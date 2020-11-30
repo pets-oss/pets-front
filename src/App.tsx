@@ -1,10 +1,11 @@
-import React from "react";
-import CssBaseline from "@material-ui/core/CssBaseline";
-import { ThemeProvider } from "@material-ui/core/styles";
-import logo from "./logo.svg";
 import "./App.css";
-import theme from "./theme";
+
+import CssBaseline from "@material-ui/core/CssBaseline";
+import React from "react";
+import { ThemeProvider } from "@material-ui/core/styles";
 import { Typography } from "@material-ui/core";
+import logo from "./logo.svg";
+import theme from "./theme";
 
 function App() {
   return (
