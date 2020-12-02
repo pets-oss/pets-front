@@ -8,32 +8,26 @@
 
 name: Deno
 
-on:
-  push:
-    branches: [main]
+name: 'build-test'
+on: # rebuild any PRs and main branch changes
   pull_request:
-    branches: [main]
+  push:
+    branches:
+      - main
 
 jobs:
-  test:
-    runs-on: ${{ matrix.os }} # runs a test on Ubuntu, Windows and macOS
-
-    strategy:
-      matrix:
-        deno: ["v1.x", "nightly"]
-        os: [macOS-latest, windows-latest, ubuntu-latest]
-
+  build: # make sure build/ci work properly
+    runs-on: ubuntu-latest
     steps:
-      - name: Setup repo
-        uses: actions/checkout@v2
-
-      - name: Setup Deno
-        uses: denolib/setup-deno@c7d7968ad4a59c159a777f79adddad6872ee8d96
+      - uses: actions/checkout@v2
+      - run: |
+          npm install
+      - run: |
+          npm test
+  test: # make sure the action works on a clean machine without building
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: ./
         with:
-          deno-version: ${{ matrix.deno }} # tests across multiple Deno versions
-
-      - name: Cache Dependencies
-        run: deno cache deps.ts
-
-      - name: Run Tests
-        run: deno test -A --unstable
+          milliseconds: 1000
