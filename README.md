@@ -5,3 +5,6 @@
 # pets-front
 
 Pets Information System Front-end
+
+---
+Started by Kayak WeCanCode Academy 2021 @ Kaunas
