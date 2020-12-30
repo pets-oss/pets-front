@@ -6,5 +6,7 @@
 
 Pets Information System Front-end
 
+Live site is available at https://pets-oss.github.io/pets-front/.
+
 ---
 Started by Kayak WeCanCode Academy 2021 @ Kaunas
