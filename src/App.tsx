@@ -4,13 +4,20 @@ import CssBaseline from "@material-ui/core/CssBaseline";
 import React from "react";
 import { ThemeProvider } from "@material-ui/core/styles";
 import theme from "./theme";
-import { Switch, Route, Link } from "react-router-dom";
+import { Switch, Route, Link, useLocation } from "react-router-dom";
 import Home from "./pages/Home";
 import About from "./pages/About";
 import PageNotFound from "./pages/PageNotFound";
 import UserProfile from "./pages/UserProfile";
 import AnimalList from "./pages/AnimalList";
 import Animal from "./pages/Animal";
+
+
+const LocationDisplay = () => {
+  const location = useLocation()
+
+  return <div data-testid="location-display">{location.pathname}</div>
+}
 
 function App() {
   return (
@@ -40,6 +47,7 @@ function App() {
           <Route component={PageNotFound} />
         </Switch>
       </div>
+      <LocationDisplay />
     </ThemeProvider>
   );
 }

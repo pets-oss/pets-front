@@ -11,3 +11,7 @@
 .nav a {
   margin: 5px;
 }
+
+div[data-testid=location-display] {
+  display: none;
+}

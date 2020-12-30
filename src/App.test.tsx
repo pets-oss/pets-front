@@ -1,9 +1,23 @@
 import React from 'react';
-import { render, screen } from '@testing-library/react';
+import { screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
+import renderWithRouter from './test-utils/RenderWithRouter';
 import App from './App';
 
-test('renders some app content', () => {
-  render(<App />);
-  const linkElement = screen.getByText(/Pets information system/i);
-  expect(linkElement).toBeInTheDocument();
-});
+test('full app rendering/navigating', () => {
+  // Home page
+  renderWithRouter(<App />)
+  expect(screen.getByText(/Pets information system/i)).toBeInTheDocument()
+
+  // navigation to About page
+  const leftClick = { button: 0 }
+  userEvent.click(screen.getByText(/About/i), leftClick)
+
+  expect(screen.getByTestId('location-display')).toHaveTextContent('/about')
+})
+
+test('landing on a bad page', () => {
+  renderWithRouter(<App />, { route: '/something-that-does-not-match' })
+
+  expect(screen.getByText(/Page Not Found/i)).toBeInTheDocument()
+})
