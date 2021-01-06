@@ -68,7 +68,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function TopNavigation() {
+export default function SiteTopNavigation() {
   const classes = useStyles();
 
   return (
