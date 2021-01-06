@@ -6,39 +6,16 @@ import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
+import Divider from "@material-ui/core/Divider";
 import AccountCircleTwoToneIcon from '@material-ui/icons/AccountCircleTwoTone';
+import ExitToAppTwoToneIcon from '@material-ui/icons/ExitToAppTwoTone';
 import { Link as RouterLink, LinkProps as RouterLinkProps } from "react-router-dom";
 import { Omit } from "@material-ui/types";
 
 import { makeStyles } from "@material-ui/core/styles";
+import { useTheme } from "@material-ui/core/styles";
+import useMediaQuery from "@material-ui/core/useMediaQuery";
 
-
-interface ListItemLinkProps {
-  icon?: React.ReactElement;
-  primary: string;
-  to: string;
-}
-
-function ListItemLink(props: ListItemLinkProps) {
-  const { icon, primary, to } = props;
-
-  const renderLink = React.useMemo(
-    () =>
-      React.forwardRef<any, Omit<RouterLinkProps, 'to'>>((itemProps, ref) => (
-        <RouterLink to={to} ref={ref} {...itemProps} />
-      )),
-    [to],
-  );
-
-  return (
-    <li>
-      <ListItem button component={renderLink}>
-        {icon ? <ListItemIcon>{icon}</ListItemIcon> : null}
-        <ListItemText primary={primary} />
-      </ListItem>
-    </li>
-  );
-}
 
 const useStyles = makeStyles((theme) => ({
   '@global': {
@@ -63,27 +40,73 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: 'row',
     padding: 0,
   },
+  menuItem: {
+    [theme.breakpoints.down('sm')]: {
+      display: 'none',
+    }
+  },
   link: {
     margin: theme.spacing(1, 1.5),
   },
 }));
+interface ListItemLinkProps {
+  icon?: React.ReactElement;
+  primary?: string;
+  to: string;
+}
+
+function ListItemLink(props: ListItemLinkProps) {
+  const { icon, primary, to } = props;
+  const classes = useStyles();
+
+  const renderLink = React.useMemo(
+    () =>
+      React.forwardRef<any, Omit<RouterLinkProps, 'to'>>((itemProps, ref) => (
+        <RouterLink className={classes.menuItem} to={to} ref={ref} {...itemProps} />
+      )),
+    [to, classes],
+  );
+
+  return (
+    <li>
+      <ListItem button component={renderLink}>
+        {icon ? <ListItemIcon>{icon}</ListItemIcon> : null}
+        {primary ? <ListItemText primary={primary} /> : null}
+      </ListItem>
+    </li>
+  );
+}
+
+const isUserLoggedIn = true;
 
 export default function SiteTopNavigation() {
   const classes = useStyles();
+  const theme = useTheme();
 
   return (
     <div>
-      <AppBar position="static" color="default" elevation={0} className={classes.appBar}>
+      <AppBar position="fixed" color="default" elevation={0} className={classes.appBar}>
         <Toolbar className={classes.toolbar}>
           <Typography variant="h6" color="inherit" noWrap className={classes.toolbarTitle}>
             PetBook
           </Typography>
           <List component="nav" className={classes.toolbarMenuRow} aria-label="top navigation">
-            <ListItemLink to="/" primary="Home" />
-            <ListItemLink to="/about" primary="About" />
-            <ListItemLink to="/animal-list" primary="Animals" />
-            <ListItemLink to="/user-profile" primary="Profile" />
-            <ListItemLink to="/login" primary="Login" icon={<AccountCircleTwoToneIcon />} />
+            {useMediaQuery(theme.breakpoints.up('sm')) ? (
+              <>
+                <ListItemLink to="/" primary="Home" />
+                <ListItemLink to="/about" primary="About" />
+                {isUserLoggedIn ? <ListItemLink to="/animal-list" primary="Animals" /> : null}
+              </>
+            ) : null}
+            {isUserLoggedIn ? (
+              <>
+                <ListItemLink to="/user-profile" primary="UserName" icon={<AccountCircleTwoToneIcon />} />
+                <Divider orientation="vertical" flexItem />
+                <ListItemLink to="/logout" primary="Logout" icon={<ExitToAppTwoToneIcon />} />
+              </>
+            ) : (
+              <ListItemLink to="/login" primary="Login" icon={<AccountCircleTwoToneIcon />} />
+            )}
           </List>
         </Toolbar>
       </AppBar>

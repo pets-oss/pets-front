@@ -32,8 +32,8 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: '#e8cdb8',
   },
   main: {
-    marginTop: theme.spacing(8),
-    marginBottom: theme.spacing(2),
+    marginTop: theme.spacing(12),
+    marginBottom: theme.spacing(10),
   },
   footer: {
     padding: theme.spacing(3, 2),
@@ -57,6 +57,7 @@ function App() {
             <Route exact path="/animal/:id" component={Animal} />
             <Route exact path="/search" component={PageNotImplemented} />
             <Route exact path="/login" component={PageNotImplemented} />
+            <Route exact path="/logout" component={PageNotImplemented} />
             <Route exact path="/" component={Home} />
             <Route component={PageNotFound} />
           </Switch>
