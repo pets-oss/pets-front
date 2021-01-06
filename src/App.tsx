@@ -15,6 +15,7 @@ import PageNotFound from "./pages/PageNotFound";
 import UserProfile from "./pages/UserProfile";
 import AnimalList from "./pages/AnimalList";
 import Animal from "./pages/Animal";
+import PageNotImplemented from "./pages/PageNotImplemented";
 
 
 const LocationDisplay = () => {
@@ -54,8 +55,8 @@ function App() {
             <Route exact path="/user-profile" component={UserProfile} />
             <Route exact path="/animal-list" component={AnimalList} />
             <Route exact path="/animal/:id" component={Animal} />
-            <Route exact path="/search" component={PageNotFound} />
-            <Route exact path="/login" component={PageNotFound} />
+            <Route exact path="/search" component={PageNotImplemented} />
+            <Route exact path="/login" component={PageNotImplemented} />
             <Route exact path="/" component={Home} />
             <Route component={PageNotFound} />
           </Switch>
