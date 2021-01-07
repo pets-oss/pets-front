@@ -22,7 +22,7 @@ function AppLogoHeader() {
   return (
     <div className={classes.root}>
       <img src={logo} className={classes.logo} alt="logo" />
-      <Typography variant="h3" component="h1">
+      <Typography variant="h3" component="h1" align="center">
         Pets information system
       </Typography>
     </div>
