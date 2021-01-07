@@ -13,6 +13,13 @@ const theme = createMuiTheme({
       dark: "#002115",
     },
   },
+  overrides: {
+    MuiListItemIcon: {
+      root: {
+        minWidth: 36,
+      }
+    }
+  }
 });
 
 export default theme;
