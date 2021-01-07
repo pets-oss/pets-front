@@ -45,18 +45,21 @@ const useStyles = makeStyles((theme) => ({
       display: 'none',
     }
   },
-  link: {
-    margin: theme.spacing(1, 1.5),
-  },
+  hasIconAndText: {
+    '& .MuiListItemIcon-root': {
+      marginRight: 4,
+    }
+  }
 }));
 interface ListItemLinkProps {
   icon?: React.ReactElement;
   primary?: string;
   to: string;
+  className?: string;
 }
 
 function ListItemLink(props: ListItemLinkProps) {
-  const { icon, primary, to } = props;
+  const { icon, primary, to, className } = props;
   const classes = useStyles();
 
   const renderLink = React.useMemo(
@@ -69,7 +72,7 @@ function ListItemLink(props: ListItemLinkProps) {
 
   return (
     <li>
-      <ListItem button component={renderLink}>
+      <ListItem className={className} button component={renderLink}>
         {icon ? <ListItemIcon>{icon}</ListItemIcon> : null}
         {primary ? <ListItemText primary={primary} /> : null}
       </ListItem>
@@ -100,12 +103,12 @@ export default function SiteTopNavigation() {
             ) : null}
             {isUserLoggedIn ? (
               <>
-                <ListItemLink to="/user-profile" primary="UserName" icon={<AccountCircleTwoToneIcon />} />
+                <ListItemLink to="/user-profile" primary="UserName" className={classes.hasIconAndText} icon={<AccountCircleTwoToneIcon />} />
                 <Divider orientation="vertical" flexItem />
-                <ListItemLink to="/logout" primary="Logout" icon={<ExitToAppTwoToneIcon />} />
+                <ListItemLink to="/logout" icon={<ExitToAppTwoToneIcon />} />
               </>
             ) : (
-              <ListItemLink to="/login" primary="Login" icon={<AccountCircleTwoToneIcon />} />
+              <ListItemLink to="/login" primary="Login" className={classes.hasIconAndText} icon={<AccountCircleTwoToneIcon />} />
             )}
           </List>
         </Toolbar>

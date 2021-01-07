@@ -1,3 +1,7 @@
+/* To be used for all specific cases App-wide.
+ * Styles should be incorporated in Components via makeStyles, material ui theme overrides
+ **/
+
 div[data-testid=location-display] {
   display: none;
 }
