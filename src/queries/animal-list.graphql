@@ -1,0 +1,6 @@
+query GetAnimalsList {
+  animals {
+    id
+    name
+  }
+}
