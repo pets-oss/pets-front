@@ -2,13 +2,13 @@ import React from "react";
 import { Typography } from "@material-ui/core";
 import { useQuery } from "@apollo/client";
 import { loader } from "graphql.macro";
-import { Animal } from "../interfaces/animal"
+import { Animal } from "../graphql/types"
 
 interface Response {
   animals: Animal[];
 }
 
-const GET_ANIMALS_QUERY = loader("../queries/animal-list.graphql");
+const GET_ANIMALS_QUERY = loader("../graphql/queries/animal-list.graphql");
 
 function AnimalList() {
   const { loading, error, data } = useQuery<Response>(GET_ANIMALS_QUERY);
