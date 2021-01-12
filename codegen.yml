@@ -1,0 +1,7 @@
+overwrite: true
+schema: "https://petbook-back.herokuapp.com/graphql"
+documents: "src/graphql/queries/*.graphql"
+generates:
+  src/graphql/types.ts:
+    plugins:
+      - "typescript"
