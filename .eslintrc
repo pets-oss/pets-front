@@ -1,0 +1,116 @@
+{
+    "extends": [
+        "airbnb-typescript",
+        "airbnb/hooks",
+        "plugin:@typescript-eslint/recommended",
+        "plugin:jest/recommended",
+        "prettier",
+        "prettier/react",
+        "prettier/@typescript-eslint",
+        "plugin:prettier/recommended"
+    ],
+    "plugins": [
+        "@typescript-eslint",
+        "react",
+        "jest",
+        "unused-imports",
+        "simple-import-sort",
+        "prettier"
+    ],
+    "parser": "@typescript-eslint/parser",
+    "parserOptions": {
+        "ecmaFeatures": {
+            "jsx": true
+        },
+        "ecmaVersion": 2018,
+        "sourceType": "module",
+        "project": "./tsconfig.json"
+    },
+    "env": {
+        "es6": true,
+        "jest": true,
+        "browser": true
+    },
+    "rules": {
+        "new-cap": "off",
+        "arrow-parens": "off",
+        "import/extensions": "off",
+        "max-classes-per-file": "off",
+        "class-methods-use-this": "off",
+        "lines-between-class-members": "off",
+        "implicit-arrow-linebreak": "off",
+        "no-underscore-dangle": "off",
+        "no-use-before-define": "off",
+        "@typescript-eslint/explicit-function-return-type": "off",
+        "@typescript-eslint/no-use-before-define": "off",
+        "@typescript-eslint/no-non-null-assertion": "off",
+        "@typescript-eslint/no-unused-vars": "off",
+        "@typescript-eslint/explicit-module-boundary-types": "off",
+        "@typescript-eslint/no-explicit-any": "off",
+        "no-param-reassign": "off",
+        "no-return-assign": "off",
+        "import/no-unresolved": "off",
+        "import/prefer-default-export": "off",
+        "import/no-extraneous-dependencies": "off",
+        "unused-imports/no-unused-imports-ts": "error",
+        "unused-imports/no-unused-vars-ts": "warn",
+        "react/prop-types": "off",
+        "react/jsx-props-no-spreading": "off",
+        "react/jsx-indent-props": "off",
+        "react/require-default-props": "off",
+        "react/display-name": "off",
+        "react/no-array-index-key": "off",
+        "react/jsx-wrap-multilines": "off",
+        "react/jsx-curly-newline": "off",
+        "react/jsx-filename-extension": [
+            2,
+            {
+                "extensions": [
+                    ".tsx"
+                ]
+            }
+        ],
+        "react/jsx-indent": [
+            "error",
+            4
+        ],
+        "max-len": [
+            "error",
+            {
+                "code": 120,
+                "ignoreStrings": true,
+                "ignoreTemplateLiterals": true
+            }
+        ],
+        "prettier/prettier": [
+            "error",
+            {
+                "endOfLine": "auto"
+            }
+        ],
+        "no-empty-function": [
+            "error",
+            {
+                "allow": [
+                    "constructors",
+                    "functions"
+                ]
+            }
+        ],
+        "import/order": "off",
+        "simple-import-sort/imports": [
+            "error",
+            {
+                "groups": [
+                    [
+                        "^[^\\.@]"
+                    ],
+                    [
+                        "^@",
+                        "^\\."
+                    ]
+                ]
+            }
+        ]
+    }
+}
