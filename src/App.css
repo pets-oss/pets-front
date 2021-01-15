@@ -3,5 +3,5 @@
  **/
 
 div[data-testid=location-display] {
-  display: none;
+    display: none;
 }

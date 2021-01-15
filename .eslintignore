@@ -1,0 +1,5 @@
+.github
+public
+node_modules
+
+**/*.svg
