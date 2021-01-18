@@ -29,7 +29,12 @@ const useStyles = makeStyles(theme => ({
         backgroundColor: '#e8cdb8',
     },
     main: {
-        marginTop: theme.spacing(12),
+        [theme.breakpoints.down('sm')]: {
+            marginTop: 56 + 16,
+        },
+        [theme.breakpoints.up('sm')]: {
+            marginTop: 64 + 24,
+        },
         marginBottom: theme.spacing(10),
     },
     footer: {
