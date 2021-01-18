@@ -5,7 +5,7 @@ import { useParams } from 'react-router-dom';
 import { Box, Typography } from '@material-ui/core';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
 import EventList from '../components/EventList';
-import LayoutTwoCol from '../components/LayoutTwoCol';
+import LayoutMultiColRow from '../components/LayoutMultiColRow';
 
 interface RouterParams {
     id: string;
@@ -32,28 +32,24 @@ function Animal() {
 
     return (
         <div className={classes.root}>
-            <LayoutTwoCol>
-                {{
-                    first: <Image src="https://picsum.photos/600/338" aspectRatio={16 / 9} />,
-                    second: (
-                        <>
-                            <Box mt={1}>
-                                <Typography className={classes.animalName} variant="h3" component="h1">
-                                    dog Scooby Doo
-                                </Typography>
-                            </Box>
-                            <Box mt={1}>
-                                <Typography className={classes.animalMeta} variant="body1">
-                                    Breed, gender, weight, color, birth_date
-                                </Typography>
-                            </Box>
-                            <Box mt={1}>
-                                <Typography variant="body1">Referencing Animal ID:{id}</Typography>
-                            </Box>
-                        </>
-                    ),
-                }}
-            </LayoutTwoCol>
+            <LayoutMultiColRow>
+                <Image src="https://picsum.photos/600/338" aspectRatio={16 / 9} />
+                <>
+                    <Box mt={1}>
+                        <Typography className={classes.animalName} variant="h3" component="h1">
+                            dog Scooby Doo
+                        </Typography>
+                    </Box>
+                    <Box mt={1}>
+                        <Typography className={classes.animalMeta} variant="body1">
+                            Breed, gender, weight, color, birth_date
+                        </Typography>
+                    </Box>
+                    <Box mt={1}>
+                        <Typography variant="body1">Referencing Animal ID:{id}</Typography>
+                    </Box>
+                </>
+            </LayoutMultiColRow>
             <Box mt={2} mb={2}>
                 <Typography variant="h5" component="h3">
                     Events
