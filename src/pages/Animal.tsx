@@ -20,7 +20,7 @@ const useStyles = makeStyles(theme =>
             color: theme.palette.primary.dark,
         },
         animalMeta: {
-            color: 'dimGray',
+            color: theme.palette.grey[600],
         },
     })
 );

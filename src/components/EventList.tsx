@@ -1,17 +1,29 @@
 import React from 'react';
 
-import { Avatar, Divider, List, ListItem, ListItemAvatar, ListItemText, Typography } from '@material-ui/core';
+import {
+    Avatar,
+    Divider,
+    fade,
+    List,
+    ListItem,
+    ListItemAvatar,
+    ListItemText,
+    Theme,
+    Typography,
+} from '@material-ui/core';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
 import TodayIcon from '@material-ui/icons/Today';
 
-const useStyles = makeStyles(theme =>
+const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         root: {
             width: '100%',
-            backgroundColor: theme.palette.background.paper,
+        },
+        item: {
+            backgroundColor: fade(theme.palette.background.paper, 0.4),
         },
         avatar: {
-            color: 'white',
+            color: theme.palette.secondary.contrastText,
             background: theme.palette.secondary.light,
         },
         inline: {
@@ -27,9 +39,9 @@ function EventList() {
         <List className={classes.root}>
             {[0, 1, 2, 3].map((item: number, index: number) => {
                 return (
-                    <>
+                    <div key={`event-list${item}`}>
                         {index !== 0 ? <Divider component="li" /> : null}
-                        <ListItem key={item} alignItems="flex-start">
+                        <ListItem className={classes.item} alignItems="flex-start">
                             <ListItemAvatar>
                                 <Avatar className={classes.avatar}>
                                     <TodayIcon />
@@ -47,14 +59,21 @@ function EventList() {
                                         >
                                             2021-01-02 by AuthorName
                                         </Typography>
-                                        {
-                                            ' — Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor…'
-                                        }
+                                        <Typography
+                                            component="span"
+                                            variant="body2"
+                                            className={classes.inline}
+                                            color="textSecondary"
+                                        >
+                                            {
+                                                ' — Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor…'
+                                            }
+                                        </Typography>
                                     </>
                                 }
                             />
                         </ListItem>
-                    </>
+                    </div>
                 );
             })}
         </List>
