@@ -30,10 +30,10 @@ const useStyles = makeStyles(theme => ({
     },
     main: {
         [theme.breakpoints.down('sm')]: {
-            marginTop: 56 + 16,
+            marginTop: 56 + theme.spacing(2), // follow AppBar minHeight: 56
         },
         [theme.breakpoints.up('sm')]: {
-            marginTop: 64 + 24,
+            marginTop: 64 + theme.spacing(3), // follow AppBar minHeight: 64
         },
         marginBottom: theme.spacing(10),
     },
