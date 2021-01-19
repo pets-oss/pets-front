@@ -92,15 +92,15 @@ export type QueryAnimalArgs = {
     id: Scalars['Int'];
 };
 
-export type QueryAnimal_DetailsArgs = {
+export type QueryAnimalDetailsArgs = {
     animal_id: Scalars['Int'];
 };
 
-export type QueryAnimal_RegistrationsArgs = {
+export type QueryAnimalRegistrationsArgs = {
     animal_id: Scalars['Int'];
 };
 
-export type QueryAnimal_MicrochipsArgs = {
+export type QueryAnimalMicrochipsArgs = {
     animal_id: Scalars['Int'];
 };
 
