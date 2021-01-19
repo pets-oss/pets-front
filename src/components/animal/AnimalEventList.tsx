@@ -32,7 +32,7 @@ const useStyles = makeStyles((theme: Theme) =>
     })
 );
 
-function EventList() {
+function AnimalEventList() {
     const classes = useStyles();
 
     return (
@@ -80,4 +80,4 @@ function EventList() {
     );
 }
 
-export default EventList;
+export default AnimalEventList;
