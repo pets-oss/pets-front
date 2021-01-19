@@ -92,18 +92,6 @@ export type QueryAnimalArgs = {
     id: Scalars['Int'];
 };
 
-export type QueryAnimalDetailsArgs = {
-    animal_id: Scalars['Int'];
-};
-
-export type QueryAnimalRegistrationsArgs = {
-    animal_id: Scalars['Int'];
-};
-
-export type QueryAnimalMicrochipsArgs = {
-    animal_id: Scalars['Int'];
-};
-
 export type QueryGendersArgs = {
     language: Scalars['String'];
 };
