@@ -36,6 +36,24 @@ function About() {
                 fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia
                 deserunt mollit anim id est laborum.
             </Typography>
+            <Typography variant="h1" component="h1">
+                Heading1
+            </Typography>
+            <Typography variant="h2" component="h2">
+                Heading2
+            </Typography>
+            <Typography variant="h3" component="h3">
+                Heading3
+            </Typography>
+            <Typography variant="h4" component="h4">
+                Heading4
+            </Typography>
+            <Typography variant="h5" component="h5">
+                Heading5
+            </Typography>
+            <Typography variant="h6" component="h6">
+                Heading6
+            </Typography>
         </div>
     );
 }

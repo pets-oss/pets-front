@@ -29,7 +29,12 @@ const useStyles = makeStyles(theme => ({
         backgroundColor: '#e8cdb8',
     },
     main: {
-        marginTop: theme.spacing(12),
+        [theme.breakpoints.down('sm')]: {
+            marginTop: 56 + theme.spacing(2), // follow AppBar minHeight: 56
+        },
+        [theme.breakpoints.up('sm')]: {
+            marginTop: 64 + theme.spacing(3), // follow AppBar minHeight: 64
+        },
         marginBottom: theme.spacing(10),
     },
     footer: {
