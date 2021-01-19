@@ -2,7 +2,7 @@ import React from 'react';
 
 import { Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import logo from '../logo.svg';
+import logo from '../../logo.svg';
 
 const useStyles = makeStyles({
     root: {

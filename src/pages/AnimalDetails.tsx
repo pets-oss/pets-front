@@ -4,8 +4,8 @@ import { useParams } from 'react-router-dom';
 
 import { Box, Typography } from '@material-ui/core';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
-import EventList from '../components/EventList';
-import LayoutMultiColRow from '../components/LayoutMultiColRow';
+import AnimalEventList from '../components/animal/AnimalEventList';
+import LayoutMultiColRow from '../components/layout/LayoutMultiColRow';
 
 interface RouterParams {
     id: string;
@@ -25,7 +25,7 @@ const useStyles = makeStyles(theme =>
     })
 );
 
-function Animal() {
+function AnimalDetails() {
     const params: RouterParams = useParams();
     const { id } = params;
     const classes = useStyles();
@@ -55,9 +55,9 @@ function Animal() {
                     Events
                 </Typography>
             </Box>
-            <EventList />
+            <AnimalEventList />
         </div>
     );
 }
 
-export default Animal;
+export default AnimalDetails;

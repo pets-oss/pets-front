@@ -1,10 +1,11 @@
 import React from 'react';
 
 import { Typography } from '@material-ui/core';
+import Page from './Page';
 
 function About() {
     return (
-        <div className="About-page">
+        <Page title="About this project">
             <Typography variant="h3" component="h1">
                 About page
             </Typography>
@@ -54,7 +55,7 @@ function About() {
             <Typography variant="h6" component="h6">
                 Heading6
             </Typography>
-        </div>
+        </Page>
     );
 }
 

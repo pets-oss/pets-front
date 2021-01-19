@@ -5,11 +5,11 @@ import { Route, Switch, useLocation } from 'react-router-dom';
 import Container from '@material-ui/core/Container';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { makeStyles, ThemeProvider } from '@material-ui/core/styles';
-import SiteBottomNavigation from './components/SiteBottomNavigation';
-import SiteTopNavigation from './components/SiteTopNavigation';
+import SiteBottomNavigation from './components/layout/SiteBottomNavigation';
+import SiteTopNavigation from './components/layout/SiteTopNavigation';
 import About from './pages/About';
-import Animal from './pages/Animal';
-import AnimalList from './pages/AnimalList';
+import AnimalDetails from './pages/AnimalDetails';
+import Animals from './pages/Animals';
 import Home from './pages/Home';
 import PageNotFound from './pages/PageNotFound';
 import PageNotImplemented from './pages/PageNotImplemented';
@@ -55,8 +55,8 @@ export default function App() {
                     <Switch>
                         <Route exact path="/about" component={About} />
                         <Route exact path="/user-profile" component={UserProfile} />
-                        <Route exact path="/animal-list" component={AnimalList} />
-                        <Route exact path="/animal/:id" component={Animal} />
+                        <Route exact path="/animal-list" component={Animals} />
+                        <Route exact path="/animal/:id" component={AnimalDetails} />
                         <Route exact path="/search" component={PageNotImplemented} />
                         <Route exact path="/login" component={PageNotImplemented} />
                         <Route exact path="/logout" component={PageNotImplemented} />
