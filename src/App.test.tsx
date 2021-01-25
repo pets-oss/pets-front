@@ -1,13 +1,15 @@
 import React from 'react';
 
-import { screen } from '@testing-library/react';
+import { screen, waitFor } from '@testing-library/react';
 import App from './App';
 import renderWithRouter from './test-utils/RenderWithRouter';
 
-test('full app rendering/navigating', () => {
+test('full app rendering/navigating', async () => {
     // Home page
     renderWithRouter(<App />);
-    expect(screen.getByText(/Pets information system/i)).toBeInTheDocument();
+    await waitFor(() => {
+        expect(screen.getByText(/Pets information system/i)).toBeInTheDocument();
+    });
 
     // todo - testing router on responsive cases
     // test needs to be set with certain media
@@ -22,8 +24,10 @@ test('full app rendering/navigating', () => {
       */
 });
 
-test('landing on a bad page', () => {
-    renderWithRouter(<App />, { route: '/something-that-does-not-match' });
+test('landing on a bad page', async () => {
+    renderWithRouter(<App />, { route: '/not-found' });
 
-    expect(screen.getByText(/Page Not Found/i)).toBeInTheDocument();
+    await waitFor(() => {
+        expect(screen.getByText(/Page Not Found/i)).toBeInTheDocument();
+    });
 });
