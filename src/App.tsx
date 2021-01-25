@@ -78,8 +78,6 @@ export default function App() {
                             />
                             <Route exact path="/" component={React.lazy(() => import('./pages/Home'))} />
                             <Route
-                                exact
-                                path="/not-found"
                                 component={React.lazy(() => import('./pages/PageNotFound'))}
                             />
                         </React.Suspense>
