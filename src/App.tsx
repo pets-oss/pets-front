@@ -8,7 +8,7 @@ import { makeStyles, ThemeProvider } from '@material-ui/core/styles';
 import { Skeleton } from '@material-ui/lab';
 import SiteBottomNavigation from './components/layout/SiteBottomNavigation';
 import SiteTopNavigation from './components/layout/SiteTopNavigation';
-import About from './pages/About';
+import PageNotFound from './pages/PageNotFound';
 import MuiTheme from './theme';
 
 const LocationDisplay = () => {
@@ -47,9 +47,9 @@ export default function App() {
             <div className={classes.root}>
                 <SiteTopNavigation />
                 <Container component="main" className={classes.main} maxWidth="lg">
-                    <Switch>
-                        <Route exact path="/about" component={About} />
-                        <React.Suspense fallback={<Skeleton variant="rect" height="100vh" />}>
+                    <React.Suspense fallback={<Skeleton variant="rect" height="100vh" />}>
+                        <Switch>
+                            <Route exact path="/about" component={React.lazy(() => import('./pages/About'))} />
                             <Route
                                 exact
                                 path="/user-profile"
@@ -77,9 +77,9 @@ export default function App() {
                                 component={React.lazy(() => import('./pages/PageNotImplemented'))}
                             />
                             <Route exact path="/" component={React.lazy(() => import('./pages/Home'))} />
-                            <Route component={React.lazy(() => import('./pages/PageNotFound'))} />
-                        </React.Suspense>
-                    </Switch>
+                            <Route component={PageNotFound} />
+                        </Switch>
+                    </React.Suspense>
                 </Container>
                 <SiteBottomNavigation />
             </div>
