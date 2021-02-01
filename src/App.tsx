@@ -10,6 +10,8 @@ import SiteBottomNavigation from './components/layout/SiteBottomNavigation';
 import SiteTopNavigation from './components/layout/SiteTopNavigation';
 import PageNotFound from './pages/PageNotFound';
 import MuiTheme from './theme';
+import Auth0ProviderWithHistory from './utils/auth/Auth0ProviderWithHistory';
+import PrivateRoute from './utils/auth/PrivateRoute';
 
 const LocationDisplay = () => {
     const location = useLocation();
@@ -44,45 +46,52 @@ export default function App() {
     return (
         <ThemeProvider theme={MuiTheme}>
             <CssBaseline />
-            <div className={classes.root}>
-                <SiteTopNavigation />
-                <Container component="main" className={classes.main} maxWidth="lg">
-                    <React.Suspense fallback={<Skeleton variant="rect" height="100vh" />}>
-                        <Switch>
-                            <Route exact path="/about" component={React.lazy(() => import('./pages/About'))} />
-                            <Route
-                                exact
-                                path="/user-profile"
-                                component={React.lazy(() => import('./pages/UserProfile'))}
-                            />
-                            <Route exact path="/animal-list" component={React.lazy(() => import('./pages/Animals'))} />
-                            <Route
-                                exact
-                                path="/animal/:id"
-                                component={React.lazy(() => import('./pages/AnimalDetails'))}
-                            />
-                            <Route
-                                exact
-                                path="/search"
-                                component={React.lazy(() => import('./pages/PageNotImplemented'))}
-                            />
-                            <Route
-                                exact
-                                path="/login"
-                                component={React.lazy(() => import('./pages/PageNotImplemented'))}
-                            />
-                            <Route
-                                exact
-                                path="/logout"
-                                component={React.lazy(() => import('./pages/PageNotImplemented'))}
-                            />
-                            <Route exact path="/" component={React.lazy(() => import('./pages/Home'))} />
-                            <Route component={PageNotFound} />
-                        </Switch>
-                    </React.Suspense>
-                </Container>
-                <SiteBottomNavigation />
-            </div>
+            <Auth0ProviderWithHistory>
+                <div className={classes.root}>
+                    <SiteTopNavigation />
+                    <Container component="main" className={classes.main} maxWidth="lg">
+                        <React.Suspense fallback={<Skeleton variant="rect" height="100vh" />}>
+                            <Switch>
+                                <Route exact path="/about" component={React.lazy(() => import('./pages/About'))} />
+                                <PrivateRoute
+                                    exact
+                                    path="/user-profile"
+                                    component={React.lazy(() => import('./pages/UserProfile'))}
+                                />
+                                <PrivateRoute
+                                    exact
+                                    path="/animal-list"
+                                    component={React.lazy(() => import('./pages/Animals'))}
+                                />
+                                <Route
+                                    exact
+                                    path="/animal/:id"
+                                    component={React.lazy(() => import('./pages/AnimalDetails'))}
+                                />
+                                <Route
+                                    exact
+                                    path="/search"
+                                    component={React.lazy(() => import('./pages/PageNotImplemented'))}
+                                />
+                                <Route
+                                    exact
+                                    path="/login"
+                                    component={React.lazy(() => import('./pages/PageNotImplemented'))}
+                                />
+                                <Route
+                                    exact
+                                    path="/logout"
+                                    component={React.lazy(() => import('./pages/PageNotImplemented'))}
+                                />
+                                <Route exact path="/" component={React.lazy(() => import('./pages/Home'))} />
+                                <Route component={PageNotFound} />
+                            </Switch>
+                        </React.Suspense>
+                    </Container>
+                    <SiteBottomNavigation />
+                </div>
+            </Auth0ProviderWithHistory>
+
             <LocationDisplay />
         </ThemeProvider>
     );
