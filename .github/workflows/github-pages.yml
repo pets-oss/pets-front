@@ -30,64 +30,64 @@ jobs:
                       ${{ runner.os }}-yarn-
 
             - run: yarn --no-progress --non-interactive --no-lockfile
-            
+
             - name: create env file
               run: |
-                touch .env
-                echo REACT_APP_GRAPHQL_URL=${{ secrets.REACT_APP_GRAPHQL_URL }} >> .env
-                echo REACT_APP_AUTH0_DOMAIN=${{ secrets.REACT_APP_AUTH0_DOMAIN }} >> .env
-                echo REACT_APP_AUTH0_CLIENT_ID=${{ secrets.REACT_APP_AUTH0_CLIENT_ID }} >> .env
+                  touch .env
+                  echo REACT_APP_GRAPHQL_URL=${{ secrets.REACT_APP_GRAPHQL_URL }} >> .env
+                  echo REACT_APP_AUTH0_DOMAIN=${{ secrets.REACT_APP_AUTH0_DOMAIN }} >> .env
+                  echo REACT_APP_AUTH0_CLIENT_ID=${{ secrets.REACT_APP_AUTH0_CLIENT_ID }} >> .env
 
-            -   uses: actions/cache@v2
-                id: cache-build
-                with:
-                    path: ./*
-                    key: ${{ github.sha }}
+            - uses: actions/cache@v2
+              id: cache-build
+              with:
+                  path: ./*
+                  key: ${{ github.sha }}
 
     testUnit:
         name: Test Unit
         runs-on: ubuntu-latest
         needs: install
         steps:
-            -   uses: actions/cache@v2
-                id: restore-install
-                with:
-                    path: ./*
-                    key: ${{ github.sha }}
-            -   run: yarn test
+            - uses: actions/cache@v2
+              id: restore-install
+              with:
+                  path: ./*
+                  key: ${{ github.sha }}
+            - run: yarn test
 
     lint:
         runs-on: ubuntu-latest
         needs: install
         steps:
-            -   uses: actions/cache@v2
-                id: restore-install
-                with:
-                    path: ./*
-                    key: ${{ github.sha }}
-            -   run: yarn lint
+            - uses: actions/cache@v2
+              id: restore-install
+              with:
+                  path: ./*
+                  key: ${{ github.sha }}
+            - run: yarn lint
 
     testsPass:
         name: Thank you
         runs-on: ubuntu-latest
         needs: [ testUnit, lint ]
         steps:
-            -   run: exit 0
+            - run: exit 0
 
     publishRelease:
         name: Build and publish release
         runs-on: ubuntu-latest
         needs: [ testsPass ]
         steps:
-            -   uses: actions/cache@v2
-                id: restore-install
-                with:
-                    path: ./*
-                    key: ${{ github.sha }}
-            -   run: yarn build
-            -   name: Deploy
-                uses: peaceiris/actions-gh-pages@v3
-                with:
-                    github_token: ${{ secrets.GITHUB_TOKEN }}
-                    publish_dir: ./build
-                    cname: app.petbook.lt
+            - uses: actions/cache@v2
+              id: restore-install
+              with:
+                  path: ./*
+                  key: ${{ github.sha }}
+            - run: yarn build
+            - name: Deploy
+              uses: peaceiris/actions-gh-pages@v3
+              with:
+                  github_token: ${{ secrets.GITHUB_TOKEN }}
+                  publish_dir: ./build
+                  cname: app.petbook.lt
