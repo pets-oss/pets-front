@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link as RouterLink, LinkProps as RouterLinkProps } from 'react-router-dom';
 
+import { useAuth0 } from '@auth0/auth0-react';
 import AppBar from '@material-ui/core/AppBar';
 import Divider from '@material-ui/core/Divider';
 import List from '@material-ui/core/List';
@@ -79,11 +80,34 @@ function ListItemLink(props: ListItemLinkProps) {
     );
 }
 
-const isUserLoggedIn = true;
+interface ListItemButtonProps {
+    icon?: React.ReactElement;
+    primary?: string;
+    onClick: () => void;
+    className?: string;
+}
+
+function ListItemButton(props: ListItemButtonProps) {
+    const { icon, primary, className, onClick } = props;
+
+    return (
+        <li>
+            <ListItem className={className} button onClick={onClick}>
+                {icon ? <ListItemIcon>{icon}</ListItemIcon> : null}
+                {primary ? <ListItemText primary={primary} /> : null}
+            </ListItem>
+        </li>
+    );
+}
+
+function AuthNav() {
+    return <ListItemLink to="/animal-list" primary="Animals" />;
+}
 
 export default function SiteTopNavigation() {
     const classes = useStyles();
     const theme = useTheme();
+    const { isAuthenticated, user, loginWithRedirect, logout } = useAuth0();
 
     return (
         <div>
@@ -97,26 +121,33 @@ export default function SiteTopNavigation() {
                             <>
                                 <ListItemLink to="/" primary="Home" />
                                 <ListItemLink to="/about" primary="About" />
-                                {isUserLoggedIn ? <ListItemLink to="/animal-list" primary="Animals" /> : null}
+                                {isAuthenticated && <AuthNav />}
                             </>
                         ) : null}
-                        {isUserLoggedIn ? (
+                        {isAuthenticated ? (
                             <>
                                 <ListItemLink
                                     to="/user-profile"
-                                    primary="UserName"
+                                    primary={user.name}
                                     className={classes.hasIconAndText}
                                     icon={<AccountCircleTwoToneIcon />}
                                 />
                                 <Divider orientation="vertical" flexItem />
-                                <ListItemLink to="/logout" icon={<ExitToAppTwoToneIcon />} />
+                                <ListItemButton
+                                    icon={<ExitToAppTwoToneIcon />}
+                                    onClick={() =>
+                                        logout({
+                                            returnTo: window.location.origin,
+                                        })
+                                    }
+                                />
                             </>
                         ) : (
-                            <ListItemLink
-                                to="/login"
+                            <ListItemButton
                                 primary="Login"
                                 className={classes.hasIconAndText}
                                 icon={<AccountCircleTwoToneIcon />}
+                                onClick={() => loginWithRedirect()}
                             />
                         )}
                     </List>
