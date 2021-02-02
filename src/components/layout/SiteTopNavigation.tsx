@@ -101,11 +101,7 @@ function ListItemButton(props: ListItemButtonProps) {
 }
 
 function AuthNav() {
-    return (
-        <>
-            <ListItemLink to="/animal-list" primary="Animals" />
-        </>
-    );
+    return <ListItemLink to="/animal-list" primary="Animals" />;
 }
 
 export default function SiteTopNavigation() {

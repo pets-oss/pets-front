@@ -26,4 +26,3 @@ yarn-error.log*
 .idea
 .env
 .env.local
-.env.staging

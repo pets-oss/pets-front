@@ -3,3 +3,10 @@
 // expect(element).toHaveTextContent(/react/i)
 // learn more: https://github.com/testing-library/jest-dom
 import '@testing-library/jest-dom';
+
+Object.defineProperty(global, 'crypto', {
+    value: {
+        getRandomValues: (arr: any) => (crypto as any).randomBytes(arr.length),
+    },
+});
+global.crypto.subtle = {}; // this gets around the 'auth0-spa-js must run on a secure origin' error
