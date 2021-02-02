@@ -77,7 +77,6 @@ jobs:
                 with:
                     path: ./*
                     key: ${{ github.sha }}
-            -   run: yarn build
             -   name: Create .env file
                 uses: SpicyPizza/create-envfile@v1.0
                 with:
@@ -85,6 +84,7 @@ jobs:
                     envkey_REACT_APP_GRAPHQL_URL: ${{ secrets.REACT_APP_GRAPHQL_URL }}
                     envkey_REACT_APP_AUTH0_DOMAIN: ${{ secrets.REACT_APP_AUTH0_DOMAIN }}
                     envkey_REACT_APP_AUTH0_CLIENT_ID: ${{ secrets.REACT_APP_AUTH0_CLIENT_ID }}
+            -   run: yarn build
             -   name: Deploy
                 uses: peaceiris/actions-gh-pages@v3
                 with:
