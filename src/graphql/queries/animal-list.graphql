@@ -2,11 +2,11 @@ query GetAnimalsList {
     animals {
         id
         name
-        image_url
+        imageUrl
         status
         details {
             gender
-            birth_date
+            birthDate
             weight
         }
     }

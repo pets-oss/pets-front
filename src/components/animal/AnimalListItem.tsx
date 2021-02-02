@@ -26,7 +26,7 @@ export default function AnimalsListItem({ animal }: AnimalsListItemProps) {
                 <ListItemAvatar className={classes.avatar}>
                     <Avatar
                         alt="Animal picture"
-                        src={animal.image_url ? animal.image_url : `https://eu.ui-avatars.com/api/?name=${animal.name}`}
+                        src={animal.imageUrl ? animal.imageUrl : `https://eu.ui-avatars.com/api/?name=${animal.name}`}
                     />
                 </ListItemAvatar>
                 <ListItemText>
@@ -35,7 +35,7 @@ export default function AnimalsListItem({ animal }: AnimalsListItemProps) {
                             {`Dog ${animal.name}`}
                         </Typography>
                         <Typography variant="body1" color="textSecondary" display="inline">
-                            {` - ${getAnimalAge(+animal.details!.birth_date!)} old`}
+                            {` - ${getAnimalAge(+animal.details!.birthDate!)} old`}
                         </Typography>
                         <Typography variant="subtitle2" color="textSecondary">
                             check-in date
@@ -44,7 +44,7 @@ export default function AnimalsListItem({ animal }: AnimalsListItemProps) {
                     <Box pt={1}>
                         <Typography component="span" variant="body2" color="textPrimary">
                             {`1.6kg black male Puddle, born in ${format(
-                                new Date(+animal.details!.birth_date!),
+                                new Date(+animal.details!.birthDate!),
                                 'yyyy-MM-dd'
                             )}`}
                         </Typography>
