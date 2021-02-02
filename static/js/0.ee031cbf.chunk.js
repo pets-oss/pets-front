@@ -1,2 +1,0 @@
-(this["webpackJsonppets-front"]=this["webpackJsonppets-front"]||[]).push([[0],{277:function(t,e,n){"use strict";n.r(e);var s=n(5),a=(n(0),n(31)),i=n(75);e.default=function(){return Object(s.jsxs)("div",{className:"NotFound-page",children:[Object(s.jsx)(i.a,{variant:"h3",component:"h1",children:"Page is not implemented yet"}),Object(s.jsxs)(i.a,{variant:"body1",children:["Try navigating to ",Object(s.jsx)(a.b,{to:"/",children:"homepage"})]})]})}}}]);
-//# sourceMappingURL=0.ee031cbf.chunk.js.map

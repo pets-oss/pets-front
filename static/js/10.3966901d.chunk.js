@@ -1,2 +1,0 @@
-(this["webpackJsonppets-front"]=this["webpackJsonppets-front"]||[]).push([[10],{267:function(e,t,n){"use strict";n.r(t);var s=n(5),a=(n(0),n(75));t.default=function(){return Object(s.jsxs)("div",{className:"UserProfile-page",children:[Object(s.jsx)(a.a,{variant:"h3",component:"h1",children:"UserProfile page"}),Object(s.jsx)(a.a,{variant:"body1",children:"User and Organization details"})]})}}}]);
-//# sourceMappingURL=10.3966901d.chunk.js.map
