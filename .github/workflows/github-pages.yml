@@ -9,7 +9,6 @@ jobs:
     install:
         name: Install with Cache setup
         runs-on: ubuntu-latest
-        environment: github-pages
         steps:
             - uses: actions/checkout@v2
 
@@ -31,13 +30,6 @@ jobs:
                       ${{ runner.os }}-yarn-
 
             - run: yarn --no-progress --non-interactive --no-lockfile
-
-            - name: create env file
-              run: |
-                  touch .env
-                  echo REACT_APP_GRAPHQL_URL=${{ secrets.REACT_APP_GRAPHQL_URL }} >> .env
-                  echo REACT_APP_AUTH0_DOMAIN=${{ secrets.REACT_APP_AUTH0_DOMAIN }} >> .env
-                  echo REACT_APP_AUTH0_CLIENT_ID=${{ secrets.REACT_APP_AUTH0_CLIENT_ID }} >> .env
 
             - uses: actions/cache@v2
               id: cache-build
@@ -79,6 +71,11 @@ jobs:
         name: Build and publish release
         runs-on: ubuntu-latest
         needs: [ testsPass ]
+        environment: github-pages
+        env:
+            REACT_APP_GRAPHQL_URL: ${{ secrets.REACT_APP_GRAPHQL_URL }}
+            REACT_APP_AUTH0_DOMAIN: ${{ secrets.REACT_APP_AUTH0_DOMAIN }}
+            REACT_APP_AUTH0_CLIENT_ID: ${{ secrets.REACT_APP_AUTH0_CLIENT_ID }}
         steps:
             - uses: actions/cache@v2
               id: restore-install
