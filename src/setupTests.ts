@@ -7,6 +7,6 @@ import '@testing-library/jest-dom';
 Object.defineProperty(global, 'crypto', {
     value: {
         getRandomValues: (arr: any) => (crypto as any).randomBytes(arr.length),
+        subtle: {},
     },
 });
-global.crypto.subtle = {}; // this gets around the 'auth0-spa-js must run on a secure origin' error
