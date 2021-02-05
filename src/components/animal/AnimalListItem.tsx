@@ -35,7 +35,7 @@ export default function AnimalsListItem({ animal }: AnimalsListItemProps) {
                             {`Dog ${animal.name}`}
                         </Typography>
                         <Typography variant="body1" color="textSecondary" display="inline">
-                            {` - ${getAnimalAge(+animal.details!.birthDate!)} old`}
+                            {` - ${getAnimalAge(animal.details!.birthDate!)}`}
                         </Typography>
                         <Typography variant="subtitle2" color="textSecondary">
                             check-in date

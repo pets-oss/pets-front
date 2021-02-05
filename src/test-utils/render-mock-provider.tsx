@@ -8,12 +8,17 @@ interface MockOptions {
     query: DocumentNode;
     error?: Error;
     data?: any;
+    variables?: any;
 }
 
-export function renderWithMockProvider(ui: any, { query, data, error }: MockOptions) {
+export function renderWithMockProvider(ui: any, { query, data, error, variables }: MockOptions) {
     const mock: MockedResponse = {
         request: { query },
     };
+
+    if (variables) {
+        mock.request.variables = variables;
+    }
 
     if (data) {
         mock.result = { data };

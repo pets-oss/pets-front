@@ -67,7 +67,7 @@ export default function AnimalsTable({ animals }: AnimalsTableProps) {
                             <TableCell align="center">{animal.name}</TableCell>
                             <TableCell align="center">Puddle</TableCell>
                             <TableCell align="center">{animal.details?.weight}</TableCell>
-                            <TableCell align="center">{getAnimalAge(+animal.details!.birthDate!)}</TableCell>
+                            <TableCell align="center">{getAnimalAge(animal.details!.birthDate!)}</TableCell>
                             <TableCell align="center">check-in date</TableCell>
                         </TableRow>
                     ))}
