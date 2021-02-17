@@ -18,7 +18,7 @@ import AddIcon from '@material-ui/icons/Add';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import CloseIcon from '@material-ui/icons/Close';
 import MenuIcon from '@material-ui/icons/Menu';
-import navigation from '../../navigation';
+import { navigation, NavigationItem } from '../../navigation';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -79,10 +79,10 @@ export default function AppBottomNavigation() {
             <Divider />
             <List>
                 {navigation
-                    .filter(item => {
+                    .filter((item: NavigationItem) => {
                         return item.authRequired ? isAuthenticated : true;
                     })
-                    .map(item => (
+                    .map((item: NavigationItem) => (
                         <ListItem
                             button
                             key={item.title}

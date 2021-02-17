@@ -7,7 +7,7 @@ import Link from '@material-ui/core/Link';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
-import navigation from '../../navigation';
+import { navigation, NavigationItem } from '../../navigation';
 import TopAuthNav from './TopAuthNav';
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -40,10 +40,10 @@ export default function AppTopNavigation() {
                     PetBook
                 </Typography>
                 {navigation
-                    .filter(item => {
+                    .filter((item: NavigationItem) => {
                         return item.authRequired ? isAuthenticated : true;
                     })
-                    .map(item => (
+                    .map((item: NavigationItem) => (
                         <Link component={NavLink} className={classes.link} key={item.title} to={item.to}>
                             {item.title}
                         </Link>
