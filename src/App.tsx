@@ -7,9 +7,9 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import { makeStyles, Theme, ThemeProvider, useTheme } from '@material-ui/core/styles';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { Skeleton } from '@material-ui/lab';
+import AppBottomNavigation from './components/layout/AppBottomNavigation';
 import AppTopBar from './components/layout/AppTopBar';
 import AppTopNavigation from './components/layout/AppTopNavigation';
-import SiteBottomNavigation from './components/layout/SiteBottomNavigation';
 import PageNotFound from './pages/PageNotFound';
 import MuiTheme from './theme';
 import Auth0ProviderWithHistory from './utils/auth/Auth0ProviderWithHistory';
@@ -25,7 +25,6 @@ const useStyles = makeStyles((theme: Theme) => ({
         display: 'flex',
         flexDirection: 'column',
         minHeight: '100vh',
-        backgroundColor: '#e8cdb8',
     },
     main: {
         [theme.breakpoints.down('md')]: {
@@ -92,7 +91,7 @@ export default function App() {
                             </Switch>
                         </React.Suspense>
                     </Container>
-                    <SiteBottomNavigation />
+                    {!matchesLgScreen && <AppBottomNavigation />}
                 </div>
             </Auth0ProviderWithHistory>
 
