@@ -7,10 +7,14 @@ import Link from '@material-ui/core/Link';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
+import navigation from '../../navigation';
 import TopAuthNav from './TopAuthNav';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
+        appBar: {
+            backgroundColor: theme.palette.primary.light,
+        },
         title: {
             flexGrow: 1,
             textAlign: 'left',
@@ -30,30 +34,20 @@ export default function AppTopNavigation() {
     const { isAuthenticated } = useAuth0();
 
     return (
-        <AppBar position="fixed" color="default" elevation={0}>
+        <AppBar className={classes.appBar} position="fixed" color="default">
             <Toolbar>
                 <Typography variant="h6" className={classes.title}>
                     PetBook
                 </Typography>
-                <Link component={NavLink} to="/" className={classes.link}>
-                    Home
-                </Link>
-                <Link component={NavLink} to="/about" className={classes.link}>
-                    About
-                </Link>
-                {isAuthenticated && (
-                    <>
-                        <Link component={NavLink} to="/animal-list" className={classes.link}>
-                            Animals
+                {navigation
+                    .filter(item => {
+                        return item.authRequired ? isAuthenticated : true;
+                    })
+                    .map(item => (
+                        <Link component={NavLink} className={classes.link} key={item.title} to={item.to}>
+                            {item.title}
                         </Link>
-                        <Link component={NavLink} to="/favourites" className={classes.link}>
-                            Favourites
-                        </Link>
-                        <Link component={NavLink} to="/reports" className={classes.link}>
-                            Reports
-                        </Link>
-                    </>
-                )}
+                    ))}
                 <TopAuthNav />
             </Toolbar>
         </AppBar>
