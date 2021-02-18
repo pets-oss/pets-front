@@ -3,7 +3,9 @@ query GetAnimal($id: Int!) {
         id
         name
         details {
-            gender
+            gender {
+                value
+            }
             color
             birthDate
             weight
