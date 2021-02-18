@@ -11,9 +11,11 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
+import Slide from '@material-ui/core/Slide';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
+import useScrollTrigger from '@material-ui/core/useScrollTrigger';
 import AddIcon from '@material-ui/icons/Add';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import CloseIcon from '@material-ui/icons/Close';
@@ -41,8 +43,31 @@ const useStyles = makeStyles((theme: Theme) =>
             top: -30,
             right: theme.spacing(3),
         },
+        show: {
+            transform: 'translateY(0)',
+            transition: 'transform .5s',
+        },
+        hide: {
+            transform: 'translateY(-110%)',
+            transition: 'transform .5s',
+        },
     })
 );
+
+interface Props {
+    children: React.ReactElement;
+}
+
+function HideOnScroll(props: Props) {
+    const { children } = props;
+    const trigger = useScrollTrigger();
+
+    return (
+        <Slide appear={false} direction="up" in={!trigger}>
+            {children}
+        </Slide>
+    );
+}
 
 export default function AppBottomNavigation() {
     const classes = useStyles();
@@ -100,19 +125,22 @@ export default function AppBottomNavigation() {
     );
 
     return (
-        <AppBar className={classes.appBar} position="fixed" color="default">
-            <Toolbar>
-                <IconButton edge="start" onClick={handleDrawerOpen} color="inherit" aria-label="open drawer">
-                    <MenuIcon />
-                </IconButton>
-                {/* FAB element should be rendered from the page context */}
-                <Fab color="secondary" aria-label="add" className={classes.fabButton}>
-                    <AddIcon />
-                </Fab>
-            </Toolbar>
-            <Drawer anchor="bottom" open={open} onClose={handleDrawerClose}>
-                {navList()}
-            </Drawer>
-        </AppBar>
+        <HideOnScroll>
+            <AppBar className={classes.appBar} position="fixed" color="default">
+                <Toolbar>
+                    <IconButton edge="start" onClick={handleDrawerOpen} color="inherit" aria-label="open drawer">
+                        <MenuIcon />
+                    </IconButton>
+                    {/* FAB element should be rendered from the page context */}
+                    {/* FAB should not be a part of this element and scroll should not affect it  */}
+                    <Fab color="secondary" aria-label="add" className={classes.fabButton}>
+                        <AddIcon />
+                    </Fab>
+                </Toolbar>
+                <Drawer anchor="bottom" open={open} onClose={handleDrawerClose}>
+                    {navList()}
+                </Drawer>
+            </AppBar>
+        </HideOnScroll>
     );
 }
