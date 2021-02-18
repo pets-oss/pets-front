@@ -1,4 +1,3 @@
-import { format } from 'date-fns';
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 
@@ -35,7 +34,7 @@ export default function AnimalsListItem({ animal }: AnimalsListItemProps) {
                             {`Dog ${animal.name}`}
                         </Typography>
                         <Typography variant="body1" color="textSecondary" display="inline">
-                            {` - ${getAnimalAge(animal.details!.birthDate!)}`}
+                            {` - ${getAnimalAge(animal.details?.birthDate)}`}
                         </Typography>
                         <Typography variant="subtitle2" color="textSecondary">
                             check-in date
@@ -43,10 +42,7 @@ export default function AnimalsListItem({ animal }: AnimalsListItemProps) {
                     </Box>
                     <Box pt={1}>
                         <Typography component="span" variant="body2" color="textPrimary">
-                            {`1.6kg black male Puddle, born in ${format(
-                                new Date(+animal.details!.birthDate!),
-                                'yyyy-MM-dd'
-                            )}`}
+                            {`1.6kg black male Puddle, born in ${getAnimalAge(animal.details?.birthDate)}`}
                         </Typography>
                     </Box>
                 </ListItemText>

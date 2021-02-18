@@ -13,7 +13,6 @@ export type Scalars = {
 
 export type Query = {
     __typename?: 'Query';
-    _empty?: Maybe<Scalars['String']>;
     /**
      * Lookup an animal.
      *
@@ -31,6 +30,22 @@ export type Query = {
      */
     animals?: Maybe<Array<Maybe<Animal>>>;
     /**
+     * Get all breeds.
+     *
+     * Examples:
+     *
+     * breeds(species: "2", language: "lt")
+     */
+    breeds?: Maybe<Array<Maybe<Breed>>>;
+    /**
+     * Get all colors.
+     *
+     * Examples:
+     *
+     * colors(language: "lt")
+     */
+    colors?: Maybe<Array<Maybe<Gender>>>;
+    /**
      * Get all genders.
      *
      * Examples:
@@ -39,21 +54,22 @@ export type Query = {
      */
     genders?: Maybe<Array<Maybe<Gender>>>;
     /**
-     * Get all statuses.
+     * Lookup an organization.
      *
      * Examples:
      *
-     * statuses(language: "lt")
+     * organization(id: 1)
      */
-    statuses?: Maybe<Array<Maybe<Status>>>;
+    organization?: Maybe<Organization>;
     /**
-     * Get all breeds.
+     * Get all organizations.
      *
      * Examples:
      *
-     * breeds(species: "2", language: "lt")
+     * organizations
      */
-    breeds?: Maybe<Array<Maybe<Breed>>>;
+    organizations?: Maybe<Array<Maybe<Organization>>>;
+    _empty?: Maybe<Scalars['String']>;
     /**
      * Get all species.
      *
@@ -63,25 +79,17 @@ export type Query = {
      */
     species?: Maybe<Array<Maybe<Species>>>;
     /**
-     * Get all colors.
+     * Get all statuses.
      *
      * Examples:
      *
-     * colors(language: "lt")
+     * statuses(language: "lt")
      */
-    colors?: Maybe<Array<Maybe<Gender>>>;
+    statuses?: Maybe<Array<Maybe<Status>>>;
 };
 
 export type QueryAnimalArgs = {
     id: Scalars['Int'];
-};
-
-export type QueryGendersArgs = {
-    language: Scalars['String'];
-};
-
-export type QueryStatusesArgs = {
-    language: Scalars['String'];
 };
 
 export type QueryBreedsArgs = {
@@ -89,29 +97,24 @@ export type QueryBreedsArgs = {
     language: Scalars['String'];
 };
 
-export type QuerySpeciesArgs = {
-    language: Scalars['String'];
-};
-
 export type QueryColorsArgs = {
     language: Scalars['String'];
 };
 
-export type Mutation = {
-    __typename?: 'Mutation';
-    _empty?: Maybe<Scalars['String']>;
-    /** Created animal */
-    createAnimal?: Maybe<Animal>;
-    /** Updated animal */
-    updateAnimal?: Maybe<Animal>;
+export type QueryGendersArgs = {
+    language: Scalars['String'];
 };
 
-export type MutationCreateAnimalArgs = {
-    input: CreateAnimalInput;
+export type QueryOrganizationArgs = {
+    id: Scalars['Int'];
 };
 
-export type MutationUpdateAnimalArgs = {
-    input: UpdateAnimalInput;
+export type QuerySpeciesArgs = {
+    language: Scalars['String'];
+};
+
+export type QueryStatusesArgs = {
+    language: Scalars['String'];
 };
 
 /** Represents an animal. */
@@ -123,7 +126,10 @@ export type Animal = {
     name?: Maybe<Scalars['String']>;
     /** Organization id */
     organization: Scalars['Int'];
-    /** Status */
+    /**
+     * Animal status by language.
+     * Examples: status(language: "en") or just status - will return default language ("lt") translation
+     */
     status?: Maybe<Scalars['String']>;
     /** Image URL */
     imageUrl?: Maybe<Scalars['String']>;
@@ -139,6 +145,71 @@ export type Animal = {
     details?: Maybe<AnimalDetails>;
 };
 
+/** Represents an animal. */
+export type AnimalStatusArgs = {
+    language?: Maybe<Scalars['String']>;
+};
+
+export type Mutation = {
+    __typename?: 'Mutation';
+    /** Created animal */
+    createAnimal?: Maybe<Animal>;
+    /** Updated animal */
+    updateAnimal?: Maybe<Animal>;
+    /** Created microchip */
+    createMicrochip?: Maybe<AnimalMicrochip>;
+    /** Updated microchip */
+    updateMicrochip?: Maybe<AnimalMicrochip>;
+    /** Deleted microchip */
+    deleteMicrochip?: Maybe<AnimalMicrochip>;
+    /** Delete animal registration */
+    deleteAnimalRegistration?: Maybe<AnimalRegistration>;
+    _empty?: Maybe<Scalars['String']>;
+    /** Created organization */
+    createOrganization?: Maybe<Organization>;
+    /** Updated organization */
+    updateOrganization?: Maybe<Organization>;
+    /** Deleted organization */
+    deleteOrganization?: Maybe<Organization>;
+};
+
+export type MutationCreateAnimalArgs = {
+    input: CreateAnimalInput;
+};
+
+export type MutationUpdateAnimalArgs = {
+    input: UpdateAnimalInput;
+};
+
+export type MutationCreateMicrochipArgs = {
+    input: CreateAnimalMicrochipInput;
+};
+
+export type MutationUpdateMicrochipArgs = {
+    input: UpdateAnimalMicrochipInput;
+};
+
+export type MutationDeleteMicrochipArgs = {
+    animalId: Scalars['Int'];
+    microchipId: Scalars['String'];
+};
+
+export type MutationDeleteAnimalRegistrationArgs = {
+    id: Scalars['Int'];
+};
+
+export type MutationCreateOrganizationArgs = {
+    input: CreateOrganisationInput;
+};
+
+export type MutationUpdateOrganizationArgs = {
+    input: UpdateOrganizationInput;
+};
+
+export type MutationDeleteOrganizationArgs = {
+    id: Scalars['Int'];
+};
+
 export type CreateAnimalInput = {
     /** Animal name */
     name?: Maybe<Scalars['String']>;
@@ -150,21 +221,25 @@ export type CreateAnimalInput = {
     image_url?: Maybe<Scalars['String']>;
     /** Comments */
     comments?: Maybe<Scalars['String']>;
+    /** AnimalRegistration */
+    registration: AnimalRegistrationInput;
 };
 
 export type UpdateAnimalInput = {
     /** Animal id, for example 2 */
     id: Scalars['Int'];
     /** Animal name */
-    name: Scalars['String'];
+    name?: Maybe<Scalars['String']>;
     /** Organization id */
-    organization: Scalars['Int'];
+    organization?: Maybe<Scalars['Int']>;
     /** Status */
-    status: Scalars['String'];
+    status?: Maybe<Scalars['String']>;
     /** Image URL */
-    image_url: Scalars['String'];
+    image_url?: Maybe<Scalars['String']>;
     /** Comments */
-    comments: Scalars['String'];
+    comments?: Maybe<Scalars['String']>;
+    /** AnimalRegistration */
+    registration?: Maybe<AnimalRegistrationInput>;
 };
 
 /** Represents an animal details. */
@@ -181,12 +256,12 @@ export type AnimalDetails = {
      * Animal species by language
      * Examples: species(language: "en") or just species - will return default language ("lt") translation
      */
-    species?: Maybe<Scalars['String']>;
+    species?: Maybe<Species>;
     /**
      * Animal gender by language.
      * Examples: gender(language: "en") or just gender - will return default language ("lt") translation
      */
-    gender?: Maybe<Scalars['String']>;
+    gender?: Maybe<Gender>;
     /**
      * Animal color by language
      * Examples: color(language: "en") or just color - will return default language ("lt") translation
@@ -222,31 +297,6 @@ export type AnimalDetailsColorArgs = {
     language?: Maybe<Scalars['String']>;
 };
 
-/** Animal registration status valid values */
-export enum RegistrationStatus {
-    Active = 'Active',
-    Implanted = 'Implanted',
-}
-
-/** Represents an animal registration. */
-export type AnimalRegistration = {
-    __typename?: 'AnimalRegistration';
-    /** Animal id, for example 2 */
-    animalId: Scalars['Int'];
-    /** Registration number */
-    registrationNo: Scalars['String'];
-    /** Registration date */
-    registrationDate?: Maybe<Scalars['String']>;
-    /** Registration status ('Active' or 'Inactive') */
-    status?: Maybe<RegistrationStatus>;
-};
-
-/** Animal microchip status valid values */
-export enum MicrochipStatus {
-    Implanted = 'Implanted',
-    Removed = 'Removed',
-}
-
 /** Represents an animal microchip. */
 export type AnimalMicrochip = {
     __typename?: 'AnimalMicrochip';
@@ -254,28 +304,85 @@ export type AnimalMicrochip = {
     animalId: Scalars['Int'];
     /** Microchip id */
     microchipId: Scalars['String'];
+    /** Chip company code */
+    chipCompanyCode: Scalars['Int'];
     /** Microchip install date */
     installDate?: Maybe<Scalars['String']>;
+    /** Microchip install place */
+    installPlace: Scalars['Int'];
+    /**
+     * Microchip status ('Implanted' or 'Removed') translation
+     * Examples: status(language: "en") or just status - will return default language ("lt") translation
+     */
+    status?: Maybe<Scalars['String']>;
+};
+
+/** Represents an animal microchip. */
+export type AnimalMicrochipStatusArgs = {
+    language?: Maybe<Scalars['String']>;
+};
+
+export type CreateAnimalMicrochipInput = {
+    /** Animal id, for example 2 */
+    animalId: Scalars['Int'];
+    /** Microchip id */
+    microchipId: Scalars['String'];
+    /** Chip company code */
+    chipCompanyCode: Scalars['Int'];
+    /** Install date */
+    installDate?: Maybe<Scalars['String']>;
+    /** Install place */
+    installPlace: Scalars['Int'];
     /** Microchip status ('Implanted' or 'Removed') */
-    status?: Maybe<MicrochipStatus>;
+    status: Scalars['String'];
 };
 
-/** Represents a gender. */
-export type Gender = {
-    __typename?: 'Gender';
-    /** Gender id */
-    id: Scalars['String'];
-    /** Gender name */
-    value: Scalars['String'];
+export type UpdateAnimalMicrochipInput = {
+    /** Animal id, for example 2 */
+    animalId: Scalars['Int'];
+    /** Microchip id */
+    microchipId: Scalars['String'];
+    /** Chip company code */
+    chipCompanyCode?: Maybe<Scalars['Int']>;
+    /** Install date */
+    installDate?: Maybe<Scalars['String']>;
+    /** Install place */
+    installPlace?: Maybe<Scalars['Int']>;
+    /** Microchip status ('Implanted' or 'Removed') */
+    status?: Maybe<Scalars['String']>;
 };
 
-/** Represents a status. */
-export type Status = {
-    __typename?: 'Status';
-    /** Status id */
-    id: Scalars['String'];
-    /** Status name */
-    value: Scalars['String'];
+export enum RegistrationStatus {
+    Active = 'Active',
+    Inactive = 'Inactive',
+}
+
+/** Represents animal registration */
+export type AnimalRegistration = {
+    __typename?: 'AnimalRegistration';
+    /** Registration number */
+    registrationNo: Scalars['String'];
+    /** Registration date */
+    registrationDate?: Maybe<Scalars['String']>;
+    /**
+     * Registration status ('Active' or 'Inactive') translation
+     * Examples: status(language: "en") or just status - will return default language ("lt") translation
+     */
+    status?: Maybe<Scalars['String']>;
+};
+
+/** Represents animal registration */
+export type AnimalRegistrationStatusArgs = {
+    language?: Maybe<Scalars['String']>;
+};
+
+export type AnimalRegistrationInput = {
+    /** Registration number */
+    registrationNo: Scalars['String'];
+    /** Registration date */
+    registrationDate?: Maybe<Scalars['String']>;
+    /** Registration status ('Active' or 'Inactive') */
+    status?: Maybe<RegistrationStatus>;
 };
 
 /** Represents a breed. */
@@ -289,6 +396,75 @@ export type Breed = {
     value: Scalars['String'];
 };
 
+/** Represents a color. */
+export type Color = {
+    __typename?: 'Color';
+    /** Color id */
+    id: Scalars['Int'];
+    /** Color name */
+    value: Scalars['String'];
+};
+
+/** Represents a gender. */
+export type Gender = {
+    __typename?: 'Gender';
+    /** Gender id */
+    id: Scalars['String'];
+    /** Gender name */
+    value: Scalars['String'];
+};
+
+/** Represents an organization. */
+export type Organization = {
+    __typename?: 'Organization';
+    /** Organization id, for example 2 */
+    id: Scalars['Int'];
+    /** Organization name */
+    name?: Maybe<Scalars['String']>;
+    /** Organization id */
+    organization: Scalars['Int'];
+    /** Country */
+    country?: Maybe<Scalars['String']>;
+    /** City */
+    city?: Maybe<Scalars['String']>;
+    /** Comments */
+    streetAddress?: Maybe<Scalars['String']>;
+    /** Phone */
+    phone?: Maybe<Scalars['String']>;
+    /** Modification time */
+    modTime?: Maybe<Scalars['String']>;
+    /** Delete time */
+    deleteTime?: Maybe<Scalars['String']>;
+};
+
+export type CreateOrganisationInput = {
+    /** Organization name */
+    name: Scalars['String'];
+    /** Country */
+    country?: Maybe<Scalars['String']>;
+    /** City */
+    city?: Maybe<Scalars['String']>;
+    /** Street address */
+    streetAddress?: Maybe<Scalars['String']>;
+    /** Phone */
+    phone?: Maybe<Scalars['String']>;
+};
+
+export type UpdateOrganizationInput = {
+    /** Organization id, for example 2 */
+    id: Scalars['Int'];
+    /** Organization name */
+    name?: Maybe<Scalars['String']>;
+    /** Country */
+    country?: Maybe<Scalars['String']>;
+    /** City */
+    city?: Maybe<Scalars['String']>;
+    /** Street address */
+    streetAddress?: Maybe<Scalars['String']>;
+    /** Phone */
+    phone?: Maybe<Scalars['String']>;
+};
+
 /** Represents a breed. */
 export type Species = {
     __typename?: 'Species';
@@ -298,11 +474,11 @@ export type Species = {
     value: Scalars['String'];
 };
 
-/** Represents a color. */
-export type Color = {
-    __typename?: 'Color';
-    /** Color id */
-    id: Scalars['Int'];
-    /** Color name */
+/** Represents a status. */
+export type Status = {
+    __typename?: 'Status';
+    /** Status id */
+    id: Scalars['String'];
+    /** Status name */
     value: Scalars['String'];
 };

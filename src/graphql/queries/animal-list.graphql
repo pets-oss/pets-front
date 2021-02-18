@@ -5,7 +5,9 @@ query GetAnimalsList {
         imageUrl
         status
         details {
-            gender
+            gender {
+                value
+            }
             birthDate
             weight
         }
