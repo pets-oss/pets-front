@@ -4,10 +4,12 @@ import { Route, Switch, useLocation } from 'react-router-dom';
 
 import Container from '@material-ui/core/Container';
 import CssBaseline from '@material-ui/core/CssBaseline';
-import { makeStyles, ThemeProvider } from '@material-ui/core/styles';
+import { makeStyles, Theme, ThemeProvider, useTheme } from '@material-ui/core/styles';
+import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { Skeleton } from '@material-ui/lab';
-import SiteBottomNavigation from './components/layout/SiteBottomNavigation';
-import SiteTopNavigation from './components/layout/SiteTopNavigation';
+import AppBottomNavigation from './components/layout/AppBottomNavigation';
+import AppTopBar from './components/layout/AppTopBar';
+import AppTopNavigation from './components/layout/AppTopNavigation';
 import PageNotFound from './pages/PageNotFound';
 import MuiTheme from './theme';
 import Auth0ProviderWithHistory from './utils/auth/Auth0ProviderWithHistory';
@@ -18,19 +20,18 @@ const LocationDisplay = () => {
     return <div data-testid="location-display">{location.pathname}</div>;
 };
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme: Theme) => ({
     root: {
         display: 'flex',
         flexDirection: 'column',
         minHeight: '100vh',
-        backgroundColor: '#e8cdb8',
     },
     main: {
-        [theme.breakpoints.down('sm')]: {
-            marginTop: 56 + theme.spacing(2), // follow AppBar minHeight: 56
+        [theme.breakpoints.down('md')]: {
+            marginTop: theme.spacing(1),
         },
-        [theme.breakpoints.up('sm')]: {
-            marginTop: 64 + theme.spacing(3), // follow AppBar minHeight: 64
+        [theme.breakpoints.up('md')]: {
+            marginTop: 64 + theme.spacing(3), // follow fixed AppBar minHeight: 64
         },
         marginBottom: theme.spacing(10),
     },
@@ -42,13 +43,15 @@ const useStyles = makeStyles(theme => ({
 
 export default function App() {
     const classes = useStyles();
+    const theme = useTheme();
+    const matchesLgScreen = useMediaQuery(theme.breakpoints.up('md'));
 
     return (
         <ThemeProvider theme={MuiTheme}>
             <CssBaseline />
             <Auth0ProviderWithHistory>
                 <div className={classes.root}>
-                    <SiteTopNavigation />
+                    {matchesLgScreen ? <AppTopNavigation /> : <AppTopBar />}
                     <Container component="main" className={classes.main} maxWidth="lg">
                         <React.Suspense fallback={<Skeleton variant="rect" height="100vh" />}>
                             <Switch>
@@ -63,7 +66,7 @@ export default function App() {
                                     path="/animal-list"
                                     component={React.lazy(() => import('./pages/Animals'))}
                                 />
-                                <Route
+                                <PrivateRoute
                                     exact
                                     path="/animal/:id"
                                     component={React.lazy(() => import('./pages/AnimalDetails'))}
@@ -88,7 +91,7 @@ export default function App() {
                             </Switch>
                         </React.Suspense>
                     </Container>
-                    <SiteBottomNavigation />
+                    {!matchesLgScreen && <AppBottomNavigation />}
                 </div>
             </Auth0ProviderWithHistory>
 
