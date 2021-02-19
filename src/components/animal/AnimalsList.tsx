@@ -2,7 +2,7 @@ import React from 'react';
 
 import Grid from '@material-ui/core/Grid';
 import { Animal } from '../../graphql/types';
-import AnimalsListItem from './AnimalListItem';
+import AnimalCard from './AnimalCard';
 
 interface AnimalsListProps {
     animals: Animal[];
@@ -10,9 +10,9 @@ interface AnimalsListProps {
 
 export default function AnimalsList({ animals }: AnimalsListProps) {
     return (
-        <Grid container component="ul" spacing={2}>
+        <Grid container component="ul" spacing={2} justify="center">
             {animals.map(animal => (
-                <AnimalsListItem key={animal.id} animal={animal} />
+                <AnimalCard key={animal.id} animal={animal} />
             ))}
         </Grid>
     );
