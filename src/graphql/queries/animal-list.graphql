@@ -6,6 +6,11 @@ query GetAnimalsList {
         status
         details {
             gender {
+                id
+                value
+            }
+            species {
+                id
                 value
             }
             birthDate
