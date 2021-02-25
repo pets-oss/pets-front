@@ -6,12 +6,18 @@ query GetAnimal($id: Int!) {
             gender {
                 value
             }
-            color
+            color {
+                id
+                value
+            }
             birthDate
             weight
             allergy
             food
-            breed
+            breed {
+                id
+                value
+            }
         }
         imageUrl
     }
