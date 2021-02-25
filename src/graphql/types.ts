@@ -86,6 +86,22 @@ export type Query = {
      * statuses(language: "lt")
      */
     statuses?: Maybe<Array<Maybe<Status>>>;
+    /**
+     * Lookup an user.
+     *
+     * Examples:
+     *
+     * user(id: 1)
+     */
+    user?: Maybe<User>;
+    /**
+     * Get all users.
+     *
+     * Examples:
+     *
+     * users
+     */
+    users?: Maybe<Array<Maybe<User>>>;
 };
 
 export type QueryAnimalArgs = {
@@ -115,6 +131,10 @@ export type QuerySpeciesArgs = {
 
 export type QueryStatusesArgs = {
     language: Scalars['String'];
+};
+
+export type QueryUserArgs = {
+    id: Scalars['String'];
 };
 
 /** Represents an animal. */
@@ -156,6 +176,8 @@ export type Mutation = {
     createAnimal?: Maybe<Animal>;
     /** Updated animal */
     updateAnimal?: Maybe<Animal>;
+    /** Delete animal details */
+    deleteAnimalDetails?: Maybe<AnimalDetails>;
     /** Created microchip */
     createMicrochip?: Maybe<AnimalMicrochip>;
     /** Updated microchip */
@@ -171,6 +193,12 @@ export type Mutation = {
     updateOrganization?: Maybe<Organization>;
     /** Deleted organization */
     deleteOrganization?: Maybe<Organization>;
+    /** Created user */
+    createUser?: Maybe<User>;
+    /** Updated user */
+    updateUser?: Maybe<User>;
+    /** Deleted user */
+    deleteUser?: Maybe<User>;
 };
 
 export type MutationCreateAnimalArgs = {
@@ -179,6 +207,10 @@ export type MutationCreateAnimalArgs = {
 
 export type MutationUpdateAnimalArgs = {
     input: UpdateAnimalInput;
+};
+
+export type MutationDeleteAnimalDetailsArgs = {
+    id: Scalars['Int'];
 };
 
 export type MutationCreateMicrochipArgs = {
@@ -210,6 +242,18 @@ export type MutationDeleteOrganizationArgs = {
     id: Scalars['Int'];
 };
 
+export type MutationCreateUserArgs = {
+    input: UserInput;
+};
+
+export type MutationUpdateUserArgs = {
+    input: UserInput;
+};
+
+export type MutationDeleteUserArgs = {
+    id: Scalars['String'];
+};
+
 export type CreateAnimalInput = {
     /** Animal name */
     name?: Maybe<Scalars['String']>;
@@ -223,6 +267,8 @@ export type CreateAnimalInput = {
     comments?: Maybe<Scalars['String']>;
     /** AnimalRegistration */
     registration: AnimalRegistrationInput;
+    /** AnimalDetails */
+    details?: Maybe<AnimalDetailsInput>;
 };
 
 export type UpdateAnimalInput = {
@@ -240,6 +286,8 @@ export type UpdateAnimalInput = {
     comments?: Maybe<Scalars['String']>;
     /** AnimalRegistration */
     registration?: Maybe<AnimalRegistrationInput>;
+    /** AnimalDetails */
+    details?: Maybe<AnimalDetailsInput>;
 };
 
 /** Represents an animal details. */
@@ -251,7 +299,7 @@ export type AnimalDetails = {
      * Animal breed by language.
      * Examples: breed(language: "en") or just breed - will return default language ("lt") translation
      */
-    breed?: Maybe<Scalars['String']>;
+    breed?: Maybe<Breed>;
     /**
      * Animal species by language
      * Examples: species(language: "en") or just species - will return default language ("lt") translation
@@ -266,7 +314,7 @@ export type AnimalDetails = {
      * Animal color by language
      * Examples: color(language: "en") or just color - will return default language ("lt") translation
      */
-    color?: Maybe<Scalars['String']>;
+    color?: Maybe<Color>;
     /** Animal date of birth */
     birthDate?: Maybe<Scalars['String']>;
     /** Animal weight (kg) */
@@ -295,6 +343,23 @@ export type AnimalDetailsGenderArgs = {
 /** Represents an animal details. */
 export type AnimalDetailsColorArgs = {
     language?: Maybe<Scalars['String']>;
+};
+
+export type AnimalDetailsInput = {
+    /** Animal breed id */
+    breedId?: Maybe<Scalars['Int']>;
+    /** Animal gender */
+    genderId?: Maybe<Scalars['Int']>;
+    /** Animal color */
+    colorId?: Maybe<Scalars['Int']>;
+    /** Animal date of birth */
+    birthDate?: Maybe<Scalars['String']>;
+    /** Animal weight (kg) */
+    weight?: Maybe<Scalars['Int']>;
+    /** Animal allergy */
+    allergy?: Maybe<Scalars['String']>;
+    /** Animal food */
+    food?: Maybe<Scalars['String']>;
 };
 
 /** Represents an animal microchip. */
@@ -481,4 +546,45 @@ export type Status = {
     id: Scalars['String'];
     /** Status name */
     value: Scalars['String'];
+};
+
+/** Represents an user. */
+export type User = {
+    __typename?: 'User';
+    /** User id, for example 2 */
+    id: Scalars['String'];
+    /** User username */
+    username: Scalars['String'];
+    /** User name */
+    name?: Maybe<Scalars['String']>;
+    /** User surname */
+    surname?: Maybe<Scalars['String']>;
+    /** User email */
+    email?: Maybe<Scalars['String']>;
+    /** User roles */
+    roles?: Maybe<Array<Maybe<Role>>>;
+    /** Modification time */
+    modTime?: Maybe<Scalars['String']>;
+};
+
+/** Represents an user role. */
+export type Role = {
+    __typename?: 'Role';
+    /** Organization id */
+    organizationId: Scalars['Int'];
+    /** User role in organization */
+    roleType?: Maybe<Scalars['String']>;
+};
+
+export type UserInput = {
+    /** User id */
+    id: Scalars['String'];
+    /** User username */
+    username?: Maybe<Scalars['String']>;
+    /** User name */
+    name?: Maybe<Scalars['String']>;
+    /** User surname */
+    surname?: Maybe<Scalars['String']>;
+    /** User email */
+    email?: Maybe<Scalars['String']>;
 };
