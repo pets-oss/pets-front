@@ -76,6 +76,7 @@ jobs:
             REACT_APP_GRAPHQL_URL: ${{ secrets.REACT_APP_GRAPHQL_URL }}
             REACT_APP_AUTH0_DOMAIN: ${{ secrets.REACT_APP_AUTH0_DOMAIN }}
             REACT_APP_AUTH0_CLIENT_ID: ${{ secrets.REACT_APP_AUTH0_CLIENT_ID }}
+            REACT_APP_AUTH0_AUTH_AUDIENCE: ${{ secrets.REACT_APP_AUTH0_AUTH_AUDIENCE }}
         steps:
             - uses: actions/cache@v2
               id: restore-install
