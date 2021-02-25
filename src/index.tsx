@@ -3,20 +3,20 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter } from 'react-router-dom';
 
-import { ApolloProvider } from '@apollo/client';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import { createGraphQlClient } from './services/graphql-client';
 import * as serviceWorkerRegistration from './serviceWorkerRegistration';
-
-const client = createGraphQlClient();
+import Auth0ProviderWithHistory from './utils/auth/Auth0ProviderWithHistory';
+import AuthorizedApolloProvider from './utils/AuthorizedApolloProvider';
 
 ReactDOM.render(
     <React.StrictMode>
         <BrowserRouter>
-            <ApolloProvider client={client}>
-                <App />
-            </ApolloProvider>
+            <Auth0ProviderWithHistory>
+                <AuthorizedApolloProvider>
+                    <App />
+                </AuthorizedApolloProvider>
+            </Auth0ProviderWithHistory>
         </BrowserRouter>
     </React.StrictMode>,
     document.getElementById('root')

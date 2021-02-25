@@ -12,7 +12,6 @@ import AppTopBar from './components/layout/AppTopBar';
 import AppTopNavigation from './components/layout/AppTopNavigation';
 import PageNotFound from './pages/PageNotFound';
 import MuiTheme from './theme';
-import Auth0ProviderWithHistory from './utils/auth/Auth0ProviderWithHistory';
 import PrivateRoute from './utils/auth/PrivateRoute';
 
 const LocationDisplay = () => {
@@ -49,52 +48,49 @@ export default function App() {
     return (
         <ThemeProvider theme={MuiTheme}>
             <CssBaseline />
-            <Auth0ProviderWithHistory>
-                <div className={classes.root}>
-                    {matchesLgScreen ? <AppTopNavigation /> : <AppTopBar />}
-                    <Container component="main" className={classes.main} maxWidth="lg">
-                        <React.Suspense fallback={<Skeleton variant="rect" height="100vh" />}>
-                            <Switch>
-                                <Route exact path="/about" component={React.lazy(() => import('./pages/About'))} />
-                                <PrivateRoute
-                                    exact
-                                    path="/user-profile"
-                                    component={React.lazy(() => import('./pages/UserProfile'))}
-                                />
-                                <PrivateRoute
-                                    exact
-                                    path="/animal-list"
-                                    component={React.lazy(() => import('./pages/Animals'))}
-                                />
-                                <PrivateRoute
-                                    exact
-                                    path="/animal/:id"
-                                    component={React.lazy(() => import('./pages/AnimalDetails'))}
-                                />
-                                <Route
-                                    exact
-                                    path="/search"
-                                    component={React.lazy(() => import('./pages/PageNotImplemented'))}
-                                />
-                                <Route
-                                    exact
-                                    path="/login"
-                                    component={React.lazy(() => import('./pages/PageNotImplemented'))}
-                                />
-                                <Route
-                                    exact
-                                    path="/logout"
-                                    component={React.lazy(() => import('./pages/PageNotImplemented'))}
-                                />
-                                <Route exact path="/" component={React.lazy(() => import('./pages/Home'))} />
-                                <Route component={PageNotFound} />
-                            </Switch>
-                        </React.Suspense>
-                    </Container>
-                    {!matchesLgScreen && <AppBottomNavigation />}
-                </div>
-            </Auth0ProviderWithHistory>
-
+            <div className={classes.root}>
+                {matchesLgScreen ? <AppTopNavigation /> : <AppTopBar />}
+                <Container component="main" className={classes.main} maxWidth="lg">
+                    <React.Suspense fallback={<Skeleton variant="rect" height="100vh" />}>
+                        <Switch>
+                            <Route exact path="/about" component={React.lazy(() => import('./pages/About'))} />
+                            <PrivateRoute
+                                exact
+                                path="/user-profile"
+                                component={React.lazy(() => import('./pages/UserProfile'))}
+                            />
+                            <PrivateRoute
+                                exact
+                                path="/animal-list"
+                                component={React.lazy(() => import('./pages/Animals'))}
+                            />
+                            <PrivateRoute
+                                exact
+                                path="/animal/:id"
+                                component={React.lazy(() => import('./pages/AnimalDetails'))}
+                            />
+                            <Route
+                                exact
+                                path="/search"
+                                component={React.lazy(() => import('./pages/PageNotImplemented'))}
+                            />
+                            <Route
+                                exact
+                                path="/login"
+                                component={React.lazy(() => import('./pages/PageNotImplemented'))}
+                            />
+                            <Route
+                                exact
+                                path="/logout"
+                                component={React.lazy(() => import('./pages/PageNotImplemented'))}
+                            />
+                            <Route exact path="/" component={React.lazy(() => import('./pages/Home'))} />
+                            <Route component={PageNotFound} />
+                        </Switch>
+                    </React.Suspense>
+                </Container>
+                {!matchesLgScreen && <AppBottomNavigation />}
+            </div>
             <LocationDisplay />
         </ThemeProvider>
     );
