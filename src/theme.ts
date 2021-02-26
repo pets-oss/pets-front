@@ -1,4 +1,5 @@
 import { createMuiTheme } from '@material-ui/core/styles';
+import { ThemeOptions } from '@material-ui/core/styles/createMuiTheme';
 
 const defaultTheme = createMuiTheme({
     palette: {
@@ -25,7 +26,7 @@ const defaultTheme = createMuiTheme({
 });
 const { breakpoints } = defaultTheme;
 
-const theme = {
+const theme: ThemeOptions = {
     ...defaultTheme,
     overrides: {
         MuiTypography: {
@@ -78,6 +79,11 @@ const theme = {
                 marginTop: 4,
                 marginBottom: 4,
             },
+        },
+    },
+    props: {
+        MuiUseMediaQuery: {
+            noSsr: true,
         },
     },
 };

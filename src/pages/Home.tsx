@@ -1,12 +1,13 @@
 import React from 'react';
 
 import AppLogoHeader from '../components/layout/AppLogoHeader';
+import Page from './Page';
 
 function Home() {
     return (
-        <div className="Home-page">
+        <Page>
             <AppLogoHeader />
-        </div>
+        </Page>
     );
 }
 

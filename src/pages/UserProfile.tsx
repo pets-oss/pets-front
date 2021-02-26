@@ -2,6 +2,7 @@ import React from 'react';
 
 import { useAuth0 } from '@auth0/auth0-react';
 import { makeStyles, Typography } from '@material-ui/core';
+import Page from './Page';
 
 const useStyles = makeStyles(theme => ({
     infoContainer: {
@@ -26,7 +27,7 @@ function UserProfile() {
     }
 
     return (
-        <div className="UserProfile-page">
+        <Page title="User preferences">
             <div className={classes.infoContainer}>
                 <img alt="" src={user.picture} className={classes.avatar} />
                 <Typography variant="h4" component="p">
@@ -34,11 +35,8 @@ function UserProfile() {
                 </Typography>
                 <Typography>{user.email}</Typography>
             </div>
-            <Typography variant="h3" component="h1">
-                UserProfile page
-            </Typography>
             <Typography variant="body1">User and Organization details</Typography>
-        </div>
+        </Page>
     );
 }
 

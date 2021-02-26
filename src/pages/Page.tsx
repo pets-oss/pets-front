@@ -1,58 +1,76 @@
-import React from 'react';
+import React, { ReactNode } from 'react';
 
 import { Box } from '@material-ui/core';
+import Container from '@material-ui/core/Container';
 import Divider from '@material-ui/core/Divider';
 import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
+import useMobile from '../hooks/useMobile';
 
 interface PageProps {
-    children: React.ReactNode;
-    action?: React.ReactNode;
-    title?: string;
+    title?: string | ReactNode;
+    topSection?: ReactNode;
+    // Content
+    children: ReactNode | ReactNode[];
+    displayTitleOnMobile?: boolean;
 }
 
-export default function Page({ children, action, title }: PageProps) {
+export default function Page({ title, topSection, children, displayTitleOnMobile }: PageProps) {
+    const classes = useStyles();
+    const mobile = useMobile();
+
     return (
-        <Box>
-            {title && <PageHeading title={title} action={action} />}
-            {children}
-        </Box>
+        <Container component="main" className={classes.root} maxWidth="lg">
+            <Grid container spacing={4}>
+                {(!mobile || displayTitleOnMobile) && (
+                    <Grid item xs={12}>
+                        {title && <PageTitle title={title} />}
+                    </Grid>
+                )}
+                {topSection && (
+                    <Grid item xs={12}>
+                        {topSection}
+                    </Grid>
+                )}
+                <Grid item xs={12}>
+                    {children}
+                </Grid>
+            </Grid>
+        </Container>
     );
 }
 
-interface PageHeadingProps {
-    title: string;
-    action?: React.ReactNode;
-}
+function PageTitle({ title }: { title: string | ReactNode }) {
+    if (typeof title !== 'string') {
+        // Custom title
+        return <>title</>;
+    }
 
-function PageHeading({ title, action }: PageHeadingProps) {
-    const classes = useStyles();
     return (
-        <Grid container spacing={2} className={classes.root}>
-            <Grid item xs={10}>
-                <Typography className={classes.title} variant="h3" color="textSecondary">
+        <>
+            <Box mb={1}>
+                <Typography variant="h3" component="h1" color="textSecondary">
                     {title}
                 </Typography>
-            </Grid>
-            {action && (
-                <Grid item xs={2} className={classes.endAlign}>
-                    {action}
-                </Grid>
-            )}
-            <Grid item xs={12}>
-                <Divider />
-            </Grid>
-        </Grid>
+            </Box>
+            <Divider />
+        </>
     );
 }
 
 const useStyles = makeStyles(theme => ({
     root: {
-        marginBottom: theme.spacing(2),
+        [theme.breakpoints.down('md')]: {
+            marginTop: theme.spacing(1),
+        },
+        [theme.breakpoints.up('md')]: {
+            marginTop: 64 + theme.spacing(3), // follow fixed AppBar minHeight: 64
+        },
+        marginBottom: theme.spacing(10),
     },
-    title: {
-        paddingBottom: theme.spacing(1),
+    heading: {
+        marginBottom: theme.spacing(2),
     },
     endAlign: {
         textAlign: 'end',

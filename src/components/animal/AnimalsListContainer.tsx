@@ -21,7 +21,7 @@ interface AnimalsListContainerProps {
 export default function AnimalsListContainer({ viewType }: AnimalsListContainerProps) {
     const { loading, error, data } = useQuery<Response>(GET_ANIMALS_QUERY);
     if (loading) {
-        return <Skeleton animation="wave" height="70vh" />;
+        return <Skeleton animation="wave" variant="rect" height={500} />;
     }
 
     if (error) {
