@@ -1,7 +1,7 @@
 import React from 'react';
 import { MemoryRouter, RouteProps, Switch } from 'react-router-dom';
 
-import { useAuth0 } from '@auth0/auth0-react';
+import { useAuth0, withAuthenticationRequired } from '@auth0/auth0-react';
 import { render, screen } from '@testing-library/react';
 import UserProfile from '../../pages/UserProfile';
 import PrivateRoute from './PrivateRoute';
@@ -19,6 +19,7 @@ test('authed user has access to private route', async () => {
         isAuthenticated: true,
         user,
     });
+    (withAuthenticationRequired as jest.Mock).mockReturnValue(UserProfile);
     const props = {
         path: '/user-profile',
         component: UserProfile,

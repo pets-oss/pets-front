@@ -1,10 +1,12 @@
 import React from 'react';
-import { Redirect, Route, RouteProps } from 'react-router-dom';
+import { Route, RouteProps } from 'react-router-dom';
 
-import { useAuth0 } from '@auth0/auth0-react';
+import { withAuthenticationRequired } from '@auth0/auth0-react';
 
-export default function PrivateRoute(props: RouteProps) {
-    const { isAuthenticated } = useAuth0();
+export default function PrivateRoute({ component, ...otherProps }: RouteProps) {
+    if (!component) {
+        return null;
+    }
 
-    return isAuthenticated ? <Route {...props} /> : <Redirect to="/" />;
+    return <Route component={withAuthenticationRequired(component)} {...otherProps} />;
 }
