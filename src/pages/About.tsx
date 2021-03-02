@@ -6,9 +6,6 @@ import Page from './Page';
 function About() {
     return (
         <Page title="About this project">
-            <Typography variant="h3" component="h1">
-                About page
-            </Typography>
             <Typography variant="body1" paragraph>
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
                 dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip

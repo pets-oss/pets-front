@@ -5,14 +5,15 @@ import { useParams } from 'react-router-dom';
 
 import { useQuery } from '@apollo/client';
 import { Box, Typography } from '@material-ui/core';
-import { createStyles, makeStyles } from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
 import { Skeleton } from '@material-ui/lab';
-import AnimalEventList from '../components/animal/AnimalEventList';
-import LayoutMultiColRow from '../components/layout/LayoutMultiColRow';
-import { Animal } from '../graphql/types';
-import { getAnimalAge, getAnimalWeight } from '../utils/animal';
+import { Animal } from '../../graphql/types';
+import { getAnimalAge, getAnimalWeight } from '../../utils/animal';
+import LayoutMultiColRow from '../layout/LayoutMultiColRow';
+import AnimalEventList from './AnimalEventList';
 
-const GET_ANIMAL_DETAILS = loader('../graphql/queries/animal-details.graphql');
+const GET_ANIMAL_DETAILS = loader('../../graphql/queries/animal-details.graphql');
+
 interface RouterParams {
     id: string;
 }
@@ -21,31 +22,22 @@ interface Response {
     animal: Animal;
 }
 
-const useStyles = makeStyles(theme =>
-    createStyles({
-        root: {
-            flexGrow: 1,
-        },
-        animalName: {
-            color: theme.palette.primary.dark,
-        },
-        animalMeta: {
-            color: theme.palette.grey[600],
-        },
-    })
-);
+interface AnimalDetailsProps {
+    onLoad?: (animal: Animal) => void;
+}
 
-function AnimalDetails() {
+function AnimalDetails({ onLoad }: AnimalDetailsProps) {
     const params: RouterParams = useParams();
     const { id } = params;
     const classes = useStyles();
 
     const { loading, error, data } = useQuery<Response>(GET_ANIMAL_DETAILS, {
         variables: { id: Number(id) },
+        onCompleted: ({ animal }) => (onLoad ? onLoad(animal) : undefined),
     });
 
     if (loading) {
-        return <Skeleton animation="wave" height="70vh" />;
+        return <Skeleton animation="wave" variant="rect" height="70vh" />;
     }
 
     if (error) {
@@ -62,15 +54,10 @@ function AnimalDetails() {
     const birthDay = animal.details?.birthDate ? getAnimalAge(animal.details.birthDate) : '';
 
     return (
-        <div className={classes.root}>
+        <>
             <LayoutMultiColRow>
                 <Image src={animal.imageUrl!} aspectRatio={16 / 9} />
                 <>
-                    <Box mt={1}>
-                        <Typography className={classes.animalName} variant="h3" component="h1">
-                            {animal.name}
-                        </Typography>
-                    </Box>
                     {animal.details && (
                         <Box mt={1}>
                             <Typography className={classes.animalMeta} variant="body1">
@@ -91,8 +78,20 @@ function AnimalDetails() {
                 </Typography>
             </Box>
             <AnimalEventList />
-        </div>
+        </>
     );
 }
 
 export default AnimalDetails;
+
+const useStyles = makeStyles(theme => ({
+    root: {
+        flexGrow: 1,
+    },
+    animalName: {
+        color: theme.palette.primary.dark,
+    },
+    animalMeta: {
+        color: theme.palette.grey[600],
+    },
+}));

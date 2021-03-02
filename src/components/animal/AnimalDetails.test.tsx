@@ -3,12 +3,12 @@ import React from 'react';
 import { MemoryRouter, Route } from 'react-router-dom';
 
 import { screen, waitFor } from '@testing-library/react';
-import { renderWithMockProvider } from '../test-utils/render-mock-provider';
+import { renderWithMockProvider } from '../../test-utils/render-mock-provider';
 import AnimalDetails from './AnimalDetails';
 
 jest.mock('@material-ui/lab/Skeleton', () => () => <div>Loading...</div>);
 
-const GET_ANIMAL_DETAILS = loader('../graphql/queries/animal-details.graphql');
+const GET_ANIMAL_DETAILS = loader('../../graphql/queries/animal-details.graphql');
 
 // https://github.com/apollographql/apollo-client/issues/6803 MockedProvider issue
 jest.mock('@apollo/client', () => ({
@@ -50,7 +50,6 @@ describe('AnimalDetails', () => {
 
         expect(screen.getByText(/Loading.../)).toBeInTheDocument();
 
-        await waitFor(() => expect(screen.getByText(/Jupyter/i)).toBeInTheDocument());
         await waitFor(() => expect(screen.getByText(/Labrador/i)).toBeInTheDocument());
         await waitFor(() => expect(screen.getByText(/Black/i)).toBeInTheDocument());
         await waitFor(() => expect(screen.getByText(/Male/i)).toBeInTheDocument());

@@ -5,3 +5,8 @@
 div[data-testid=location-display] {
     display: none;
 }
+
+* {
+    margin: 0;
+    padding: 0;
+}
