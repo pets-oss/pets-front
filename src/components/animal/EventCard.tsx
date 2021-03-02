@@ -49,13 +49,7 @@ export default function EventCard({ eventName, date, author, description }: Anim
 
 const useStyles = makeStyles(theme => ({
     root: {
-        width: 300,
-        [theme.breakpoints.up('md')]: {
-            width: 500,
-        },
-        [theme.breakpoints.up('lg')]: {
-            width: 800,
-        },
+        width: '100%',
     },
     expand: {
         transform: 'rotate(0deg)',
