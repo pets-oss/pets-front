@@ -8,5 +8,5 @@ export default function PrivateRoute({ component, ...otherProps }: RouteProps) {
         return null;
     }
 
-    return <Route component={withAuthenticationRequired(component)} {...otherProps} />;
+    return <Route component={withAuthenticationRequired(component as React.ComponentType<any>)} {...otherProps} />;
 }
