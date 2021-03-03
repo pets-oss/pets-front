@@ -6,7 +6,7 @@
 
 Pets Information System Front-end
 
-Live site is available at https://pets-oss.github.io/pets-front/.
+Live site is available at https://app.petbook.lt/.
 
 ## Environment variables
 
