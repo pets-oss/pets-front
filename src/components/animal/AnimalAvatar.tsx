@@ -12,12 +12,6 @@ import IconRabbit from './IconRabbit';
 import IconReptile from './IconReptile';
 
 export default function AnimalAvatar({ species, gender }: AnimalAvatarProps) {
-    if (!gender) {
-        gender = {} as Gender;
-    }
-    if (!species) {
-        species = { id: '0', value: 'Undefined' } as Species;
-    }
     const styleProps = createGenderStyle(gender);
     const classes = useStyles(styleProps);
 
