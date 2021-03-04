@@ -1,9 +1,21 @@
-import { Species } from '../types';
+import { Maybe, Species } from '../types';
 
-export const enum SpeciesType {
-    DOG = 'dog',
-    CAT = 'cat',
-    UNDEFINED = 'Undefined',
+// available GraphQL enums
+//   {
+//     species(language:"lt") {
+//       id,
+//       value
+//     }
+//   }
+
+export enum SpeciesType {
+    DOG,
+    CAT,
+    RABBIT,
+    BIRD,
+    GUINEAPIG,
+    REPTILE,
+    UNDEFINED = 'undefined',
 }
 
 const SpeciesMapList: {
@@ -11,9 +23,13 @@ const SpeciesMapList: {
 } = {
     '1': SpeciesType.DOG,
     '2': SpeciesType.CAT,
+    '4': SpeciesType.RABBIT,
+    '10': SpeciesType.BIRD,
+    '11': SpeciesType.GUINEAPIG,
+    '13': SpeciesType.REPTILE,
 };
 
-export default function getSpecieType(species?: Species): SpeciesType {
+export default function getSpecieType(species?: Maybe<Species>): SpeciesType {
     if (!species) {
         return SpeciesType.UNDEFINED;
     }
