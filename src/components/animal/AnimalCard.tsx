@@ -3,13 +3,13 @@ import React from 'react';
 import { NavLink } from 'react-router-dom';
 
 import { Box, Card, CardActionArea, CardHeader, CardMedia, IconButton, Typography } from '@material-ui/core';
-import Avatar from '@material-ui/core/Avatar';
 import Grid from '@material-ui/core/Grid';
 import { makeStyles, Theme } from '@material-ui/core/styles';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import config from '../../config';
 import { Animal } from '../../graphql/types';
 import { getYMDDateFromTS } from '../../utils/dateFormatters';
+import AnimalAvatar from './AnimalAvatar';
 
 const VALID_GENDER_IDS = ['1', '2'];
 const VALID_SPECIES_IDS = ['1', '2'];
@@ -23,6 +23,9 @@ export default function AnimalCard({ animal }: AnimalCardProps) {
     } else {
         formatedRegistrationDate = 'n/d';
     }
+
+    const species = animal.details?.species;
+    const gender = animal.details?.gender;
 
     // just mocking toggle
     const handleFavoriteClick = () => {
@@ -51,7 +54,7 @@ export default function AnimalCard({ animal }: AnimalCardProps) {
                     </IconButton>
                 </Box>
                 <CardHeader
-                    avatar={<Avatar aria-label="specie" alt="specie" src={resolveIconSrc(animal)} />}
+                    avatar={<AnimalAvatar species={species} gender={gender} />}
                     title={
                         <Typography component="h6" className={classes.headerText} noWrap>
                             {animal.name}
