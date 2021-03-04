@@ -6,13 +6,9 @@ import { Box, Card, CardActionArea, CardHeader, CardMedia, IconButton, Typograph
 import Grid from '@material-ui/core/Grid';
 import { makeStyles, Theme } from '@material-ui/core/styles';
 import FavoriteIcon from '@material-ui/icons/Favorite';
-import config from '../../config';
 import { Animal } from '../../graphql/types';
 import { getYMDDateFromTS } from '../../utils/dateFormatters';
 import AnimalAvatar from './AnimalAvatar';
-
-const VALID_GENDER_IDS = ['1', '2'];
-const VALID_SPECIES_IDS = ['1', '2'];
 
 export default function AnimalCard({ animal }: AnimalCardProps) {
     const classes = useStyles();
@@ -69,19 +65,6 @@ export default function AnimalCard({ animal }: AnimalCardProps) {
             </Card>
         </Grid>
     );
-}
-
-function resolveIconSrc(animal: Animal) {
-    if (!animal.details?.gender || !VALID_GENDER_IDS.includes(animal.details.gender.id)) {
-        return `${config.PUBLIC_URL}/logo192.png`;
-    }
-
-    let speciesId = '0';
-    if (!!animal?.details?.species && VALID_SPECIES_IDS.includes(animal.details.species.id)) {
-        speciesId = animal.details.species.id;
-    }
-
-    return `${config.PUBLIC_URL}/gender${animal.details.gender.id}-species${speciesId}.png`;
 }
 
 const isFavoriteColor = '#D10C0C';
