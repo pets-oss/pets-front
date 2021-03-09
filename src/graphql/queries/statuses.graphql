@@ -1,0 +1,6 @@
+query GetStatuses($language: String!) {
+    statuses(language: $language) {
+        id
+        value
+    }
+}

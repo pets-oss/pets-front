@@ -1,0 +1,6 @@
+query GetBreeds($species: String!, $language: String!) {
+    breeds(species: $species, language: $language) {
+        id
+        value
+    }
+}
