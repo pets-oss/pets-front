@@ -18,7 +18,7 @@ function AnimalEventList() {
         <List className={classes.root}>
             {[0, 1, 2, 3].map((id: number) => {
                 return (
-                    <ListItem key={id}>
+                    <ListItem key={id} disableGutters>
                         <EventCard
                             eventName={`Event${id}`}
                             date={`2020-01-0${id}`}
