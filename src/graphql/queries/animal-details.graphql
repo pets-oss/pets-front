@@ -1,4 +1,4 @@
-query GetAnimal($id: Int!) {
+query GetAnimal($id: Int!, $language: String! = "lt") {
     animal(id: $id) {
         id
         name
@@ -20,5 +20,18 @@ query GetAnimal($id: Int!) {
             }
         }
         imageUrl
+    }
+    events(language: $language) {
+        animalAll(animalId: $id) {
+            id
+            category
+            type {
+                id
+                type
+            }
+            dateTime
+            expenses
+            comments
+        }
     }
 }

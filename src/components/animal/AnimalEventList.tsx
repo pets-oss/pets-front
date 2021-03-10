@@ -2,6 +2,7 @@ import React from 'react';
 
 import { List, ListItem } from '@material-ui/core';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
+import { Event } from '../../graphql/types';
 import EventCard from './EventCard';
 
 const useStyles = makeStyles(() =>
@@ -12,22 +13,19 @@ const useStyles = makeStyles(() =>
     })
 );
 
-function AnimalEventList() {
+interface AnimalEventListProps {
+    events: Event[];
+}
+
+function AnimalEventList({ events }: AnimalEventListProps) {
     const classes = useStyles();
     return (
         <List className={classes.root}>
-            {[0, 1, 2, 3].map((id: number) => {
-                return (
-                    <ListItem key={id}>
-                        <EventCard
-                            eventName={`Event${id}`}
-                            date={`2020-01-0${id}`}
-                            author={`Author${id}`}
-                            description={`Description${id}`}
-                        />
-                    </ListItem>
-                );
-            })}
+            {events.map(event => (
+                <ListItem key={event.id}>
+                    <EventCard event={event} />
+                </ListItem>
+            ))}
         </List>
     );
 }
