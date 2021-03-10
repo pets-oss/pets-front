@@ -5,17 +5,20 @@ import { Card, CardContent, CardHeader, Collapse, IconButton, Typography } from 
 import Avatar from '@material-ui/core/Avatar';
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import { Event } from '../../graphql/types';
+import { getFormattedDate } from '../../utils/date';
 
-export default function EventCard({ eventName, date, author, description }: AnimalCardProps) {
+export default function EventCard({ event }: AnimalCardProps) {
     const classes = useStyles();
     const [expanded, setExpanded] = useState(false);
+    const eventName = event.type?.type || '';
 
     return (
         <Card className={classes.root}>
             <CardHeader
                 avatar={
                     <Avatar aria-label="event" alt="event">
-                        E
+                        {eventName.charAt(0)}
                     </Avatar>
                 }
                 title={
@@ -35,12 +38,28 @@ export default function EventCard({ eventName, date, author, description }: Anim
                         <ExpandMoreIcon />
                     </IconButton>
                 }
-                subheader={<Typography noWrap>{date}</Typography>}
+                subheader={<Typography noWrap>{event.dateTime ? getFormattedDate(event.dateTime) : '-'}</Typography>}
             />
             <Collapse in={expanded} timeout="auto" unmountOnExit>
                 <CardContent className={classes.content}>
-                    <Typography paragraph>{author}</Typography>
-                    <Typography paragraph>{description}</Typography>
+                    <Typography color="textPrimary" className={classes.label}>
+                        Expenses:
+                    </Typography>
+                    <Typography paragraph color="textSecondary">
+                        {event.expenses || '-'}
+                    </Typography>
+                    <Typography color="textPrimary" className={classes.label}>
+                        Comments:
+                    </Typography>
+                    <Typography paragraph color="textSecondary">
+                        {event.comments || '-'}
+                    </Typography>
+                    <Typography color="textPrimary" className={classes.label}>
+                        Author:
+                    </Typography>
+                    <Typography paragraph color="textSecondary">
+                        -
+                    </Typography>
                 </CardContent>
             </Collapse>
         </Card>
@@ -73,11 +92,11 @@ const useStyles = makeStyles(theme => ({
     content: {
         wordBreak: 'break-word',
     },
+    label: {
+        fontWeight: theme.typography.fontWeightBold,
+    },
 }));
 
 interface AnimalCardProps {
-    eventName: string;
-    date: string;
-    author: string;
-    description: string;
+    event: Event;
 }
