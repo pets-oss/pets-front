@@ -1,0 +1,6 @@
+query GetSpecies($language: String!) {
+    species(language: $language) {
+        id
+        value
+    }
+}

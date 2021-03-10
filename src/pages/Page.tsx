@@ -33,7 +33,7 @@ export default function Page({ title, topSection, children, displayTitleOnMobile
                         {topSection}
                     </Grid>
                 )}
-                <Grid item xs={12}>
+                <Grid item xs={12} className={classes.content}>
                     {children}
                 </Grid>
             </Grid>
@@ -74,5 +74,11 @@ const useStyles = makeStyles(theme => ({
     },
     endAlign: {
         textAlign: 'end',
+    },
+    content: {
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        flexDirection: 'column',
     },
 }));

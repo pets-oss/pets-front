@@ -55,6 +55,11 @@ export default function App() {
                         />
                         <PrivateRoute
                             exact
+                            path="/animal/new"
+                            component={React.lazy(() => import('./pages/NewAnimalPage'))}
+                        />
+                        <PrivateRoute
+                            exact
                             path="/animal/:id"
                             component={React.lazy(() => import('./pages/AnimalDetailsPage'))}
                         />

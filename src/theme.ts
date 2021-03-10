@@ -62,7 +62,7 @@ const theme: ThemeOptions = {
                 fontSize: '1.8rem',
                 lineHeight: 1.2,
                 [breakpoints.down('sm')]: {
-                    fontSize: '1.6rem',
+                    fontSize: '1.4rem',
                 },
             },
             h6: {
@@ -78,6 +78,16 @@ const theme: ThemeOptions = {
                 minWidth: 'auto',
                 marginTop: 4,
                 marginBottom: 4,
+            },
+        },
+        MuiStepIcon: {
+            root: {
+                '&$completed': {
+                    fill: defaultTheme.palette.success.main,
+                },
+                '&$active': {
+                    fill: defaultTheme.palette.secondary.main,
+                },
             },
         },
     },
