@@ -13,6 +13,11 @@ const defaultTheme = createMuiTheme({
             main: '#13493b',
             dark: '#002115',
         },
+        tertiary: {
+            light: '#ffffff',
+            main: '#faf5f1',
+            dark: '#c7c2be',
+        },
     },
     breakpoints: {
         values: {
@@ -97,5 +102,14 @@ const theme: ThemeOptions = {
         },
     },
 };
+
+declare module '@material-ui/core/styles/createPalette' {
+    interface Palette {
+        tertiary: Palette['primary'];
+    }
+    interface PaletteOptions {
+        tertiary: PaletteOptions['primary'];
+    }
+}
 
 export default theme;

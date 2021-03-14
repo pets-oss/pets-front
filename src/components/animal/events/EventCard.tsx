@@ -5,8 +5,8 @@ import Avatar from '@material-ui/core/Avatar';
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import LocalHospitalIcon from '@material-ui/icons/LocalHospital';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
-import { Event } from '../../graphql/types';
-import { getFormattedDate } from '../../utils/date';
+import { Event } from '../../../graphql/types';
+import { getFormattedDate } from '../../../utils/date';
 
 export default function EventCard({ event }: AnimalCardProps) {
     const classes = useStyles();

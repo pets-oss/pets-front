@@ -2,7 +2,9 @@ import { DocumentNode } from 'graphql';
 import React from 'react';
 
 import { MockedProvider, MockedResponse } from '@apollo/client/testing';
+import { MuiThemeProvider } from '@material-ui/core';
 import { render } from '@testing-library/react';
+import theme from '../theme';
 
 interface MockOptions {
     query: DocumentNode;
@@ -28,7 +30,13 @@ export function renderWithMockProvider(ui: any, { query, data, error, variables 
         mock.error = error;
     }
 
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    return render(ui, { wrapper: props => <MockedProvider {...props} mocks={[mock]} /> });
+    return render(ui, {
+        wrapper: props => (
+            <MuiThemeProvider theme={theme}>
+                {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
+                {/* @ts-ignore */}
+                <MockedProvider {...props} mocks={[mock]} />
+            </MuiThemeProvider>
+        ),
+    });
 }
