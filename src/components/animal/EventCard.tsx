@@ -1,10 +1,10 @@
-import clsx from 'clsx';
 import React, { useState } from 'react';
 
 import { Card, CardContent, CardHeader, Collapse, IconButton, Typography } from '@material-ui/core';
 import Avatar from '@material-ui/core/Avatar';
 import makeStyles from '@material-ui/core/styles/makeStyles';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import LocalHospitalIcon from '@material-ui/icons/LocalHospital';
+import MoreVertIcon from '@material-ui/icons/MoreVert';
 import { Event } from '../../graphql/types';
 import { getFormattedDate } from '../../utils/date';
 
@@ -12,33 +12,29 @@ export default function EventCard({ event }: AnimalCardProps) {
     const classes = useStyles();
     const [expanded, setExpanded] = useState(false);
     const eventName = event.type?.type || '';
+    const header = `Event type - ${eventName}`;
+    const subHeader = `${event.dateTime ? getFormattedDate(event.dateTime) : '-'} / Author`;
 
     return (
         <Card className={classes.root}>
             <CardHeader
                 avatar={
                     <Avatar aria-label="event" alt="event">
-                        {eventName.charAt(0)}
+                        <LocalHospitalIcon />
                     </Avatar>
                 }
                 title={
-                    <Typography noWrap className={classes.eventName}>
-                        {eventName}
+                    <Typography component="h6" className={classes.headerText} noWrap>
+                        {header}
                     </Typography>
                 }
+                subheader={subHeader}
                 action={
-                    <IconButton
-                        className={clsx(classes.expand, {
-                            [classes.expandOpen]: expanded,
-                        })}
-                        onClick={() => setExpanded(!expanded)}
-                        aria-expanded={expanded}
-                        aria-label="show more"
-                    >
-                        <ExpandMoreIcon />
+                    <IconButton aria-label="settings">
+                        <MoreVertIcon />
                     </IconButton>
                 }
-                subheader={<Typography noWrap>{event.dateTime ? getFormattedDate(event.dateTime) : '-'}</Typography>}
+                onClick={() => setExpanded(!expanded)}
             />
             <Collapse in={expanded} timeout="auto" unmountOnExit>
                 <CardContent className={classes.content}>
@@ -70,24 +66,17 @@ const useStyles = makeStyles(theme => ({
     root: {
         width: '100%',
     },
-    expand: {
-        transform: 'rotate(0deg)',
-        marginLeft: 'auto',
-        transition: theme.transitions.create('transform', {
-            duration: theme.transitions.duration.shortest,
-        }),
-    },
-    expandOpen: {
-        transform: 'rotate(180deg)',
-    },
-    eventName: {
-        maxWidth: 160,
+    headerText: {
+        maxWidth: 150,
         [theme.breakpoints.up('md')]: {
             maxWidth: 350,
         },
         [theme.breakpoints.up('lg')]: {
             maxWidth: 600,
         },
+        fontSize: 20,
+        lineHeight: '24px',
+        fontWeight: 600,
     },
     content: {
         wordBreak: 'break-word',
