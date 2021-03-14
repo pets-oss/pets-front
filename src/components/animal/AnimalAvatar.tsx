@@ -3,7 +3,7 @@ import React from 'react';
 import { Avatar } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { Pets } from '@material-ui/icons';
-import getGenderType, { GenderType } from '../../graphql/data-transform/gender';
+import getGenderType, { GenderType } from '../../graphql/data-transform/genders';
 import getSpecieType, { SpeciesType } from '../../graphql/data-transform/species';
 import { AnimalDetails, Gender, Maybe, Species } from '../../graphql/types';
 import IconBird from './IconBird';
@@ -43,20 +43,32 @@ const createGenderStyle = (gender?: Maybe<Gender>): AvatarStyleProps => {
         color: '#3949ab',
         backgroundColor: '#c5cae9',
     };
+    const styleDesexedMale = {
+        color: 'white',
+        backgroundColor: '#c5cae9',
+    };
     const styleFemale = {
         color: '#d81b60',
         backgroundColor: '#f8bbd0',
     };
-    const styleUndefined = {
+    const styleDesexedFemale = {
         color: 'white',
+        backgroundColor: '#f8bbd0',
+    };
+    const styleUndefined = {
+        color: '#999999',
         backgroundColor: '#e0e0e0',
     };
 
     switch (getGenderType(gender)) {
         case GenderType.MALE:
             return styleMale;
+        case GenderType.DESEXEDMALE:
+            return styleDesexedMale;
         case GenderType.FEMALE:
             return styleFemale;
+        case GenderType.DESEXEDFEMALE:
+            return styleDesexedFemale;
         default:
             return styleUndefined;
     }

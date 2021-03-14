@@ -1,16 +1,28 @@
 import { Gender, Maybe } from '../types';
 
+// available GraphQL enums
+//  {
+//     genders(language:"lt") {
+//       id,
+//       value
+//     }
+//   }
+
 export enum GenderType {
-    MALE,
     FEMALE,
+    MALE,
+    DESEXEDFEMALE,
+    DESEXEDMALE,
     UNDEFINED = 'Undefined',
 }
 
 const GenderMapList: {
     [key: string]: GenderType;
 } = {
-    '1': GenderType.MALE,
-    '2': GenderType.FEMALE,
+    '1': GenderType.FEMALE,
+    '2': GenderType.MALE,
+    '3': GenderType.DESEXEDFEMALE,
+    '4': GenderType.DESEXEDMALE,
 };
 
 export default function getGenderType(gender?: Maybe<Gender>): GenderType {
