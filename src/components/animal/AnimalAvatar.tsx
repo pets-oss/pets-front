@@ -39,30 +39,37 @@ const useStyles = makeStyles({
 });
 
 const createGenderStyle = (gender?: Maybe<Gender>): AvatarStyleProps => {
-    const gender1 = {
+    const styleMale = {
         color: '#3949ab',
         backgroundColor: '#c5cae9',
     };
-    const gender2 = {
+    const styleFemale = {
         color: '#d81b60',
         backgroundColor: '#f8bbd0',
     };
-    const genderUndefined = {
+    const styleUndefined = {
         color: 'white',
         backgroundColor: '#e0e0e0',
     };
 
     switch (getGenderType(gender)) {
         case GenderType.MALE:
-            return gender1;
+            return styleMale;
         case GenderType.FEMALE:
-            return gender2;
+            return styleFemale;
         default:
-            return genderUndefined;
+            return styleUndefined;
     }
 };
 
 const AnimalSpeciesIcon = (species?: Maybe<Species>) => {
+    // available GraphQL enums
+    //   {
+    //     species(language:"lt") {
+    //       id,
+    //       value
+    //     }
+    //   }
     switch (getSpecieType(species)) {
         case SpeciesType.DOG:
             return <IconDog />;
