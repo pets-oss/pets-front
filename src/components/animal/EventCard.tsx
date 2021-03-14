@@ -5,12 +5,15 @@ import Avatar from '@material-ui/core/Avatar';
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import LocalHospitalIcon from '@material-ui/icons/LocalHospital';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
+import { Event } from '../../graphql/types';
+import { getFormattedDate } from '../../utils/date';
 
-export default function EventCard({ eventName, date, author, description }: AnimalCardProps) {
+export default function EventCard({ event }: AnimalCardProps) {
     const classes = useStyles();
     const [expanded, setExpanded] = useState(false);
+    const eventName = event.type?.type || '';
     const header = `Event type - ${eventName}`;
-    const subHeader = `${date} / Author`;
+    const subHeader = `${event.dateTime ? getFormattedDate(event.dateTime) : '-'} / Author`;
 
     return (
         <Card className={classes.root}>
@@ -35,8 +38,24 @@ export default function EventCard({ eventName, date, author, description }: Anim
             />
             <Collapse in={expanded} timeout="auto" unmountOnExit>
                 <CardContent className={classes.content}>
-                    <Typography paragraph>{author}</Typography>
-                    <Typography paragraph>{description}</Typography>
+                    <Typography color="textPrimary" className={classes.label}>
+                        Expenses:
+                    </Typography>
+                    <Typography paragraph color="textSecondary">
+                        {event.expenses || '-'}
+                    </Typography>
+                    <Typography color="textPrimary" className={classes.label}>
+                        Comments:
+                    </Typography>
+                    <Typography paragraph color="textSecondary">
+                        {event.comments || '-'}
+                    </Typography>
+                    <Typography color="textPrimary" className={classes.label}>
+                        Author:
+                    </Typography>
+                    <Typography paragraph color="textSecondary">
+                        -
+                    </Typography>
                 </CardContent>
             </Collapse>
         </Card>
@@ -46,16 +65,6 @@ export default function EventCard({ eventName, date, author, description }: Anim
 const useStyles = makeStyles(theme => ({
     root: {
         width: '100%',
-    },
-    expand: {
-        transform: 'rotate(0deg)',
-        marginLeft: 'auto',
-        transition: theme.transitions.create('transform', {
-            duration: theme.transitions.duration.shortest,
-        }),
-    },
-    expandOpen: {
-        transform: 'rotate(180deg)',
     },
     headerText: {
         maxWidth: 150,
@@ -72,11 +81,11 @@ const useStyles = makeStyles(theme => ({
     content: {
         wordBreak: 'break-word',
     },
+    label: {
+        fontWeight: theme.typography.fontWeightBold,
+    },
 }));
 
 interface AnimalCardProps {
-    eventName: string;
-    date: string;
-    author: string;
-    description: string;
+    event: Event;
 }

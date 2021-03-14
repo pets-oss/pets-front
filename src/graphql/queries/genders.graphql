@@ -1,0 +1,6 @@
+query GetGenders($language: String!) {
+    genders(language: $language) {
+        id
+        value
+    }
+}

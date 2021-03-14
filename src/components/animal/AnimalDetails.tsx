@@ -7,7 +7,7 @@ import { useQuery } from '@apollo/client';
 import { Box, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { Skeleton } from '@material-ui/lab';
-import { Animal } from '../../graphql/types';
+import { Animal, Event } from '../../graphql/types';
 import { getAnimalAge, getAnimalWeight } from '../../utils/animal';
 import LayoutMultiColRow from '../layout/LayoutMultiColRow';
 import AnimalEventList from './AnimalEventList';
@@ -20,6 +20,7 @@ interface RouterParams {
 
 interface Response {
     animal: Animal;
+    events: { animalAll: Event[] }[];
 }
 
 interface AnimalDetailsProps {
@@ -50,8 +51,9 @@ function AnimalDetails({ onLoad }: AnimalDetailsProps) {
         return <p>No data!</p>;
     }
 
-    const { animal } = data;
+    const { animal, events } = data;
     const birthDay = animal.details?.birthDate ? getAnimalAge(animal.details.birthDate) : '';
+    const animalEvents = events?.[0]?.animalAll;
 
     return (
         <>
@@ -72,12 +74,16 @@ function AnimalDetails({ onLoad }: AnimalDetailsProps) {
                     </Box>
                 </>
             </LayoutMultiColRow>
-            <Box mt={2} mb={2}>
-                <Typography variant="h5" component="h3">
-                    Events
-                </Typography>
-            </Box>
-            <AnimalEventList />
+            {Array.isArray(animalEvents) && animalEvents.length > 0 && (
+                <>
+                    <Box mt={2} mb={2}>
+                        <Typography variant="h5" component="h3">
+                            Events
+                        </Typography>
+                    </Box>
+                    <AnimalEventList events={animalEvents} />
+                </>
+            )}
         </>
     );
 }
