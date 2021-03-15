@@ -16,12 +16,12 @@ interface PageProps {
 
 export default function Page({ title, topSection, children, displayTitleOnMobile }: PageProps) {
     const classes = useStyles();
-    const mobile = useMobile();
+    const matchesMobile = useMobile();
 
     return (
         <Container component="main" className={classes.root} maxWidth="lg">
             <Grid container spacing={4}>
-                {(!mobile || displayTitleOnMobile) && (
+                {(!matchesMobile || displayTitleOnMobile) && (
                     <Grid item xs={12}>
                         {title && <PageTitle title={title} />}
                     </Grid>
