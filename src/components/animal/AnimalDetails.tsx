@@ -4,7 +4,7 @@ import React from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 
 import { useQuery } from '@apollo/client';
-import { Box, Grid, Typography } from '@material-ui/core';
+import { Box, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { Skeleton } from '@material-ui/lab';
 import { Animal, Event } from '../../graphql/types';
@@ -58,7 +58,7 @@ function AnimalDetails({ onLoad }: AnimalDetailsProps) {
     const animalEvents = events?.[0]?.animalAll ?? [];
 
     return (
-        <>
+        <div className={classes.root}>
             <LayoutMultiColRow>
                 <>
                     <AnimalDetailsHeader
@@ -105,13 +105,10 @@ function AnimalDetails({ onLoad }: AnimalDetailsProps) {
                     </Box>
                 </>
                 <Box className={classes.eventsContainer} py={3} px={2}>
-                    <Typography variant="h6" component="h3" className={classes.eventsHeader}>
-                        Events
-                    </Typography>
                     <AnimalEvents events={animalEvents} />
                 </Box>
             </LayoutMultiColRow>
-        </>
+        </div>
     );
 }
 
@@ -120,6 +117,7 @@ export default AnimalDetails;
 const useStyles = makeStyles(theme => ({
     root: {
         flexGrow: 1,
+        width: '100%',
     },
     animalName: {
         color: theme.palette.primary.dark,
@@ -135,6 +133,6 @@ const useStyles = makeStyles(theme => ({
         fontWeight: 400,
     },
     eventsContainer: {
-        backgroundColor: '#FAF5F1',
+        backgroundColor: theme.palette.tertiary.main,
     },
 }));

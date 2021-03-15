@@ -60,10 +60,10 @@ export default function AnimalEvents({ events }: AnimalEventsProps) {
     }, [activeFilter, events, sortByDateComparator]);
 
     return (
-        <Box p={3} className={classes.root}>
+        <Box className={classes.root}>
             <Box mb={2} display="flex" justifyContent="space-between" alignItems="center">
                 <Typography variant="h5" component="h3">
-                    Animal history
+                    Events
                 </Typography>
                 <Button color="primary" variant="contained" startIcon={<AddIcon />}>
                     Create

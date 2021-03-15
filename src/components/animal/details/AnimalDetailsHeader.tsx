@@ -50,7 +50,7 @@ const useStyles = makeStyles(theme => ({
                 position: 'absolute',
                 height: '100%',
                 width: '2px',
-                backgroundColor: '#C4C4C4',
+                backgroundColor: theme.palette.tertiary.dark,
                 top: 0,
                 right: 0,
             },
@@ -63,7 +63,7 @@ const useStyles = makeStyles(theme => ({
         },
     },
     backIcon: {
-        color: '#fff',
+        color: theme.palette.tertiary.light,
     },
 }));
 
