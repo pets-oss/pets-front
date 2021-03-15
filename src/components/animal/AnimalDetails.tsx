@@ -67,6 +67,7 @@ function AnimalDetails({ onLoad }: AnimalDetailsProps) {
                         species={animal.details?.species?.value}
                         color={animal.details?.color?.value}
                         onBack={() => history.goBack()}
+                        breed={animal.details?.breed?.value}
                     />
                     <Image src={animal.imageUrl!} aspectRatio={3 / 2} />
                     {animal.details && (

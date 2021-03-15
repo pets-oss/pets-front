@@ -29,8 +29,12 @@ const mockedData = {
         imageUrl: 'https://picsum.photos/id/237/300/300',
         details: {
             birthDate: '1577836800000',
-            breed: 'Labrador',
-            color: 'Black',
+            breed: {
+                value: 'Labrador',
+            },
+            color: {
+                value: 'Black',
+            },
             gender: 'Male',
             weight: 1,
         },
@@ -51,8 +55,7 @@ describe('AnimalDetails', () => {
         expect(screen.getByText(/Loading.../)).toBeInTheDocument();
 
         await waitFor(() => expect(screen.getByText(/Labrador/i)).toBeInTheDocument());
-        await waitFor(() => expect(screen.getByText(/Black/i)).toBeInTheDocument());
-        await waitFor(() => expect(screen.getByText(/Male/i)).toBeInTheDocument());
-        await waitFor(() => expect(screen.getByText(/1kg/i)).toBeInTheDocument());
+        await waitFor(() => expect(screen.getByText(/Color - Black/i)).toBeInTheDocument());
+        await waitFor(() => expect(screen.getByText(/Weight - 1kg/i)).toBeInTheDocument());
     });
 });

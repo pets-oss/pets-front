@@ -4,7 +4,7 @@ import { Box, IconButton, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 
-function AnimalDetailsHeader({ animalName, gender, species, color, onBack }: AnimalDetailsHeaderProps) {
+function AnimalDetailsHeader({ animalName, gender, species, color, breed, onBack }: AnimalDetailsHeaderProps) {
     const classes = useStyles();
 
     return (
@@ -28,6 +28,11 @@ function AnimalDetailsHeader({ animalName, gender, species, color, onBack }: Ani
                     {color && (
                         <Typography variant="body2" className={classes.property}>
                             {color}
+                        </Typography>
+                    )}
+                    {breed && (
+                        <Typography variant="body2" className={classes.property}>
+                            {breed}
                         </Typography>
                     )}
                 </Box>
@@ -72,5 +77,6 @@ interface AnimalDetailsHeaderProps {
     species?: string | null;
     gender?: string | null;
     color?: string | null;
+    breed?: string | null;
     onBack?: () => void;
 }
