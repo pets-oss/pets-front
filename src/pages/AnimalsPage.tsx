@@ -87,10 +87,13 @@ function TopSection({
     return (
         <Grid container spacing={2} alignItems="center">
             <Grid container item xs={10} alignItems="center" spacing={2}>
-                <Grid item>
-                    <CreateButton />
-                </Grid>
-                {!mobile && <Divider flexItem orientation="vertical" />}
+                <CreateButton />
+                {!mobile && (
+                    <>
+                        <Grid item />
+                        <Divider flexItem orientation="vertical" />
+                    </>
+                )}
                 <Grid item>
                     <AnimalFilters filters={filters} onReset={onFiltersClear} onApply={onFiltersApply} count={34} />
                 </Grid>
