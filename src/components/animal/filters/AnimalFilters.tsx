@@ -66,6 +66,7 @@ export default function AnimalFilters({ filters, onReset, onApply, count }: Anim
                     </Box>
                     {filters.map(filter => (
                         <FilterSelectInput
+                            key={filter.name}
                             value={filter.value}
                             label={filter.name}
                             options={filter.options}

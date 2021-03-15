@@ -4,13 +4,13 @@ import React from 'react';
 import { useParams } from 'react-router-dom';
 
 import { useQuery } from '@apollo/client';
-import { Box, Typography } from '@material-ui/core';
+import { Box, Grid, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { Skeleton } from '@material-ui/lab';
 import { Animal, Event } from '../../graphql/types';
 import { getAnimalAge, getAnimalWeight } from '../../utils/animal';
 import LayoutMultiColRow from '../layout/LayoutMultiColRow';
-import AnimalEventList from './AnimalEventList';
+import AnimalEvents from './events/AnimalEvents';
 
 const GET_ANIMAL_DETAILS = loader('../../graphql/queries/animal-details.graphql');
 
@@ -53,38 +53,33 @@ function AnimalDetails({ onLoad }: AnimalDetailsProps) {
 
     const { animal, events } = data;
     const birthDay = animal.details?.birthDate ? getAnimalAge(animal.details.birthDate) : '';
-    const animalEvents = events?.[0]?.animalAll;
+    const animalEvents = events?.[0]?.animalAll ?? [];
 
     return (
-        <>
-            <LayoutMultiColRow>
-                <Image src={animal.imageUrl!} aspectRatio={16 / 9} />
-                <>
-                    {animal.details && (
+        <Grid container spacing={2}>
+            <Grid item xs={12} lg={6}>
+                <LayoutMultiColRow>
+                    <Image src={animal.imageUrl!} aspectRatio={16 / 9} />
+                    <>
+                        {animal.details && (
+                            <Box mt={1}>
+                                <Typography className={classes.animalMeta} variant="body1">
+                                    {`${animal.details.breed}, ${animal.details.gender}, ${getAnimalWeight(
+                                        animal.details.weight!
+                                    )}, ${animal.details.color}, ${birthDay}`}
+                                </Typography>
+                            </Box>
+                        )}
                         <Box mt={1}>
-                            <Typography className={classes.animalMeta} variant="body1">
-                                {`${animal.details.breed}, ${animal.details.gender}, ${getAnimalWeight(
-                                    animal.details.weight!
-                                )}, ${animal.details.color}, ${birthDay}`}
-                            </Typography>
+                            <Typography variant="body1">Referencing Animal ID:{id}</Typography>
                         </Box>
-                    )}
-                    <Box mt={1}>
-                        <Typography variant="body1">Referencing Animal ID:{id}</Typography>
-                    </Box>
-                </>
-            </LayoutMultiColRow>
-            {Array.isArray(animalEvents) && animalEvents.length > 0 && (
-                <>
-                    <Box mt={2} mb={2}>
-                        <Typography variant="h5" component="h3">
-                            Events
-                        </Typography>
-                    </Box>
-                    <AnimalEventList events={animalEvents} />
-                </>
-            )}
-        </>
+                    </>
+                </LayoutMultiColRow>
+            </Grid>
+            <Grid item xs={12} lg={6}>
+                <AnimalEvents events={animalEvents} />
+            </Grid>
+        </Grid>
     );
 }
 
