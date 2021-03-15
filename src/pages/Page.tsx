@@ -1,8 +1,6 @@
 import React, { ReactNode } from 'react';
 
-import { Box } from '@material-ui/core';
 import Container from '@material-ui/core/Container';
-import Divider from '@material-ui/core/Divider';
 import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
@@ -42,6 +40,8 @@ export default function Page({ title, topSection, children, displayTitleOnMobile
 }
 
 function PageTitle({ title }: { title: string | ReactNode }) {
+    const classes = useStyles();
+
     if (typeof title !== 'string') {
         // Custom title
         return <>title</>;
@@ -49,12 +49,9 @@ function PageTitle({ title }: { title: string | ReactNode }) {
 
     return (
         <>
-            <Box mb={1}>
-                <Typography variant="h3" component="h1" color="textSecondary">
-                    {title}
-                </Typography>
-            </Box>
-            <Divider />
+            <Typography className={classes.title} variant="h3" component="h1">
+                {title}
+            </Typography>
         </>
     );
 }
@@ -75,10 +72,13 @@ const useStyles = makeStyles(theme => ({
     endAlign: {
         textAlign: 'end',
     },
+    title: {
+        fontWeight: 500,
+    },
     content: {
         display: 'flex',
         justifyContent: 'center',
-        alignItems: 'center',
+        alignItems: 'flex-start',
         flexDirection: 'column',
     },
 }));
