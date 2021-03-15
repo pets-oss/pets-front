@@ -1,0 +1,6 @@
+query GetColors($language: String!) {
+    colors(language: $language) {
+        id
+        value
+    }
+}

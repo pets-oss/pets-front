@@ -13,6 +13,11 @@ const defaultTheme = createMuiTheme({
             main: '#13493b',
             dark: '#002115',
         },
+        tertiary: {
+            light: '#ffffff',
+            main: '#faf5f1',
+            dark: '#c7c2be',
+        },
     },
     breakpoints: {
         values: {
@@ -62,7 +67,7 @@ const theme: ThemeOptions = {
                 fontSize: '1.8rem',
                 lineHeight: 1.2,
                 [breakpoints.down('sm')]: {
-                    fontSize: '1.6rem',
+                    fontSize: '1.4rem',
                 },
             },
             h6: {
@@ -80,6 +85,16 @@ const theme: ThemeOptions = {
                 marginBottom: 4,
             },
         },
+        MuiStepIcon: {
+            root: {
+                '&$completed': {
+                    fill: defaultTheme.palette.success.main,
+                },
+                '&$active': {
+                    fill: defaultTheme.palette.secondary.main,
+                },
+            },
+        },
     },
     props: {
         MuiUseMediaQuery: {
@@ -87,5 +102,14 @@ const theme: ThemeOptions = {
         },
     },
 };
+
+declare module '@material-ui/core/styles/createPalette' {
+    interface Palette {
+        tertiary: Palette['primary'];
+    }
+    interface PaletteOptions {
+        tertiary: PaletteOptions['primary'];
+    }
+}
 
 export default theme;
