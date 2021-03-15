@@ -5,7 +5,6 @@ import { useAuth0 } from '@auth0/auth0-react';
 import AppBar from '@material-ui/core/AppBar';
 import Divider from '@material-ui/core/Divider';
 import Drawer from '@material-ui/core/Drawer';
-import Fab from '@material-ui/core/Fab';
 import IconButton from '@material-ui/core/IconButton';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
@@ -16,17 +15,19 @@ import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import useScrollTrigger from '@material-ui/core/useScrollTrigger';
-import AddIcon from '@material-ui/icons/Add';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import CloseIcon from '@material-ui/icons/Close';
 import MenuIcon from '@material-ui/icons/Menu';
 import { navigation, NavigationItem } from '../../navigation';
+
+export const BOTTOM_NAVIGATION_HEIGHT = 64;
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         appBar: {
             top: 'auto',
             bottom: 0,
+            height: BOTTOM_NAVIGATION_HEIGHT,
             backgroundColor: theme.palette.primary.light,
         },
         drawerHeader: {
@@ -36,12 +37,6 @@ const useStyles = makeStyles((theme: Theme) =>
             // necessary for height alignment with app bar
             ...theme.mixins.toolbar,
             justifyContent: 'space-between',
-        },
-        fabButton: {
-            position: 'absolute',
-            zIndex: 1,
-            top: -30,
-            right: theme.spacing(3),
         },
         show: {
             transform: 'translateY(0)',
@@ -131,11 +126,6 @@ export default function AppBottomNavigation() {
                     <IconButton edge="start" onClick={handleDrawerOpen} color="inherit" aria-label="open drawer">
                         <MenuIcon />
                     </IconButton>
-                    {/* FAB element should be rendered from the page context */}
-                    {/* FAB should not be a part of this element and scroll should not affect it  */}
-                    <Fab color="secondary" aria-label="add" className={classes.fabButton}>
-                        <AddIcon />
-                    </Fab>
                 </Toolbar>
                 <Drawer anchor="bottom" open={open} onClose={handleDrawerClose}>
                     {navList()}

@@ -39,6 +39,20 @@ export default function AnimalForm() {
         console.log('FORM DATA: ', data);
     };
 
+    const scrollToTop = () => {
+        window.scrollTo({ left: 0, top: 168, behavior: 'smooth' });
+    };
+
+    const handleNext = () => {
+        setStep(step + 1);
+        scrollToTop();
+    };
+
+    const handlePrev = () => {
+        setStep(step - 1);
+        scrollToTop();
+    };
+
     return (
         <FormProvider {...methods}>
             <Grid
@@ -64,9 +78,9 @@ export default function AnimalForm() {
                         style={{ width: formWidth * 3, transform: `translate3d(${-formWidth * (step - 1)}px,0px,0px)` }}
                         className={classes.steps}
                     >
-                        <DetailsStep onNext={() => setStep(step + 1)} />
-                        <MicrochipStep onNext={() => setStep(step + 1)} onPrev={() => setStep(step - 1)} />
-                        <RegistrationStep onPrev={() => setStep(step - 1)} />
+                        <DetailsStep onNext={handleNext} />
+                        <MicrochipStep onNext={handleNext} onPrev={handlePrev} />
+                        <RegistrationStep onPrev={handlePrev} />
                     </Box>
                 </Grid>
             </Grid>
