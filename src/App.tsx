@@ -3,12 +3,10 @@ import React from 'react';
 import { Route, Switch, useLocation } from 'react-router-dom';
 
 import CssBaseline from '@material-ui/core/CssBaseline';
-import { makeStyles, Theme, ThemeProvider, useTheme } from '@material-ui/core/styles';
-import useMediaQuery from '@material-ui/core/useMediaQuery';
+import { makeStyles, ThemeProvider } from '@material-ui/core/styles';
 import { Skeleton } from '@material-ui/lab';
-import AppBottomNavigation from './components/layout/AppBottomNavigation';
-import AppTopBar from './components/layout/AppTopBar';
-import AppTopNavigation from './components/layout/AppTopNavigation';
+import ResponsiveAppBottom from './components/layout/ResponsiveAppBottom';
+import ResponsiveAppTop from './components/layout/ResponsiveAppTop';
 import PageNotFound from './pages/PageNotFound';
 import MuiTheme from './theme';
 import PrivateRoute from './utils/auth/PrivateRoute';
@@ -18,28 +16,22 @@ const LocationDisplay = () => {
     return <div data-testid="location-display">{location.pathname}</div>;
 };
 
-const useStyles = makeStyles((theme: Theme) => ({
+const useStyles = makeStyles({
     root: {
         display: 'flex',
         flexDirection: 'column',
         minHeight: '100vh',
     },
-    footer: {
-        padding: theme.spacing(3, 2),
-        marginTop: 'auto',
-    },
-}));
+});
 
 export default function App() {
     const classes = useStyles();
-    const theme = useTheme();
-    const matchesLgScreen = useMediaQuery(theme.breakpoints.up('md'));
 
     return (
         <ThemeProvider theme={MuiTheme}>
             <CssBaseline />
             <div className={classes.root}>
-                {matchesLgScreen ? <AppTopNavigation /> : <AppTopBar />}
+                <ResponsiveAppTop />
                 <React.Suspense fallback={<Skeleton variant="rect" height="100vh" />}>
                     <Switch>
                         <Route exact path="/about" component={React.lazy(() => import('./pages/About'))} />
@@ -78,7 +70,7 @@ export default function App() {
                         <Route component={PageNotFound} />
                     </Switch>
                 </React.Suspense>
-                {!matchesLgScreen && <AppBottomNavigation />}
+                <ResponsiveAppBottom />
             </div>
             <LocationDisplay />
         </ThemeProvider>

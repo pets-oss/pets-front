@@ -20,9 +20,11 @@ const defaultTheme = createMuiTheme({
         },
     },
     breakpoints: {
+        // due to Material UI breakpoints implementation
+        // theme.breakpoints.down('sm') resolves to "+1 and lower" or "md and lower"
         values: {
             xs: 0,
-            sm: 450,
+            sm: 500,
             md: 768,
             lg: 1280,
             xl: 1920,

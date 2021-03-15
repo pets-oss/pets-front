@@ -10,6 +10,7 @@ const useStyles = makeStyles({
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
+        width: '100%',
     },
     logo: {
         height: '40vmin',

@@ -6,14 +6,29 @@ import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
+import { makeStyles } from '@material-ui/core/styles';
+import Typography from '@material-ui/core/Typography';
 import AccountCircleTwoToneIcon from '@material-ui/icons/AccountCircleTwoTone';
+import useMobileXS from '../../hooks/useMobileXS';
 
 export default function TopAuthNav() {
+    const classes = useStyles();
     const { isAuthenticated, user, loginWithRedirect, logout } = useAuth0();
     const history = useHistory();
 
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
     const open = Boolean(anchorEl);
+
+    const matchesMobileXS = useMobileXS();
+
+    const getShortUserName = (username: string): string => {
+        const words = username.split(' ');
+        let initials = '';
+        words.forEach(word => {
+            initials += word[0];
+        });
+        return initials;
+    };
 
     const handleMenu = (event: React.MouseEvent<HTMLElement>) => {
         setAnchorEl(event.currentTarget);
@@ -39,7 +54,9 @@ export default function TopAuthNav() {
                         color="inherit"
                         startIcon={<AccountCircleTwoToneIcon />}
                     >
-                        {user.name}
+                        <Typography component="span" className={classes.label} noWrap>
+                            {matchesMobileXS ? getShortUserName(user.name) : user.name}
+                        </Typography>
                     </Button>
                     <Menu
                         id="menu-appbar"
@@ -76,3 +93,13 @@ export default function TopAuthNav() {
         </div>
     );
 }
+
+const useStyles = makeStyles(theme => ({
+    label: {
+        fontSize: 'inherit',
+        fontWeight: 'inherit',
+        [theme.breakpoints.down('sm')]: {
+            maxWidth: 150,
+        },
+    },
+}));
