@@ -37,7 +37,7 @@ export default function AppTopBar() {
     return (
         <AppBar className={classes.appbar} position="static" color="default" elevation={0}>
             <Toolbar className={classes.toolbar}>
-                <Typography variant="h6" className={classes.title}>
+                <Typography variant="h6" className={classes.title} noWrap>
                     {pageTitle()}
                 </Typography>
                 <TopAuthNav />
