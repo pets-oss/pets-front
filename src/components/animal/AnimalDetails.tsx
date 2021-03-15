@@ -69,7 +69,7 @@ function AnimalDetails({ onLoad }: AnimalDetailsProps) {
                         onBack={() => history.goBack()}
                         breed={animal.details?.breed?.value}
                     />
-                    <Image src={animal.imageUrl!} aspectRatio={3 / 2} />
+                    <Image src={animal.imageUrl!} aspectRatio={3 / 2} cover />
                     {animal.details && (
                         <>
                             <Box mt={3} mb={2}>
