@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react';
 
 import { Grid } from '@material-ui/core';
+import Divider from '@material-ui/core/Divider';
 import useTheme from '@material-ui/core/styles/useTheme';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import AnimalsListContainer from '../components/animal/AnimalsListContainer';
+import CreateButton from '../components/animal/create/CreateButton';
 import AnimalFiltersChips from '../components/animal/filters/AnimalFilterChips';
 import AnimalFilters from '../components/animal/filters/AnimalFilters';
 import Filter, { FilterOption } from '../components/animal/filters/Filter';
@@ -84,7 +86,11 @@ function TopSection({
 }: TopSectionProps) {
     return (
         <Grid container spacing={2} alignItems="center">
-            <Grid container item xs={10} alignItems="center" spacing={1}>
+            <Grid container item xs={10} alignItems="center" spacing={2}>
+                <Grid item>
+                    <CreateButton />
+                </Grid>
+                {!mobile && <Divider flexItem orientation="vertical" />}
                 <Grid item>
                     <AnimalFilters filters={filters} onReset={onFiltersClear} onApply={onFiltersApply} count={34} />
                 </Grid>
