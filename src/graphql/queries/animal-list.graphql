@@ -4,6 +4,7 @@ query GetAnimalsList {
         name
         imageUrl
         status
+        modTime
         details {
             gender {
                 id
@@ -15,7 +16,9 @@ query GetAnimalsList {
             }
             birthDate
             weight
+            species {
+                value
+            }
         }
     }
 }
-
