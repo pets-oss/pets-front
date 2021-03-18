@@ -29,7 +29,7 @@ export default function HomePageCarouselContainer({ itemsToRender, title }: Home
         return itemsToRender.map((carouselItem, index) => <div key={index}>{carouselItem}</div>);
     };
     return (
-        <Box marginTop={5} className={classes.root}>
+        <Box mt={5} className={classes.root}>
             <Typography noWrap variant="h4" color="textPrimary" gutterBottom className={classes.title}>
                 {title}
             </Typography>
