@@ -38,8 +38,8 @@ export default function RecentEventsContainer() {
     const events = [...data.events[0].all].sort(sortEventsByDate);
 
     return (
-        <Box marginTop={2} className={classes.root}>
-            <Typography noWrap variant="h5" color="textPrimary" gutterBottom className={classes.title}>
+        <Box className={classes.root} mt={5}>
+            <Typography noWrap variant="h4" color="textPrimary" className={classes.title}>
                 Recent events
             </Typography>
             <AnimalEventList events={events} />
@@ -50,10 +50,9 @@ export default function RecentEventsContainer() {
 const useStyles = makeStyles(() => ({
     root: {
         width: '100%',
-        margin: 0,
     },
     title: {
-        fontSize: 24,
         fontWeight: 500,
+        marginBottom: '-8px',
     },
 }));

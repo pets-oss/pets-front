@@ -3,7 +3,6 @@ import Carousel from 'react-material-ui-carousel';
 
 import { Grid } from '@material-ui/core';
 import Box from '@material-ui/core/Box';
-import { Theme } from '@material-ui/core/styles';
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import useTheme from '@material-ui/core/styles/useTheme';
 import Typography from '@material-ui/core/Typography';
@@ -30,8 +29,8 @@ export default function HomePageCarouselContainer({ itemsToRender, title }: Home
         return itemsToRender.map((carouselItem, index) => <div key={index}>{carouselItem}</div>);
     };
     return (
-        <Box marginTop={2} className={classes.root}>
-            <Typography noWrap variant="h5" color="textPrimary" gutterBottom className={classes.title}>
+        <Box marginTop={5} className={classes.root}>
+            <Typography noWrap variant="h4" color="textPrimary" gutterBottom className={classes.title}>
                 {title}
             </Typography>
             <Carousel autoPlay={false} indicators={false} animation="slide" swipe>
@@ -40,17 +39,11 @@ export default function HomePageCarouselContainer({ itemsToRender, title }: Home
         </Box>
     );
 }
-const useStyles = makeStyles((theme: Theme) => ({
+const useStyles = makeStyles(() => ({
     root: {
         width: '100%',
-        margin: '61px 0',
-        [theme.breakpoints.down('md')]: {
-            margin: '30px 0',
-        },
     },
     title: {
-        fontSize: 24,
         fontWeight: 500,
-        marginBottom: 20,
     },
 }));
