@@ -1,11 +1,27 @@
 import React, { useCallback, useEffect, useState } from 'react';
 
-import { Box, Button, makeStyles, Typography } from '@material-ui/core';
-import AddIcon from '@material-ui/icons/Add';
+import { Box, makeStyles } from '@material-ui/core';
 import { Event } from '../../../graphql/types';
 import AnimalEventFilters, { EVENT_FILTER_ALL, EventCategory } from './AnimalEventFilters';
 import AnimalEventList from './AnimalEventList';
+import EventDialog from './AnimalEventsDialog';
 import AnimalEventSorting, { EventSortingMode } from './AnimalEventSorting';
+
+const TYPE_OPTIONS = [
+    'Ženklinimas ir įregistravimas',
+    'Laikytojo pasikeitimas',
+    'Laikymo vietos pasikeitimas',
+    'Savininko pasikeitimas',
+    'Dingimas',
+    'Suradimas',
+    'Nugaišimas',
+    'Nugaišinimas',
+    'Išvežimas',
+    'Vakcinavimas',
+    'Augintinio agresyvumas',
+];
+
+const CATEGORY_OPTIONS = ['General', 'Medical'];
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -61,14 +77,12 @@ export default function AnimalEvents({ events }: AnimalEventsProps) {
 
     return (
         <Box className={classes.root}>
-            <Box mb={2} display="flex" justifyContent="space-between" alignItems="center">
-                <Typography variant="h5" component="h3">
-                    Events
-                </Typography>
-                <Button color="primary" variant="contained" startIcon={<AddIcon />}>
-                    Create
-                </Button>
-            </Box>
+            <EventDialog
+                onCreate={() => console.log('create')}
+                onClose={() => console.log('closed')}
+                typeOptions={TYPE_OPTIONS}
+                categoryOptions={CATEGORY_OPTIONS}
+            />
             <AnimalEventFilters activeFilter={activeFilter} onChange={handleFilterChange} />
             <AnimalEventSorting sortingMode={activeSort} onChange={handleSortChange} />
             <AnimalEventList events={filteredEvents} />
