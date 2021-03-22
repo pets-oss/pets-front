@@ -18,6 +18,10 @@ query GetAnimal($id: Int!, $language: String! = "lt") {
                 id
                 value
             }
+            species {
+                id
+                value
+            }
         }
         imageUrl
     }
