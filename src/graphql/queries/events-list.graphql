@@ -1,0 +1,11 @@
+query GetEventsList($language: String!) {
+    events(language: $language) {
+        all {
+            id
+            dateTime
+            type {
+                type
+            }
+        }
+    }
+}
