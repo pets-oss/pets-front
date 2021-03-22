@@ -187,6 +187,8 @@ export type Mutation = {
     createAnimal?: Maybe<Animal>;
     /** Updated animal */
     updateAnimal?: Maybe<Animal>;
+    /** Deleted animal */
+    deleteAnimal?: Maybe<Animal>;
     /** Delete animal details */
     deleteAnimalDetails?: Maybe<AnimalDetails>;
     /** Deleted microchip */
@@ -214,6 +216,10 @@ export type MutationCreateAnimalArgs = {
 
 export type MutationUpdateAnimalArgs = {
     input: UpdateAnimalInput;
+};
+
+export type MutationDeleteAnimalArgs = {
+    input: DeleteAnimalInput;
 };
 
 export type MutationDeleteAnimalDetailsArgs = {
@@ -298,6 +304,11 @@ export type UpdateAnimalInput = {
     details?: Maybe<AnimalDetailsInput>;
     /** AnimalMicrochip */
     microchip?: Maybe<UpdateAnimalMicrochipInput>;
+};
+
+export type DeleteAnimalInput = {
+    /** Animal id, for example 2 */
+    id: Scalars['Int'];
 };
 
 /** Represents an animal details. */

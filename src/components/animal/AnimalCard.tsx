@@ -2,7 +2,7 @@ import clsx from 'clsx';
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 
-import { Box, Card, CardActionArea, CardHeader, CardMedia, IconButton, Typography } from '@material-ui/core';
+import { Box, Card, CardActionArea, CardHeader, CardMedia, GridSize, IconButton, Typography } from '@material-ui/core';
 import Grid from '@material-ui/core/Grid';
 import { makeStyles, Theme } from '@material-ui/core/styles';
 import FavoriteIcon from '@material-ui/icons/Favorite';
@@ -10,7 +10,7 @@ import { Animal } from '../../graphql/types';
 import { getYMDDateFromTS } from '../../utils/dateFormatters';
 import AnimalAvatar from './AnimalAvatar';
 
-export default function AnimalCard({ animal }: AnimalCardProps) {
+export default function AnimalCard({ animal, xs = 10, md = 6, lg = 3 }: AnimalCardProps) {
     const classes = useStyles();
     const [favorite, setFavorite] = React.useState(false);
     let formatedRegistrationDate;
@@ -29,7 +29,7 @@ export default function AnimalCard({ animal }: AnimalCardProps) {
     };
 
     return (
-        <Grid item xs={10} md={6} lg={3}>
+        <Grid item xs={xs} md={md} lg={lg}>
             <Card>
                 <Box className={classes.cardMediaWrapper}>
                     <CardActionArea component={NavLink} to={`/animal/${animal.id}`}>
@@ -109,4 +109,7 @@ const useStyles = makeStyles((theme: Theme) => ({
 
 interface AnimalCardProps {
     animal: Animal;
+    xs?: GridSize;
+    md?: GridSize;
+    lg?: GridSize;
 }
