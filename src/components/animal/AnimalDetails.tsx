@@ -12,6 +12,7 @@ import { getAnimalAge, getAnimalWeight } from '../../utils/animal';
 import LayoutMultiColRow from '../layout/LayoutMultiColRow';
 import AnimalDetailsHeader from './details/AnimalDetailsHeader';
 import AnimalEvents from './events/AnimalEvents';
+import ParamTable from './ParamTable';
 
 const GET_ANIMAL_DETAILS = loader('../../graphql/queries/animal-details.graphql');
 
@@ -54,8 +55,31 @@ function AnimalDetails({ onLoad }: AnimalDetailsProps) {
     }
 
     const { animal, events } = data;
-    const birthDay = animal.details?.birthDate ? getAnimalAge(animal.details.birthDate) : '';
     const animalEvents = events?.[0]?.animalAll ?? [];
+
+    const birthDay = animal.details?.birthDate ? getAnimalAge(animal.details.birthDate) : '';
+    const weight = animal.details?.weight ? getAnimalWeight(animal.details.weight) : '';
+    const color = `${animal.details?.color?.value}`;
+    const comments = animal.comments ? animal.comments : '';
+
+    const descriptionEntries = [
+        {
+            title: 'Age',
+            value: birthDay,
+        },
+        {
+            title: 'Weight',
+            value: weight,
+        },
+        {
+            title: 'Color',
+            value: color,
+        },
+        {
+            title: 'Comments',
+            value: comments,
+        },
+    ];
 
     return (
         <div className={classes.root}>
@@ -84,21 +108,7 @@ function AnimalDetails({ onLoad }: AnimalDetailsProps) {
                                     </Typography>
                                 )}
                             </Box>
-                            <Box
-                                display="flex"
-                                flexDirection="column"
-                                alignItems="flexStart"
-                                justifyContent="flexStart"
-                            >
-                                <Typography variant="body2">{`Age - ${birthDay}`}</Typography>
-                                {animal.details.weight && (
-                                    <Typography variant="body2">
-                                        {`Weight - ${getAnimalWeight(animal.details.weight)}`}
-                                    </Typography>
-                                )}
-                                <Typography variant="body2">{`Color - ${animal.details.color?.value}`}</Typography>
-                                <Typography variant="body2">{animal.comments}</Typography>
-                            </Box>
+                            <ParamTable items={descriptionEntries} />
                         </>
                     )}
                     <Box mt={1}>
