@@ -6,6 +6,7 @@ import { Event } from '../../../graphql/types';
 import AnimalEventFilters, { EVENT_FILTER_ALL, EventCategory } from './AnimalEventFilters';
 import AnimalEventList from './AnimalEventList';
 import AnimalEventSorting, { EventSortingMode } from './AnimalEventSorting';
+import NewEvent from './NewEvent';
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -41,7 +42,8 @@ export default function AnimalEvents({ events }: AnimalEventsProps) {
         [activeSort]
     );
 
-    const [filteredEvents, setFilteredEvents] = useState(events.sort(sortByDateComparator));
+    // const [filteredEvents, setFilteredEvents] = useState(events.sort(sortByDateComparator));
+    const [filteredEvents, setFilteredEvents] = useState([...events].sort(sortByDateComparator));
 
     const handleFilterChange = (value: EventCategory) => {
         setActiveFilter(value);
@@ -59,19 +61,56 @@ export default function AnimalEvents({ events }: AnimalEventsProps) {
         );
     }, [activeFilter, events, sortByDateComparator]);
 
+    const [newEventDialogOpen, setNewEventDialogOpen] = useState(false);
+
+    const handleNewEventDialogOpen = () => {
+        setNewEventDialogOpen(true);
+    };
+
+    const typeOptions = [
+        'Ženklinimas ir įregistravimas',
+        'Laikytojo pasikeitimas',
+        'Laikymo vietos pasikeitimas',
+        'Savininko pasikeitimas',
+        'Dingimas',
+        'Suradimas',
+        'Nugaišimas',
+        'Nugaišinimas',
+        'Išvežimas',
+        'Vakcinavimas',
+        'Augintinio agresyvumas',
+    ];
+
+    const categoryOptions = ['General', 'Medical'];
+
+    const onNewEventDialogCancel = (showDialog: boolean) => {
+        setNewEventDialogOpen(showDialog);
+    };
+
+    const onNewEventDialogSubmit = (newEvent: Event) => {
+        alert('NewEvent is about to be created!');
+    };
+
     return (
         <Box className={classes.root}>
             <Box mb={2} display="flex" justifyContent="space-between" alignItems="center">
                 <Typography variant="h5" component="h3">
                     Events
                 </Typography>
-                <Button color="primary" variant="contained" startIcon={<AddIcon />}>
+                <Button color="primary" variant="contained" onClick={handleNewEventDialogOpen} startIcon={<AddIcon />}>
                     Create
                 </Button>
             </Box>
             <AnimalEventFilters activeFilter={activeFilter} onChange={handleFilterChange} />
             <AnimalEventSorting sortingMode={activeSort} onChange={handleSortChange} />
             <AnimalEventList events={filteredEvents} />
+            <NewEvent
+                showDialog={newEventDialogOpen}
+                typeOptions={typeOptions}
+                categoryOptions={categoryOptions}
+                onCancel={onNewEventDialogCancel}
+                onCreate={onNewEventDialogSubmit}
+            />
         </Box>
     );
 }
