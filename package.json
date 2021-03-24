@@ -10,6 +10,7 @@
         "@material-ui/icons": "^4.11.2",
         "@material-ui/lab": "^4.0.0-alpha.57",
         "@typescript-eslint/parser": "^4.17.0",
+        "date-fns": "^2.19.0",
         "eslint-config-airbnb-typescript": "^12.3.1",
         "eslint-plugin-jest": "^24.3.1",
         "graphql": "^15.5.0",
