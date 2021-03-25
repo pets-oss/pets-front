@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useParams } from 'react-router';
 
 import {
     Box,
@@ -18,9 +19,15 @@ import {
 } from '@material-ui/core';
 import { Event } from '../../../graphql/types';
 
+interface RouterParams {
+    id: string;
+}
+
 export default function AnimalEventDialog({ dialogOpen, categoryOptions, typeOptions, onCancel, onCreate }) {
     const theme = useTheme();
     const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
+    const params: RouterParams = useParams();
+    const { id: animalID } = params;
 
     const [eventType, setEventType] = useState('');
     const [eventCategory, setEventCategory] = useState('');
@@ -85,7 +92,9 @@ export default function AnimalEventDialog({ dialogOpen, categoryOptions, typeOpt
             }
             return;
         }
-        onCreate(createObject(eventType, eventCategory, eventExpenses, eventComments, eventDate));
+        const newEventObject = createObject(eventType, eventCategory, eventExpenses, eventComments, eventDate);
+        console.log(newEventObject);
+        onCreate(newEventObject);
         cleanup();
     };
 
@@ -111,8 +120,8 @@ export default function AnimalEventDialog({ dialogOpen, categoryOptions, typeOpt
     const createObject = (type, category, expenses, comments, date): Event => {
         return {
             id: 123456,
-            animal: 123456,
-            type: { id: 123456, type },
+            animal: +animalID,
+            type: { id: typeOptions.indexOf(eventType), type },
             category,
             expenses: +expenses,
             comments,
