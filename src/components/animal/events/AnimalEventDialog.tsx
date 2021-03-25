@@ -16,11 +16,7 @@ import {
     useMediaQuery,
     useTheme,
 } from '@material-ui/core';
-/* import { Event } from '../../../graphql/types';
-
-interface AnimalEvent {
-    events: Event[];
-} */
+import { Event } from '../../../graphql/types';
 
 export default function AnimalEventDialog({ dialogOpen, categoryOptions, typeOptions, onCancel, onCreate }) {
     const theme = useTheme();
@@ -112,14 +108,15 @@ export default function AnimalEventDialog({ dialogOpen, categoryOptions, typeOpt
         onCancel(false);
     };
 
-    const createObject = (type, category, expenses, comments, date) /* : AnimalEvent */ => {
+    const createObject = (type, category, expenses, comments, date): Event => {
         return {
             id: 123456,
-            type: { type },
+            animal: 123456,
+            type: { id: 123456, type },
             category,
             expenses: +expenses,
             comments,
-            dateTime: Date.parse(date),
+            dateTime: Date.parse(date).toString(),
         };
     };
 
