@@ -9,6 +9,7 @@ export type Scalars = {
     Boolean: boolean;
     Int: number;
     Float: number;
+    Upload: any;
 };
 
 export type Query = {
@@ -273,8 +274,8 @@ export type CreateAnimalInput = {
     organization: Scalars['Int'];
     /** Status */
     status?: Maybe<AnimalStatus>;
-    /** Image URL */
-    image_url?: Maybe<Scalars['String']>;
+    /** Image File */
+    image?: Maybe<Scalars['Upload']>;
     /** Comments */
     comments?: Maybe<Scalars['String']>;
     /** AnimalRegistration */
@@ -294,8 +295,8 @@ export type UpdateAnimalInput = {
     organization?: Maybe<Scalars['Int']>;
     /** Status */
     status?: Maybe<AnimalStatus>;
-    /** Image URL */
-    image_url?: Maybe<Scalars['String']>;
+    /** Image File */
+    image?: Maybe<Scalars['Upload']>;
     /** Comments */
     comments?: Maybe<Scalars['String']>;
     /** AnimalRegistration */

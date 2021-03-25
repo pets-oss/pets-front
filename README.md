@@ -8,32 +8,30 @@ Pets Information System Front-end
 
 Live site is available at https://app.petbook.lt/.
 
-
 ## Setup
 
-Make sure you have [Node JS](https://nodejs.org/en/download/) (> 10v) installed.  
+Make sure you have [Node JS](https://nodejs.org/en/download/) (> 10v) and [npm](https://www.npmjs.com/get-npm) installed.
 
 The project codebase is optimized for using Visual Studio Code.
 
 Clone the repository to your local disk. Run `git clone https://github.com/pets-oss/pets-front.git` in the terminal.
 
-Install project package dependencies. Run `npm install` in the terminal.
+Install project package dependencies. Run `npm install` in the terminal. Make sure you always use `npm` adding new dependencies.
 
 Make sure to set up local environment variables to run the project (see next section).
 
-To start development version with hot reload, run `npm start` in the terminal. 
-
+To start development version with hot reload, run `npm start` in the terminal.
 
 ## Environment variables
 
 App configuration values are stored in the `.env` file. If it is needed to overwrite values locally, create `.env.local` file and set custom values there. Only variables with `REACT_APP_` prefix will be included.
 
-
 ## GraphQL
 
-GraphQL types used by Typescript should not be defined manually but generated from the schema. To re-generate GraphQL types run `yarn codegen` command. Types are stored in the `src/graphql/types.ts` file.
+GraphQL types used by Typescript should not be defined manually but generated from the schema. To re-generate GraphQL types run `npm run codegen` command. Types are stored in the `src/graphql/types.ts` file.
 
 The latest API features exposed in the [development GraphQL Playground](https://petbook-back-dev.herokuapp.com/graphql).
 
 ---
+
 Started by Kayak WeCanCode Academy 2021 @ Kaunas
