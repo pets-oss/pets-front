@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router';
 
 import {
@@ -50,6 +50,12 @@ export default function AnimalEventDialog({
     const [dateError, setDateError] = useState(false);
     const [error, setError] = useState(false);
 
+    useEffect(() => {
+        if (!typeError && !categoryError && !expensesError && !commentsError && !dateError) {
+            setError(false);
+        }
+    }, [typeError, categoryError, expensesError, commentsError, dateError]);
+
     const handleEventTypeChange = event => {
         setTypeError(false);
         setType(event.target.value);
@@ -76,21 +82,21 @@ export default function AnimalEventDialog({
     };
 
     const handleCreate = () => {
-        if (type === '' || category === '' || expenses === '' || comment === '' || date === '') {
+        if (!type || !category || !expenses || !comment || !date) {
             setError(true);
-            if (type === '') {
+            if (!type) {
                 setTypeError(true);
             }
-            if (category === '') {
+            if (!category) {
                 setCategoryError(true);
             }
-            if (expenses === '') {
+            if (!expenses) {
                 setExpensesError(true);
             }
-            if (comment === '') {
+            if (!comment) {
                 setCommentsError(true);
             }
-            if (date === '') {
+            if (!date) {
                 setDateError(true);
             }
             return;
@@ -228,7 +234,7 @@ export default function AnimalEventDialog({
                     <Box flex="1" marginLeft={2}>
                         {error && (
                             <Typography variant="body1" color="error">
-                                Please fill all the fields
+                                Please fill in all blank fields
                             </Typography>
                         )}
                     </Box>
