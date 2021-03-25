@@ -93,7 +93,6 @@ export default function AnimalEventDialog({ dialogOpen, categoryOptions, typeOpt
             return;
         }
         const newEventObject = createObject(eventType, eventCategory, eventExpenses, eventComments, eventDate);
-        console.log(newEventObject);
         onCreate(newEventObject);
         cleanup();
     };
