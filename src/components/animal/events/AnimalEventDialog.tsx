@@ -19,21 +19,30 @@ import {
 } from '@material-ui/core';
 import { Event } from '../../../graphql/types';
 
-interface RouterParams {
-    id: string;
+interface AnimalEventDialogProps {
+    dialogOpen: boolean;
+    categoryOptions: string[];
+    typeOptions: string[];
+    onCancel: (showDialog: boolean) => void;
+    onCreate: (eventObject: Event) => void;
 }
 
-export default function AnimalEventDialog({ dialogOpen, categoryOptions, typeOptions, onCancel, onCreate }) {
+export default function AnimalEventDialog({
+    dialogOpen,
+    categoryOptions,
+    typeOptions,
+    onCancel,
+    onCreate,
+}: AnimalEventDialogProps) {
     const theme = useTheme();
     const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
-    const params: RouterParams = useParams();
-    const { id: animalID } = params;
+    const { id: animalID } = useParams<{ id: string }>();
 
-    const [eventType, setEventType] = useState('');
-    const [eventCategory, setEventCategory] = useState('');
-    const [eventExpenses, setEventExpenses] = useState('');
-    const [eventComments, setEventComments] = useState('');
-    const [eventDate, setEventDate] = useState('');
+    const [type, setType] = useState('');
+    const [category, setCategory] = useState('');
+    const [expenses, setExpenses] = useState('');
+    const [comment, setComment] = useState('');
+    const [date, setDate] = useState('');
     const [typeError, setTypeError] = useState(false);
     const [categoryError, setCategoryError] = useState(false);
     const [expensesError, setExpensesError] = useState(false);
@@ -43,56 +52,50 @@ export default function AnimalEventDialog({ dialogOpen, categoryOptions, typeOpt
 
     const handleEventTypeChange = event => {
         setTypeError(false);
-        setEventType(event.target.value);
+        setType(event.target.value);
     };
 
     const handleEventCategoryChange = event => {
         setCategoryError(false);
-        setEventCategory(event.target.value);
+        setCategory(event.target.value);
     };
 
     const handleEventExpensesChange = event => {
         setExpensesError(false);
-        setEventExpenses(event.target.value);
+        setExpenses(event.target.value);
     };
 
     const handleEventCommentsChange = event => {
         setCommentsError(false);
-        setEventComments(event.target.value);
+        setComment(event.target.value);
     };
 
     const handleEventDateChange = event => {
         setDateError(false);
-        setEventDate(event.target.value);
+        setDate(event.target.value);
     };
 
     const handleCreate = () => {
-        if (
-            eventType === '' ||
-            eventCategory === '' ||
-            eventExpenses === '' ||
-            eventComments === '' ||
-            eventDate === ''
-        ) {
+        if (type === '' || category === '' || expenses === '' || comment === '' || date === '') {
             setError(true);
-            if (eventType === '') {
+            if (type === '') {
                 setTypeError(true);
             }
-            if (eventCategory === '') {
+            if (category === '') {
                 setCategoryError(true);
             }
-            if (eventExpenses === '') {
+            if (expenses === '') {
                 setExpensesError(true);
             }
-            if (eventComments === '') {
+            if (comment === '') {
                 setCommentsError(true);
             }
-            if (eventDate === '') {
+            if (date === '') {
                 setDateError(true);
             }
             return;
         }
-        const newEventObject = createObject(eventType, eventCategory, eventExpenses, eventComments, eventDate);
+        const newEventObject = createEvent(type, category, expenses, comment, date);
         onCreate(newEventObject);
         cleanup();
     };
@@ -102,11 +105,11 @@ export default function AnimalEventDialog({ dialogOpen, categoryOptions, typeOpt
     };
 
     const cleanup = () => {
-        setEventType('');
-        setEventCategory('');
-        setEventExpenses('');
-        setEventComments('');
-        setEventDate('');
+        setType('');
+        setCategory('');
+        setExpenses('');
+        setComment('');
+        setDate('');
         setTypeError(false);
         setCategoryError(false);
         setExpensesError(false);
@@ -116,15 +119,15 @@ export default function AnimalEventDialog({ dialogOpen, categoryOptions, typeOpt
         onCancel(false);
     };
 
-    const createObject = (type, category, expenses, comments, date): Event => {
+    const createEvent = (_type, _category, _expenses, _comment, _date): Event => {
         return {
             id: 123456,
             animal: +animalID,
-            type: { id: typeOptions.indexOf(eventType), type },
-            category,
-            expenses: +expenses,
-            comments,
-            dateTime: Date.parse(date).toString(),
+            type: { id: typeOptions.indexOf(type), type: _type },
+            category: _category,
+            expenses: +_expenses,
+            comments: _comment,
+            dateTime: Date.parse(_date).toString(),
         };
     };
 
@@ -145,7 +148,7 @@ export default function AnimalEventDialog({ dialogOpen, categoryOptions, typeOpt
                         <Select
                             labelId="type"
                             label="Type"
-                            value={eventType ?? ''}
+                            value={type}
                             onChange={handleEventTypeChange}
                             error={typeError}
                         >
@@ -163,7 +166,7 @@ export default function AnimalEventDialog({ dialogOpen, categoryOptions, typeOpt
                         <Select
                             labelId="category"
                             label="Category"
-                            value={eventCategory ?? ''}
+                            value={category}
                             onChange={handleEventCategoryChange}
                             error={categoryError}
                         >
@@ -179,7 +182,7 @@ export default function AnimalEventDialog({ dialogOpen, categoryOptions, typeOpt
                     <TextField
                         id="expenses"
                         label="Expenses $"
-                        value={eventExpenses ?? ''}
+                        value={expenses}
                         onChange={handleEventExpensesChange}
                         variant="outlined"
                         fullWidth
@@ -190,9 +193,9 @@ export default function AnimalEventDialog({ dialogOpen, categoryOptions, typeOpt
                 </Box>
                 <Box marginTop={2.5} marginBottom={2.5}>
                     <TextField
-                        id="comments"
+                        id="comment"
                         label="Comments"
-                        value={eventComments ?? ''}
+                        value={comment}
                         onChange={handleEventCommentsChange}
                         variant="outlined"
                         fullWidth
@@ -207,7 +210,7 @@ export default function AnimalEventDialog({ dialogOpen, categoryOptions, typeOpt
                     <TextField
                         id="date"
                         label="Date"
-                        value={eventDate ?? ''}
+                        value={date}
                         onChange={handleEventDateChange}
                         variant="outlined"
                         fullWidth

@@ -21,27 +21,27 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
+const TYPE_OPTIONS = [
+    'Ženklinimas ir įregistravimas',
+    'Laikytojo pasikeitimas',
+    'Laikymo vietos pasikeitimas',
+    'Savininko pasikeitimas',
+    'Dingimas',
+    'Suradimas',
+    'Nugaišimas',
+    'Nugaišinimas',
+    'Išvežimas',
+    'Vakcinavimas',
+    'Augintinio agresyvumas',
+];
+
+const CATEGORY_OPTIONS = ['General', 'Medical'];
+
 export default function AnimalEvents({ events }: AnimalEventsProps) {
     const classes = useStyles();
     const [activeFilter, setActiveFilter] = useState<EventCategory>(EVENT_FILTER_ALL);
     const [activeSort, setActiveSort] = useState<EventSortingMode>(EventSortingMode.DESCENDING);
     const [dialogOpen, setDialogOpen] = useState(false);
-
-    const TYPE_OPTIONS = [
-        'Ženklinimas ir įregistravimas',
-        'Laikytojo pasikeitimas',
-        'Laikymo vietos pasikeitimas',
-        'Savininko pasikeitimas',
-        'Dingimas',
-        'Suradimas',
-        'Nugaišimas',
-        'Nugaišinimas',
-        'Išvežimas',
-        'Vakcinavimas',
-        'Augintinio agresyvumas',
-    ];
-
-    const CATEGORY_OPTIONS = ['General', 'Medical'];
 
     const handleDialogOpen = () => {
         setDialogOpen(true);
