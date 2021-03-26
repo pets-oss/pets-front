@@ -10,7 +10,7 @@ Live site is available at https://app.petbook.lt/.
 
 ## Setup
 
-Before starting the setup choose what actions you will do with the code changes. If you will keep it as a local copy - make a **repository clone**. If you will contribute the project - make a **repository fork** and read the [Contribution guideline](CONTRIBUTING.md).
+Before starting the setup choose what actions you will do with the code changes. If you will keep it as a local copy - make a **repository clone**. If you will contribute to the project - make a **repository fork** and read the [Contribution guideline](CONTRIBUTING.md).
 
 The project codebase is optimized for using Visual Studio Code which can be [downloaded](https://code.visualstudio.com/) and used with the most of popular OS. Install [Prettier](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode) and [ESLint](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint) extensions as these are mandatory for project codebase consistency.
 
@@ -36,9 +36,10 @@ Follow other steps of [this guide](https://auth0.com/docs/quickstart/spa/react/0
 
 The value of the `REACT_APP_AUTH0_AUTH_AUDIENCE` parameter needs to match an existing API service identifier configured in the "APIs" section of your Dashboard.
 
-Continue setting params the your Auth0 "Application" section - set **Application type** to "Regular Web Application", **Token Endpoint Authentication Method** to "None".
+Continue setting params in your Auth0 "Application" section - set **Application type** to "Regular Web Application", **Token Endpoint Authentication Method** to "None".
 
 After `env` variables are defined and Auth0 service itself is configured, you're good to go.
+
 ## GraphQL
 
 GraphQL types used by Typescript should not be defined manually but generated from the schema. To re-generate GraphQL types run `npm run codegen` command.
