@@ -4,6 +4,10 @@ import { screen, waitFor } from '@testing-library/react';
 import App from './App';
 import renderWithRouter from './test-utils/RenderWithRouter';
 
+const mockedComponent = () => <></>;
+jest.mock('./components/layout/RecentAnimalsContainer', () => mockedComponent);
+jest.mock('./components/layout/RecentEventsContainer', () => mockedComponent);
+
 test('full app rendering/navigating', async () => {
     // Home page
     renderWithRouter(<App />);
