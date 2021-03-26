@@ -42,7 +42,6 @@ export default function AnimalEvents({ events }: AnimalEventsProps) {
         [activeSort]
     );
 
-    // const [filteredEvents, setFilteredEvents] = useState(events.sort(sortByDateComparator));
     const [filteredEvents, setFilteredEvents] = useState([...events].sort(sortByDateComparator));
 
     const handleFilterChange = (value: EventCategory) => {
@@ -67,6 +66,14 @@ export default function AnimalEvents({ events }: AnimalEventsProps) {
         setNewEventDialogOpen(true);
     };
 
+    const handleNewEventDialogClose = () => {
+        setNewEventDialogOpen(false);
+    };
+
+    const handleNewEventDialogSubmit = (event: Event) => {
+        setFilteredEvents([...filteredEvents, event].sort(sortByDateComparator));
+    };
+
     const typeOptions = [
         'Ženklinimas ir įregistravimas',
         'Laikytojo pasikeitimas',
@@ -82,14 +89,6 @@ export default function AnimalEvents({ events }: AnimalEventsProps) {
     ];
 
     const categoryOptions = ['General', 'Medical'];
-
-    const onNewEventDialogCancel = (showDialog: boolean) => {
-        setNewEventDialogOpen(showDialog);
-    };
-
-    const onNewEventDialogSubmit = (newEvent: Event) => {
-        alert('NewEvent is about to be created!');
-    };
 
     return (
         <Box className={classes.root}>
@@ -108,8 +107,8 @@ export default function AnimalEvents({ events }: AnimalEventsProps) {
                 showDialog={newEventDialogOpen}
                 typeOptions={typeOptions}
                 categoryOptions={categoryOptions}
-                onCancel={onNewEventDialogCancel}
-                onCreate={onNewEventDialogSubmit}
+                onCancel={handleNewEventDialogClose}
+                onCreate={handleNewEventDialogSubmit}
             />
         </Box>
     );

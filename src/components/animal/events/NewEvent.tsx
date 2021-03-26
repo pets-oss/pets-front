@@ -13,61 +13,98 @@ import {
     Typography,
 } from '@material-ui/core';
 import Dialog from '@material-ui/core/Dialog';
+import { Event, EventType } from '../../../graphql/types';
 
-export default function NewEvent(props) {
-    const { showDialog, typeOptions, categoryOptions, onCancel, onCreate } = props;
-
-    const [type, setType] = useState('');
+export default function NewEvent({ showDialog, typeOptions, categoryOptions, onCancel, onCreate }: NewEventProps) {
+    const [type, setType] = useState({} as EventType);
     const [category, setCategory] = useState('');
     const [expenses, setExpenses] = useState(0);
     const [comments, setComments] = useState('');
-    const [date, setDate] = useState(null);
+    const [dateTime, setDateTime] = useState('');
+    const [errorText, setErrorText] = useState('');
+    const [expensesErrorText, setExpensesErrorText] = useState('');
 
     const handleDialogClose = () => {
-        onCancel(false);
+        onCancel();
     };
 
     const handleDialogSubmit = () => {
-        // TODO: update the properties of the new event
-        const newEvent = null;
-        handleDialogClose();
-        onCreate(newEvent);
+        if (Object.keys(type).length && category && expenses && comments && dateTime) {
+            setErrorText('');
+            const event = {
+                id: 1234,
+                animal: 12345,
+                type,
+                category,
+                expenses,
+                comments,
+                dateTime,
+            } as Event;
+            handleDialogClose();
+            onCreate(event);
+
+            // reset Event attributes
+            setType({} as EventType);
+            setCategory('');
+            setExpenses(0);
+            setComments('');
+            setDateTime('');
+        } else {
+            setErrorText('* Please fill in all the required fields.');
+        }
     };
 
     const handleTypeChange = e => {
-        setType(e.currentTarget.value);
+        const eventType = { id: 123456, type: e.target.value } as EventType;
+        setType(eventType);
     };
 
     const handleCategoryChange = e => {
-        setCategory(e.currentTarget.value);
+        setCategory(e.target.value);
     };
 
     const handleExpensesChange = e => {
-        setExpenses(e.currentTarget.value);
+        if (e.target.value.length > 0 && !Number(e.target.value)) {
+            setExpensesErrorText('* Please enter a valid number expression.');
+            setExpenses(0);
+        } else if (Number(e.target.value) < 0) {
+            setExpensesErrorText('* Expenses cannot be a negative number.');
+            setExpenses(0);
+        } else {
+            setExpensesErrorText('');
+            setExpenses(parseFloat(e.target.value));
+        }
     };
 
     const handleCommentsChange = e => {
-        setComments(e.currentTarget.value);
+        setComments(e.target.value);
     };
 
-    const handleDateChange = e => {
-        setDate(e.currentTarget.value);
+    const handleDateTimeChange = e => {
+        setDateTime(String(Date.parse(e.target.value)));
     };
 
     return (
-        <Dialog open={showDialog}>
+        <Dialog open={showDialog} fullWidth maxWidth="sm">
             <DialogContent>
-                <Box display="flex" justifyContent="space-between" marginTop={2.5} marginBottom={2.5}>
-                    <Typography variant="h6">Create new event</Typography>
+                <Box marginTop={2.5} marginBottom={2.5}>
+                    <Typography variant="h6">Create a new event</Typography>
                 </Box>
-                <Box display="flex" justifyContent="space-between" marginTop={2.5} marginBottom={2.5}>
-                    <FormControl variant="outlined" fullWidth /* className={classes.formControl} */>
-                        <InputLabel id="demo-simple-select-outlined-label">Type</InputLabel>
+                <Box marginTop={2.5} marginBottom={2.5}>
+                    <Typography variant="caption" color="error">
+                        {errorText}
+                    </Typography>
+                </Box>
+                <Box marginTop={2.5} marginBottom={2.5}>
+                    <FormControl variant="outlined" fullWidth>
+                        <InputLabel required error={errorText.length !== 0 && Object.keys(type).length === 0}>
+                            Type
+                        </InputLabel>
                         <Select
-                            labelId="demo-simple-select-outlined-label"
-                            id="demo-simple-select-outlined"
                             onChange={handleTypeChange}
                             label="type"
+                            required
+                            error={errorText.length !== 0 && Object.keys(type).length === 0}
                         >
                             {typeOptions.map((typeOption, index) => (
                                 <MenuItem key={index} value={typeOption}>
@@ -77,14 +114,16 @@ export default function NewEvent(props) {
                         </Select>
                     </FormControl>
                 </Box>
-                <Box display="flex" justifyContent="space-between" marginTop={2.5} marginBottom={2.5}>
-                    <FormControl variant="outlined" fullWidth /* className={classes.formControl} */>
-                        <InputLabel id="demo-simple-select-outlined-label">Category</InputLabel>
+                <Box marginTop={2.5} marginBottom={2.5}>
+                    <FormControl variant="outlined" fullWidth>
+                        <InputLabel required error={errorText.length !== 0 && !category}>
+                            Category
+                        </InputLabel>
                         <Select
-                            labelId="demo-simple-select-outlined-label"
-                            id="demo-simple-select-outlined"
                             onChange={handleCategoryChange}
                             label="category"
+                            required
+                            error={errorText.length !== 0 && !category}
                         >
                             {categoryOptions.map((categoryOption, index) => (
                                 <MenuItem key={index} value={categoryOption}>
@@ -94,26 +133,30 @@ export default function NewEvent(props) {
                         </Select>
                     </FormControl>
                 </Box>
-                <Box display="flex" justifyContent="space-between" marginTop={2.5} marginBottom={2.5}>
+                <Box marginTop={2.5} marginBottom={2.5}>
                     <TextField
                         label="Expenses $"
                         variant="outlined"
-                        type="number"
                         fullWidth
+                        required
+                        error={expensesErrorText.length !== 0 || (errorText.length !== 0 && !expenses)}
+                        helperText={expensesErrorText}
                         onChange={handleExpensesChange}
                     />
                 </Box>
-                <Box display="flex" justifyContent="space-between" marginTop={2.5} marginBottom={2.5}>
+                <Box marginTop={2.5} marginBottom={2.5}>
                     <TextField
                         label="Comments..."
                         variant="outlined"
                         multiline
                         rows={5}
                         fullWidth
+                        required
+                        error={errorText.length !== 0 && !comments}
                         onChange={handleCommentsChange}
                     />
                 </Box>
-                <Box display="flex" justifyContent="space-between" marginTop={2.5} marginBottom={2.5}>
+                <Box marginTop={2.5} marginBottom={2.5}>
                     <TextField
                         label="Date"
                         type="date"
@@ -122,7 +165,9 @@ export default function NewEvent(props) {
                         InputLabelProps={{
                             shrink: true,
                         }}
-                        onChange={handleDateChange}
+                        required
+                        error={errorText.length !== 0 && !dateTime}
+                        onChange={handleDateTimeChange}
                     />
                 </Box>
             </DialogContent>
@@ -136,4 +181,12 @@ export default function NewEvent(props) {
             </DialogActions>
         </Dialog>
     );
+}
+
+interface NewEventProps {
+    showDialog: boolean;
+    typeOptions: string[];
+    categoryOptions: string[];
+    onCancel: () => void;
+    onCreate: (event: Event) => void;
 }
