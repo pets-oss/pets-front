@@ -3,6 +3,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { Box, Button, makeStyles, Typography } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 import { Event } from '../../../graphql/types';
+import AnimalEventDialog from './AnimalEventDialog';
 import AnimalEventFilters, { EVENT_FILTER_ALL, EventCategory } from './AnimalEventFilters';
 import AnimalEventList from './AnimalEventList';
 import AnimalEventSorting, { EventSortingMode } from './AnimalEventSorting';
@@ -19,6 +20,22 @@ const useStyles = makeStyles(theme => ({
         },
     },
 }));
+
+const typeOptions = [
+    'Ženklinimas ir įregistravimas',
+    'Laikytojo pasikeitimas',
+    'Laikymo vietos pasikeitimas',
+    'Savininko pasikeitimas',
+    'Dingimas',
+    'Suradimas',
+    'Nugaišimas',
+    'Nugaišinimas',
+    'Išvežimas',
+    'Vakcinavimas',
+    'Augintinio agresyvumas',
+];
+
+const categories = ['General', 'Medical'];
 
 export default function AnimalEvents({ events }: AnimalEventsProps) {
     const classes = useStyles();
@@ -41,7 +58,7 @@ export default function AnimalEvents({ events }: AnimalEventsProps) {
         [activeSort]
     );
 
-    const [filteredEvents, setFilteredEvents] = useState(events.sort(sortByDateComparator));
+    const [filteredEvents, setFilteredEvents] = useState([...events].sort(sortByDateComparator));
 
     const handleFilterChange = (value: EventCategory) => {
         setActiveFilter(value);
@@ -59,19 +76,40 @@ export default function AnimalEvents({ events }: AnimalEventsProps) {
         );
     }, [activeFilter, events, sortByDateComparator]);
 
+    const [open, setOpen] = useState(false);
+
+    const openDialog = () => {
+        setOpen(true);
+    };
+
+    const onCancel = () => {
+        setOpen(false);
+    };
+
+    const onCreate = event => {
+        setFilteredEvents([...filteredEvents, event]);
+    };
+
     return (
         <Box className={classes.root}>
             <Box mb={2} display="flex" justifyContent="space-between" alignItems="center">
                 <Typography variant="h5" component="h3">
                     Events
                 </Typography>
-                <Button color="primary" variant="contained" startIcon={<AddIcon />}>
+                <Button color="primary" variant="contained" startIcon={<AddIcon />} onClick={openDialog}>
                     Create
                 </Button>
             </Box>
             <AnimalEventFilters activeFilter={activeFilter} onChange={handleFilterChange} />
             <AnimalEventSorting sortingMode={activeSort} onChange={handleSortChange} />
             <AnimalEventList events={filteredEvents} />
+            <AnimalEventDialog
+                open={open}
+                typeOptions={typeOptions}
+                categories={categories}
+                onCancel={onCancel}
+                onCreate={onCreate}
+            />
         </Box>
     );
 }
