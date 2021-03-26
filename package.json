@@ -34,7 +34,8 @@
         "workbox-range-requests": "^5.1.4",
         "workbox-routing": "^5.1.4",
         "workbox-strategies": "^5.1.4",
-        "workbox-streams": "^5.1.4"
+        "workbox-streams": "^5.1.4",
+        "yarn": "^1.22.10"
     },
     "devDependencies": {
         "@graphql-codegen/cli": "1.20.0",
