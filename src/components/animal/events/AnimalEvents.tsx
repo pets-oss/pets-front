@@ -6,6 +6,7 @@ import { Event } from '../../../graphql/types';
 import AnimalEventFilters, { EVENT_FILTER_ALL, EventCategory } from './AnimalEventFilters';
 import AnimalEventList from './AnimalEventList';
 import AnimalEventSorting, { EventSortingMode } from './AnimalEventSorting';
+import NewEventDialog from './NewEventDialog';
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -59,15 +60,38 @@ export default function AnimalEvents({ events }: AnimalEventsProps) {
         );
     }, [activeFilter, events, sortByDateComparator]);
 
+    const [open, setOpen] = useState(false);
+
+    const handleClickOpen = () => {
+        setOpen(true);
+    };
+
+    const TypeOptions = [
+        'Ženklinimas ir įregistravimas',
+        'Laikytojo pasikeitimas',
+        'Laikymo vietos pasikeitimas',
+        'Savininko pasikeitimas',
+        'Dingimas',
+        'Suradimas',
+        'Nugaišimas',
+        'Nugaišinimas',
+        'Išvežimas',
+        'Vakcinavimas',
+        'Augintinio agresyvumas',
+    ];
+
+    const Category = ['General', 'Medical'];
+
     return (
         <Box className={classes.root}>
             <Box mb={2} display="flex" justifyContent="space-between" alignItems="center">
                 <Typography variant="h5" component="h3">
                     Events
                 </Typography>
-                <Button color="primary" variant="contained" startIcon={<AddIcon />}>
+                <Button color="primary" variant="contained" startIcon={<AddIcon />} onClick={handleClickOpen}>
                     Create
                 </Button>
+                <NewEventDialog open={open} onClose={() => setOpen(false)} types={TypeOptions} category={Category} />
             </Box>
             <AnimalEventFilters activeFilter={activeFilter} onChange={handleFilterChange} />
             <AnimalEventSorting sortingMode={activeSort} onChange={handleSortChange} />
