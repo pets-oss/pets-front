@@ -48,54 +48,16 @@ export default function AnimalEventDialog({ open, typeOptions, categories, onCan
 
     const handleExpensesChange = (expenses: number) => {
         setEventExpenses(expenses);
-        if (!expenses) {
-            setExpensesErr(true);
-            setErrText('All fields are required.');
-        } else {
-            setExpensesErr(false);
-            setErrText('');
-        }
+        validateExpenses(expenses);
     };
 
     const handleCommentsChange = (comment: string) => {
         setEventComments(comment);
-        if (!comment) {
-            setCommentsErr(true);
-            setErrText('All fields are required.');
-        } else {
-            setCommentsErr(false);
-            setErrText('');
-        }
+        validateComments(comment);
     };
 
     const handleDateChange = (dt: string) => {
         setEventDate(dt);
-    };
-
-    const handleCancel = () => {
-        onCancel();
-        setEventType('');
-        setEventCategory('');
-        setEventExpenses(NaN);
-        setEventComments('');
-        setEventDate(date.toISOString().substr(0, 10));
-    };
-
-    const handleCreate = () => {
-        const newEvent: Event = {
-            id: 123456,
-            type: {
-                type: eventType,
-                id: 1,
-            },
-            category: getCategory(eventCategory),
-            expenses: eventExpenses,
-            comments: eventComments,
-            dateTime: eventDate,
-            animal: 1,
-        };
-        onCreate(newEvent);
-        handleCancel();
     };
 
     const validateType = () => {
@@ -116,6 +78,58 @@ export default function AnimalEventDialog({ open, typeOptions, categories, onCan
             setCategoryErr(false);
             setErrText('');
         }
+    };
+
+    const validateExpenses = expenses => {
+        if (!expenses) {
+            setExpensesErr(true);
+            setErrText('All fields are required.');
+        } else {
+            setExpensesErr(false);
+            setErrText('');
+        }
+    };
+
+    const validateComments = comment => {
+        if (!comment) {
+            setCommentsErr(true);
+            setErrText('All fields are required.');
+        } else {
+            setCommentsErr(false);
+            setErrText('');
+        }
+    };
+
+    const handleCancel = () => {
+        onCancel();
+        setEventType('');
+        setEventCategory('');
+        setEventExpenses(NaN);
+        setEventComments('');
+        setEventDate(date.toISOString().substr(0, 10));
+        setTypeErr(false);
+        setCategoryErr(false);
+        setExpensesErr(false);
+        setCommentsErr(false);
+        setErrText('');
+    };
+
+    const handleCreate = () => {
+        const d = new Date(eventDate).getTime().toString();
+        const newEvent: Event = {
+            id: 123456,
+            type: {
+                type: eventType,
+                id: 1,
+            },
+            category: getCategory(eventCategory),
+            expenses: eventExpenses,
+            comments: eventComments,
+            dateTime: d,
+            animal: 1,
+        };
+        onCreate(newEvent);
+        handleCancel();
     };
 
     return (
@@ -183,6 +197,7 @@ export default function AnimalEventDialog({ open, typeOptions, categories, onCan
                         type="number"
                         value={eventExpenses}
                         onChange={event => handleExpensesChange(parseFloat(event?.target.value))}
+                        onBlur={event => validateExpenses(event?.target.value)}
                         variant="outlined"
                         color="secondary"
                         fullWidth
@@ -196,6 +211,7 @@ export default function AnimalEventDialog({ open, typeOptions, categories, onCan
                         label="Comments..."
                         value={eventComments}
                         onChange={event => handleCommentsChange(event?.target.value)}
+                        onBlur={event => validateComments(event?.target.value)}
                         multiline
                         rows={4}
                         variant="outlined"
