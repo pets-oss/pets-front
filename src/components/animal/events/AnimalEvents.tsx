@@ -1,12 +1,11 @@
 import React, { useCallback, useEffect, useState } from 'react';
 
-import { Box, Button, makeStyles, Typography } from '@material-ui/core';
-import AddIcon from '@material-ui/icons/Add';
+import { Box, makeStyles, Typography } from '@material-ui/core';
 import { Event } from '../../../graphql/types';
-import AnimalDialog from './AnimalDialog';
 import AnimalEventFilters, { EVENT_FILTER_ALL, EventCategory } from './AnimalEventFilters';
 import AnimalEventList from './AnimalEventList';
 import AnimalEventSorting, { EventSortingMode } from './AnimalEventSorting';
+import EventDialog from './EventDialog';
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -60,15 +59,15 @@ export default function AnimalEvents({ events }: AnimalEventsProps) {
         );
     }, [activeFilter, events, sortByDateComparator]);
 
-    const [open, setOpen] = React.useState(false);
+    // const [open, setOpen] = React.useState(false);
 
-    const handleClickOpen = () => {
-        setOpen(true);
-    };
+    // const handleClickOpen = () => {
+    //     setOpen(true);
+    // };
 
-    const handleClose = () => {
-        setOpen(false);
-    };
+    // const handleClose = () => {
+    //     setOpen(false);
+    // };
 
     return (
         <Box className={classes.root}>
@@ -76,10 +75,10 @@ export default function AnimalEvents({ events }: AnimalEventsProps) {
                 <Typography variant="h5" component="h3">
                     Events
                 </Typography>
-                <Button color="primary" variant="contained" onClick={handleClickOpen} startIcon={<AddIcon />}>
+                {/* <Button color="primary" variant="contained" onClick={handleClickOpen} startIcon={<AddIcon />}>
                     Create
-                </Button>
-                <AnimalDialog open={open} onCancel={handleClose} />
+                </Button> */}
+                <EventDialog />
             </Box>
             <AnimalEventFilters activeFilter={activeFilter} onChange={handleFilterChange} />
             <AnimalEventSorting sortingMode={activeSort} onChange={handleSortChange} />
