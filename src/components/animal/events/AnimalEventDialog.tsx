@@ -25,7 +25,13 @@ const getCategory = (category: string) => {
     }
 };
 
-export default function AnimalEventDialog({ open, typeOptions, categories, onCancel, onCreate }) {
+export default function AnimalEventDialog({
+    open,
+    typeOptions,
+    categories,
+    onCancel,
+    onCreate,
+}: AnimalEventDialogProps) {
     const date = new Date();
     const [eventType, setEventType] = React.useState('');
     const [eventCategory, setEventCategory] = React.useState('');
@@ -80,7 +86,7 @@ export default function AnimalEventDialog({ open, typeOptions, categories, onCan
         }
     };
 
-    const validateExpenses = expenses => {
+    const validateExpenses = (expenses: number) => {
         if (!expenses) {
             setExpensesErr(true);
             setErrText('All fields are required.');
@@ -90,7 +96,7 @@ export default function AnimalEventDialog({ open, typeOptions, categories, onCan
         }
     };
 
-    const validateComments = comment => {
+    const validateComments = (comment: string) => {
         if (!comment) {
             setCommentsErr(true);
             setErrText('All fields are required.');
@@ -197,7 +203,7 @@ export default function AnimalEventDialog({ open, typeOptions, categories, onCan
                         type="number"
                         value={eventExpenses}
                         onChange={event => handleExpensesChange(parseFloat(event?.target.value))}
-                        onBlur={event => validateExpenses(event?.target.value)}
+                        onBlur={event => validateExpenses(parseFloat(event?.target.value))}
                         variant="outlined"
                         color="secondary"
                         fullWidth
@@ -247,4 +253,12 @@ export default function AnimalEventDialog({ open, typeOptions, categories, onCan
             </Box>
         </Dialog>
     );
+}
+
+interface AnimalEventDialogProps {
+    open: boolean;
+    typeOptions: string[];
+    categories: string[];
+    onCancel: () => void;
+    onCreate: (newObject: Event) => void;
 }
