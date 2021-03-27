@@ -91,7 +91,12 @@ export default function AnimalEvents({ events }: AnimalEventsProps) {
                 <Button color="primary" variant="contained" startIcon={<AddIcon />} onClick={handleClickOpen}>
                     Create
                 </Button>
-                <NewEventDialog open={open} onClose={() => setOpen(false)} types={TypeOptions} category={Category} />
+                <NewEventDialog
+                    open={open}
+                    onClose={() => setOpen(false)}
+                    typeOptions={TypeOptions}
+                    category={Category}
+                />
             </Box>
             <AnimalEventFilters activeFilter={activeFilter} onChange={handleFilterChange} />
             <AnimalEventSorting sortingMode={activeSort} onChange={handleSortChange} />

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
@@ -21,13 +21,39 @@ export interface SimpleDialogProps {
     open: boolean;
     category: string[];
     onClose: () => void;
-    types: string[];
+    typeOptions: string[];
 }
 
 export default function NewEventDialog(props: SimpleDialogProps) {
     // eslint-disable-next-line
     const classes = useStyles();
-    const { open, category, onClose, types } = props;
+    const { open, category, onClose, typeOptions } = props;
+
+    const [selectedType, setSelectedType] = useState('');
+    const [selectedCategory, setSelectedCategory] = useState('');
+    const [expenses, setExpenses] = useState('');
+    const [comments, setComments] = useState('');
+    const [selectedDate, setSelectedDate] = useState('');
+
+    const handleTypeChange = (event: React.ChangeEvent<{ value: unknown }>) => {
+        setSelectedType(event.target.value as string);
+    };
+
+    const handleCategoryChange = (event: React.ChangeEvent<{ value: unknown }>) => {
+        setSelectedCategory(event.target.value as string);
+    };
+
+    const handleExpensesChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setExpenses(event.target.value);
+    };
+
+    const handleCommentsChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setComments(event.target.value);
+    };
+
+    const handleDateChange = (event: React.ChangeEvent<{ value: unknown }>) => {
+        setSelectedDate(event.target.value as string);
+    };
 
     return (
         <Dialog aria-labelledby="form-dialog-title" open={open}>
@@ -40,10 +66,10 @@ export default function NewEventDialog(props: SimpleDialogProps) {
                     labelId="input-type"
                     margin="dense"
                     variant="outlined"
-                    // value={age}
-                    //   onChange={handleChange}
+                    value={selectedType}
+                    onChange={handleTypeChange}
                 >
-                    {types.map(type => (
+                    {typeOptions.map(type => (
                         <MenuItem value={type}>{type}</MenuItem>
                     ))}
                 </Select>
@@ -54,14 +80,23 @@ export default function NewEventDialog(props: SimpleDialogProps) {
                     labelId="input-category"
                     margin="dense"
                     variant="outlined"
-                    // value={age}
-                    //   onChange={handleChange}
+                    value={selectedCategory}
+                    onChange={handleCategoryChange}
                 >
                     {category.map(cat => (
                         <MenuItem value={cat}>{cat}</MenuItem>
                     ))}
                 </Select>
-                <TextField fullWidth id="expenses" label="Expenses $" margin="dense" variant="outlined" />
+                <TextField
+                    fullWidth
+                    id="expenses"
+                    label="Expenses $"
+                    margin="dense"
+                    variant="outlined"
+                    value={expenses}
+                    onChange={handleExpensesChange}
+                />
+
                 <TextField
                     fullWidth
                     id="comments"
@@ -70,6 +105,8 @@ export default function NewEventDialog(props: SimpleDialogProps) {
                     multiline
                     rows={4}
                     variant="outlined"
+                    value={comments}
+                    onChange={handleCommentsChange}
                 />
                 <TextField
                     fullWidth
@@ -78,13 +115,32 @@ export default function NewEventDialog(props: SimpleDialogProps) {
                     margin="dense"
                     type="date"
                     variant="outlined"
+                    value={selectedDate}
+                    onChange={handleDateChange}
                     InputLabelProps={{
                         shrink: true,
                     }}
                 />
             </DialogContent>
             <DialogActions>
-                <Button onClick={() => onClose()} color="primary" variant="outlined">
+                <Button
+                    onClick={() =>
+                        // eslint-disable-next-line
+                        console.log(
+                            selectedType,
+                            ',',
+                            selectedCategory,
+                            ', ',
+                            expenses,
+                            ', ',
+                            comments,
+                            ', ',
+                            selectedDate
+                        )
+                    }
+                    color="primary"
+                    variant="outlined"
+                >
                     Cancel
                 </Button>
                 {/* KITOKS FUNKCIONALUMAS TURETU BUTI */}
