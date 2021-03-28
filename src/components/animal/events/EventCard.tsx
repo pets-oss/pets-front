@@ -1,3 +1,4 @@
+import clsx from 'clsx';
 import React, { useState } from 'react';
 
 import { Card, CardContent, CardHeader, Collapse, IconButton, Typography } from '@material-ui/core';
@@ -16,10 +17,14 @@ export default function EventCard({ event }: AnimalCardProps) {
     const subHeader = `${event.dateTime ? getFormattedDate(event.dateTime) : '-'} / Author`;
 
     return (
-        <Card className={classes.root}>
+        <Card
+            className={clsx(classes.root, {
+                'MuiPaper-elevation5': expanded,
+            })}
+        >
             <CardHeader
                 avatar={
-                    <Avatar aria-label="event" alt="event">
+                    <Avatar className={clsx(expanded && classes.avatarExpanded)} aria-label="event" alt="event">
                         <LocalHospitalIcon />
                     </Avatar>
                 }
@@ -83,6 +88,9 @@ const useStyles = makeStyles(theme => ({
     },
     label: {
         fontWeight: theme.typography.fontWeightBold,
+    },
+    avatarExpanded: {
+        backgroundColor: theme.palette.primary.light,
     },
 }));
 
