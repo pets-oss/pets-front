@@ -1,25 +1,27 @@
 import React, { useState } from 'react';
 
-import Button from '@material-ui/core/Button';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import InputLabel from '@material-ui/core/InputLabel';
-import MenuItem from '@material-ui/core/MenuItem';
-import Select from '@material-ui/core/Select';
-import TextField from '@material-ui/core/TextField';
+import {
+    Button,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogTitle,
+    InputLabel,
+    MenuItem,
+    Select,
+    TextField,
+} from '@material-ui/core';
 
 interface NewEventDialogProps {
     categoryOptions: string[];
-    open: boolean;
     onCancel: () => void;
     onCreate: any;
+    open: boolean;
     typeOptions: string[];
 }
 
 export default function NewEventDialog(props: NewEventDialogProps) {
-    const { categoryOptions, open, onCancel, onCreate, typeOptions } = props;
+    const { categoryOptions, onCancel, onCreate, open, typeOptions } = props;
 
     const [selectedType, setSelectedType] = useState('');
     const [selectedCategory, setSelectedCategory] = useState('');
@@ -47,12 +49,17 @@ export default function NewEventDialog(props: NewEventDialogProps) {
         setSelectedDate(event.target.value as string);
     };
 
-    const handleReset = () => {
+    const resetInputs = () => {
         setSelectedType('');
         setSelectedCategory('');
         setExpenses('');
         setComments('');
         setSelectedDate('');
+    };
+
+    const handleCancel = () => {
+        resetInputs();
+        onCancel();
     };
 
     const handleCreate = () => {
@@ -73,14 +80,14 @@ export default function NewEventDialog(props: NewEventDialogProps) {
                 dateTime: date,
             };
             onCreate(newEvent);
-            handleReset();
+            resetInputs();
             onCancel();
         }
     };
 
     return (
-        <Dialog aria-labelledby="form-dialog-title" open={open}>
-            <DialogTitle id="form-dialog-title">Create new event</DialogTitle>
+        <Dialog aria-labelledby="dialog-title" open={open}>
+            <DialogTitle id="dialog-title">Create new event</DialogTitle>
             <DialogContent>
                 <InputLabel id="input-type">Type</InputLabel>
                 <Select
@@ -119,7 +126,6 @@ export default function NewEventDialog(props: NewEventDialogProps) {
                     value={expenses}
                     onChange={handleExpensesChange}
                 />
-
                 <TextField
                     fullWidth
                     id="comments"
@@ -146,7 +152,7 @@ export default function NewEventDialog(props: NewEventDialogProps) {
                 />
             </DialogContent>
             <DialogActions>
-                <Button onClick={onCancel} color="primary" variant="outlined">
+                <Button onClick={handleCancel} color="primary" variant="outlined">
                     Cancel
                 </Button>
                 <Button onClick={handleCreate} color="primary" variant="contained">
