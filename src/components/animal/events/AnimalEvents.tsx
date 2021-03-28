@@ -6,6 +6,7 @@ import { Event } from '../../../graphql/types';
 import AnimalEventFilters, { EVENT_FILTER_ALL, EventCategory } from './AnimalEventFilters';
 import AnimalEventList from './AnimalEventList';
 import AnimalEventSorting, { EventSortingMode } from './AnimalEventSorting';
+import AnimalNewEvent from './AnimalNewEvent';
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -24,6 +25,7 @@ export default function AnimalEvents({ events }: AnimalEventsProps) {
     const classes = useStyles();
     const [activeFilter, setActiveFilter] = useState<EventCategory>(EVENT_FILTER_ALL);
     const [activeSort, setActiveSort] = useState<EventSortingMode>(EventSortingMode.DESCENDING);
+    const [eventOpen, seteventOpen] = useState(false);
 
     const sortByDateComparator = useCallback(
         (event1: Event, event2: Event) => {
@@ -41,7 +43,7 @@ export default function AnimalEvents({ events }: AnimalEventsProps) {
         [activeSort]
     );
 
-    const [filteredEvents, setFilteredEvents] = useState(events.sort(sortByDateComparator));
+    const [filteredEvents, setFilteredEvents] = useState([...events].sort(sortByDateComparator));
 
     const handleFilterChange = (value: EventCategory) => {
         setActiveFilter(value);
@@ -58,20 +60,20 @@ export default function AnimalEvents({ events }: AnimalEventsProps) {
                 .sort(sortByDateComparator)
         );
     }, [activeFilter, events, sortByDateComparator]);
-
     return (
         <Box className={classes.root}>
             <Box mb={2} display="flex" justifyContent="space-between" alignItems="center">
                 <Typography variant="h5" component="h3">
                     Events
                 </Typography>
-                <Button color="primary" variant="contained" startIcon={<AddIcon />}>
+                <Button color="primary" variant="contained" startIcon={<AddIcon />} onClick={() => seteventOpen(true)}>
                     Create
                 </Button>
             </Box>
             <AnimalEventFilters activeFilter={activeFilter} onChange={handleFilterChange} />
             <AnimalEventSorting sortingMode={activeSort} onChange={handleSortChange} />
             <AnimalEventList events={filteredEvents} />
+            <AnimalNewEvent eventOpen={eventOpen} seteventOpen={seteventOpen} />
         </Box>
     );
 }
