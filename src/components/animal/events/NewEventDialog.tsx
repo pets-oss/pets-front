@@ -13,21 +13,21 @@ import TextField from '@material-ui/core/TextField';
 
 const useStyles = makeStyles({
     root: {
-        width: '5ch', // KOREGUOTI
+        width: '5ch', // KOREGUOTI, DAR NEŽINAU KAIP VEIKIA
     },
 });
 
-export interface SimpleDialogProps {
+interface NewEventDialogProps {
+    categoryOptions: string[];
     open: boolean;
-    category: string[];
-    onClose: () => void;
+    onCancel: () => void;
     typeOptions: string[];
 }
 
-export default function NewEventDialog(props: SimpleDialogProps) {
+export default function NewEventDialog(props: NewEventDialogProps) {
     // eslint-disable-next-line
     const classes = useStyles();
-    const { open, category, onClose, typeOptions } = props;
+    const { categoryOptions, open, onCancel, typeOptions } = props;
 
     const [selectedType, setSelectedType] = useState('');
     const [selectedCategory, setSelectedCategory] = useState('');
@@ -53,6 +53,29 @@ export default function NewEventDialog(props: SimpleDialogProps) {
 
     const handleDateChange = (event: React.ChangeEvent<{ value: unknown }>) => {
         setSelectedDate(event.target.value as string);
+        // eslint-disable-next-line
+        // console.log(event.target.value);
+    };
+
+    const handleCreate = () => {
+        if (
+            selectedType !== '' &&
+            selectedCategory !== '' &&
+            expenses !== '' &&
+            comments !== '' &&
+            selectedDate !== ''
+        ) {
+            const newEvent = {
+                id: 123456,
+                type: { __typename: 'EventType', id: typeOptions.indexOf(selectedType), selectedType },
+                expenses,
+                category: selectedCategory,
+                comments,
+                dateTime: selectedDate,
+            };
+            // eslint-disable-next-line
+            console.log(newEvent);
+        }
     };
 
     return (
@@ -83,7 +106,7 @@ export default function NewEventDialog(props: SimpleDialogProps) {
                     value={selectedCategory}
                     onChange={handleCategoryChange}
                 >
-                    {category.map(cat => (
+                    {categoryOptions.map(cat => (
                         <MenuItem value={cat}>{cat}</MenuItem>
                     ))}
                 </Select>
@@ -123,28 +146,10 @@ export default function NewEventDialog(props: SimpleDialogProps) {
                 />
             </DialogContent>
             <DialogActions>
-                <Button
-                    onClick={() =>
-                        // eslint-disable-next-line
-                        console.log(
-                            selectedType,
-                            ',',
-                            selectedCategory,
-                            ', ',
-                            expenses,
-                            ', ',
-                            comments,
-                            ', ',
-                            selectedDate
-                        )
-                    }
-                    color="primary"
-                    variant="outlined"
-                >
+                <Button onClick={() => onCancel()} color="primary" variant="outlined">
                     Cancel
                 </Button>
-                {/* KITOKS FUNKCIONALUMAS TURETU BUTI */}
-                <Button onClick={() => onClose()} color="primary" variant="contained">
+                <Button onClick={handleCreate} color="primary" variant="contained">
                     Create
                 </Button>
             </DialogActions>

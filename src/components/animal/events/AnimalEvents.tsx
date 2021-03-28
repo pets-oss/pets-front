@@ -64,6 +64,10 @@ export default function AnimalEvents({ events }: AnimalEventsProps) {
 
     const handleClickOpen = () => {
         setOpen(true);
+        // eslint-disable-next-line
+        console.log(events);
+        // eslint-disable-next-line
+        console.log(events[0]);
     };
 
     const TypeOptions = [
@@ -80,7 +84,7 @@ export default function AnimalEvents({ events }: AnimalEventsProps) {
         'Augintinio agresyvumas',
     ];
 
-    const Category = ['General', 'Medical'];
+    const CategoryOptions = ['General', 'Medical'];
 
     return (
         <Box className={classes.root}>
@@ -93,9 +97,9 @@ export default function AnimalEvents({ events }: AnimalEventsProps) {
                 </Button>
                 <NewEventDialog
                     open={open}
-                    onClose={() => setOpen(false)}
+                    onCancel={() => setOpen(false)}
                     typeOptions={TypeOptions}
-                    category={Category}
+                    categoryOptions={CategoryOptions}
                 />
             </Box>
             <AnimalEventFilters activeFilter={activeFilter} onChange={handleFilterChange} />
