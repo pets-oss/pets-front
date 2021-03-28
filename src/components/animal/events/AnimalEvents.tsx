@@ -35,6 +35,8 @@ const typeOptions = [
     'Augintinio agresyvumas',
 ];
 
+const category = ['General', 'Medical'];
+
 export default function AnimalEvents({ events }: AnimalEventsProps) {
     const classes = useStyles();
     const [activeFilter, setActiveFilter] = useState<EventCategory>(EVENT_FILTER_ALL);
@@ -106,6 +108,7 @@ export default function AnimalEvents({ events }: AnimalEventsProps) {
                 onCancel={handleEventCancel}
                 onCreate={handleEventCreate}
                 typeOptions={typeOptions}
+                categories={category}
             />
         </Box>
     );

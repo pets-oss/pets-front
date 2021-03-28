@@ -14,27 +14,36 @@ import {
     Typography,
 } from '@material-ui/core';
 
-// interface NewEventProps { }
-
-function NewEventDialog({ onCancel, onCreate, open, setOpen, typeOptions }: any) {
-    const [type, setType] = useState<any>('');
-    const [category, setCategory] = useState('');
-    const [expenses, setExpenses] = useState(null);
-    const [comments, setComments] = useState('');
-    const [date, setDate] = useState('');
+function NewEventDialog({ onCancel, onCreate, open, setOpen, typeOptions, categories }: any) {
+    const [typeValue, setTypeValue] = useState<string>('');
+    const [categoryValue, setCategoryValue] = useState<string>('');
+    const [expensesValue, setExpensesValue] = useState<number | null>(null);
+    const [commentsValue, setCommentsValue] = useState<string>('');
+    const [dateValue, setDateValue] = useState<string>('');
 
     const handleClose = () => {
         setOpen(false);
     };
 
-    const handleTypeChange = (event: React.ChangeEvent<{ name?: string; value: unknown }>) => {
-        setType(event.target.value);
+    const handleTypeChange = (event: React.ChangeEvent<{ value: unknown }>) => {
+        setTypeValue(event.target.value as string);
     };
 
-    // const handleCategoryChange = (event: React.ChangeEvent<{ name?: string; value: unknown }>) => {
-    //     setCategory(event.target.value);
-    // };
+    const handleCategoryChange = (event: React.ChangeEvent<{ value: unknown }>) => {
+        setCategoryValue(event.target.value as string);
+    };
 
+    const handleExpensesChange = (event: React.ChangeEvent<{ value: unknown }>) => {
+        setExpensesValue(Number(event.target.value) as number);
+    };
+
+    const handleCommentsChange = (event: React.ChangeEvent<{ value: unknown }>) => {
+        setCommentsValue(event.target.value as string);
+    };
+
+    const handleDateChange = (event: React.ChangeEvent<{ value: unknown }>) => {
+        setDateValue(event.target.value as string);
+    };
     return (
         <div>
             <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
@@ -42,15 +51,15 @@ function NewEventDialog({ onCancel, onCreate, open, setOpen, typeOptions }: any)
                     <Typography variant="h6">Create new event</Typography>
                 </DialogTitle>
                 <DialogContent>
-                    <FormControl variant="outlined" color="secondary" fullWidth>
-                        <InputLabel htmlFor="type">Type</InputLabel>
+                    <FormControl variant="outlined" color="secondary" fullWidth margin="dense">
+                        <InputLabel htmlFor="new-event-type">Type</InputLabel>
                         <Select
-                            value={type}
+                            value={typeValue}
                             onChange={handleTypeChange}
                             label="Type"
                             inputProps={{
-                                name: 'type',
-                                id: 'type',
+                                name: 'new-event-type',
+                                id: 'new-event-type',
                             }}
                         >
                             {typeOptions.map(option => (
@@ -58,12 +67,54 @@ function NewEventDialog({ onCancel, onCreate, open, setOpen, typeOptions }: any)
                             ))}
                         </Select>
                     </FormControl>
+                    <FormControl variant="outlined" color="secondary" fullWidth margin="dense">
+                        <InputLabel htmlFor="new-event-category">Category</InputLabel>
+                        <Select
+                            value={categoryValue}
+                            onChange={handleCategoryChange}
+                            label="Category"
+                            inputProps={{
+                                name: 'new-event-category',
+                                id: 'new-event-category',
+                            }}
+                        >
+                            {categories.map(category => (
+                                <MenuItem value={category}>{category}</MenuItem>
+                            ))}
+                        </Select>
+                    </FormControl>
                     <TextField
-                        autoFocus
+                        id="new-event-expenses"
+                        value={expensesValue}
+                        onChange={handleExpensesChange}
+                        label="Expenses $"
                         margin="dense"
-                        id="name"
-                        label="Expenses"
-                        type="email"
+                        fullWidth
+                        variant="outlined"
+                        color="secondary"
+                    />
+                    <TextField
+                        id="new-event-comments"
+                        value={commentsValue}
+                        onChange={handleCommentsChange}
+                        label="Comments"
+                        multiline
+                        rows={4}
+                        margin="dense"
+                        fullWidth
+                        variant="outlined"
+                        color="secondary"
+                    />
+                    <TextField
+                        id="new-event-date"
+                        value={dateValue}
+                        onChange={handleDateChange}
+                        label="Date"
+                        type="datetime-local"
+                        InputLabelProps={{
+                            shrink: true,
+                        }}
+                        margin="dense"
                         fullWidth
                         variant="outlined"
                         color="secondary"
