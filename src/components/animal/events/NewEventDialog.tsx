@@ -8,26 +8,18 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import Select from '@material-ui/core/Select';
-import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
-
-const useStyles = makeStyles({
-    root: {
-        width: '5ch', // KOREGUOTI, DAR NEŽINAU KAIP VEIKIA
-    },
-});
 
 interface NewEventDialogProps {
     categoryOptions: string[];
     open: boolean;
     onCancel: () => void;
+    onCreate: any;
     typeOptions: string[];
 }
 
 export default function NewEventDialog(props: NewEventDialogProps) {
-    // eslint-disable-next-line
-    const classes = useStyles();
-    const { categoryOptions, open, onCancel, typeOptions } = props;
+    const { categoryOptions, open, onCancel, onCreate, typeOptions } = props;
 
     const [selectedType, setSelectedType] = useState('');
     const [selectedCategory, setSelectedCategory] = useState('');
@@ -53,8 +45,14 @@ export default function NewEventDialog(props: NewEventDialogProps) {
 
     const handleDateChange = (event: React.ChangeEvent<{ value: unknown }>) => {
         setSelectedDate(event.target.value as string);
-        // eslint-disable-next-line
-        // console.log(event.target.value);
+    };
+
+    const handleReset = () => {
+        setSelectedType('');
+        setSelectedCategory('');
+        setExpenses('');
+        setComments('');
+        setSelectedDate('');
     };
 
     const handleCreate = () => {
@@ -65,16 +63,18 @@ export default function NewEventDialog(props: NewEventDialogProps) {
             comments !== '' &&
             selectedDate !== ''
         ) {
+            const date = new Date(selectedDate).getTime().toString();
             const newEvent = {
                 id: 123456,
-                type: { __typename: 'EventType', id: typeOptions.indexOf(selectedType), selectedType },
+                type: { __typename: 'EventType', id: typeOptions.indexOf(selectedType), type: selectedType },
                 expenses,
                 category: selectedCategory,
                 comments,
-                dateTime: selectedDate,
+                dateTime: date,
             };
-            // eslint-disable-next-line
-            console.log(newEvent);
+            onCreate(newEvent);
+            handleReset();
+            onCancel();
         }
     };
 
@@ -106,8 +106,8 @@ export default function NewEventDialog(props: NewEventDialogProps) {
                     value={selectedCategory}
                     onChange={handleCategoryChange}
                 >
-                    {categoryOptions.map(cat => (
-                        <MenuItem value={cat}>{cat}</MenuItem>
+                    {categoryOptions.map(category => (
+                        <MenuItem value={category}>{category}</MenuItem>
                     ))}
                 </Select>
                 <TextField
@@ -146,7 +146,7 @@ export default function NewEventDialog(props: NewEventDialogProps) {
                 />
             </DialogContent>
             <DialogActions>
-                <Button onClick={() => onCancel()} color="primary" variant="outlined">
+                <Button onClick={onCancel} color="primary" variant="outlined">
                     Cancel
                 </Button>
                 <Button onClick={handleCreate} color="primary" variant="contained">

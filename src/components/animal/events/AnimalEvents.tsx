@@ -60,15 +60,7 @@ export default function AnimalEvents({ events }: AnimalEventsProps) {
         );
     }, [activeFilter, events, sortByDateComparator]);
 
-    const [open, setOpen] = useState(false);
-
-    const handleClickOpen = () => {
-        setOpen(true);
-        // eslint-disable-next-line
-        console.log(events);
-        // eslint-disable-next-line
-        console.log(events[0]);
-    };
+    const [showDialog, setShowDialog] = useState(false);
 
     const TypeOptions = [
         'Ženklinimas ir įregistravimas',
@@ -92,12 +84,13 @@ export default function AnimalEvents({ events }: AnimalEventsProps) {
                 <Typography variant="h5" component="h3">
                     Events
                 </Typography>
-                <Button color="primary" variant="contained" startIcon={<AddIcon />} onClick={handleClickOpen}>
+                <Button color="primary" variant="contained" startIcon={<AddIcon />} onClick={() => setShowDialog(true)}>
                     Create
                 </Button>
                 <NewEventDialog
-                    open={open}
-                    onCancel={() => setOpen(false)}
+                    open={showDialog}
+                    onCancel={() => setShowDialog(false)}
+                    onCreate={newEvent => setFilteredEvents([...filteredEvents, newEvent])}
                     typeOptions={TypeOptions}
                     categoryOptions={CategoryOptions}
                 />
