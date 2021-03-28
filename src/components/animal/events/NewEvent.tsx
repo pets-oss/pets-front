@@ -16,15 +16,21 @@ import Dialog from '@material-ui/core/Dialog';
 import { Event, EventType } from '../../../graphql/types';
 
 export default function NewEvent({ showDialog, typeOptions, categoryOptions, onCancel, onCreate }: NewEventProps) {
-    const [type, setType] = useState({} as EventType);
-    const [category, setCategory] = useState('');
-    const [expenses, setExpenses] = useState(0);
-    const [comments, setComments] = useState('');
-    const [dateTime, setDateTime] = useState('');
+    const initialEventState = {
+        type: {} as EventType,
+        category: '',
+        expenses: 0,
+        comments: '',
+        dateTime: '',
+    };
+
+    const [{ type, category, expenses, comments, dateTime }, setEventState] = useState(initialEventState);
     const [errorText, setErrorText] = useState('');
     const [expensesErrorText, setExpensesErrorText] = useState('');
 
     const handleDialogClose = () => {
+        setEventState({ ...initialEventState });
+        setErrorText('');
         onCancel();
     };
 
@@ -40,15 +46,8 @@ export default function NewEvent({ showDialog, typeOptions, categoryOptions, onC
                 comments,
                 dateTime,
             } as Event;
-            handleDialogClose();
             onCreate(event);
-
-            // reset Event attributes
-            setType({} as EventType);
-            setCategory('');
-            setExpenses(0);
-            setComments('');
-            setDateTime('');
+            handleDialogClose();
         } else {
             setErrorText('* Please fill in all the required fields.');
         }
@@ -56,32 +55,32 @@ export default function NewEvent({ showDialog, typeOptions, categoryOptions, onC
 
     const handleTypeChange = e => {
         const eventType = { id: 123456, type: e.target.value } as EventType;
-        setType(eventType);
+        setEventState(prevState => ({ ...prevState, type: eventType }));
     };
 
     const handleCategoryChange = e => {
-        setCategory(e.target.value);
+        setEventState(prevState => ({ ...prevState, category: e.target.value }));
     };
 
     const handleExpensesChange = e => {
         if (e.target.value.length > 0 && !Number(e.target.value)) {
             setExpensesErrorText('* Please enter a valid number expression.');
-            setExpenses(0);
+            setEventState(prevState => ({ ...prevState, expenses: 0 }));
         } else if (Number(e.target.value) < 0) {
             setExpensesErrorText('* Expenses cannot be a negative number.');
-            setExpenses(0);
+            setEventState(prevState => ({ ...prevState, expenses: 0 }));
         } else {
             setExpensesErrorText('');
-            setExpenses(parseFloat(e.target.value));
+            setEventState(prevState => ({ ...prevState, expenses: parseFloat(e.target.value) }));
         }
     };
 
     const handleCommentsChange = e => {
-        setComments(e.target.value);
+        setEventState(prevState => ({ ...prevState, comments: e.target.value }));
     };
 
     const handleDateTimeChange = e => {
-        setDateTime(String(Date.parse(e.target.value)));
+        setEventState(prevState => ({ ...prevState, dateTime: String(Date.parse(e.target.value)) }));
     };
 
     return (
