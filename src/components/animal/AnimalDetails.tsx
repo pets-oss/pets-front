@@ -10,6 +10,7 @@ import { Skeleton } from '@material-ui/lab';
 import { Animal, Event } from '../../graphql/types';
 import { getAnimalAge, getAnimalWeight } from '../../utils/animal';
 import LayoutMultiColRow from '../layout/LayoutMultiColRow';
+import ParamTable from '../ParamTable';
 import AnimalDetailsHeader from './details/AnimalDetailsHeader';
 import AnimalEvents from './events/AnimalEvents';
 
@@ -55,6 +56,10 @@ function AnimalDetails({ onLoad }: AnimalDetailsProps) {
 
     const { animal, events } = data;
     const birthDay = animal.details?.birthDate ? getAnimalAge(animal.details.birthDate) : '';
+    const weight = animal.details?.weight ? getAnimalWeight(animal.details.weight) : '';
+    const color = animal.details?.color ? animal.details.color.value : '';
+    const demoText =
+        'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.';
     const animalEvents = events?.[0]?.animalAll ?? [];
 
     return (
@@ -72,6 +77,17 @@ function AnimalDetails({ onLoad }: AnimalDetailsProps) {
                     <Image src={animal.imageUrl!} aspectRatio={3 / 2} cover />
                     {animal.details && (
                         <>
+                            <Box mt={2} mb={2}>
+                                <ParamTable
+                                    items={[
+                                        { title: 'Age', value: birthDay },
+                                        { title: 'Weight', value: weight },
+                                        { title: 'Color', value: color },
+                                        { title: 'Info', value: demoText },
+                                        { title: 'Undefined' },
+                                    ]}
+                                />
+                            </Box>
                             <Box mt={3} mb={2}>
                                 {animal.microchip && (
                                     <Typography variant="body1" className={classes.secondaryProperty}>
@@ -90,13 +106,6 @@ function AnimalDetails({ onLoad }: AnimalDetailsProps) {
                                 alignItems="flexStart"
                                 justifyContent="flexStart"
                             >
-                                <Typography variant="body2">{`Age - ${birthDay}`}</Typography>
-                                {animal.details.weight && (
-                                    <Typography variant="body2">
-                                        {`Weight - ${getAnimalWeight(animal.details.weight)}`}
-                                    </Typography>
-                                )}
-                                <Typography variant="body2">{`Color - ${animal.details.color?.value}`}</Typography>
                                 <Typography variant="body2">{animal.comments}</Typography>
                             </Box>
                         </>
