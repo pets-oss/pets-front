@@ -1,11 +1,11 @@
 import React, { useCallback, useEffect, useState } from 'react';
 
-import { Box, Button, makeStyles, Typography } from '@material-ui/core';
-import AddIcon from '@material-ui/icons/Add';
+import { Box, makeStyles, Typography } from '@material-ui/core';
 import { Event } from '../../../graphql/types';
 import AnimalEventFilters, { EVENT_FILTER_ALL, EventCategory } from './AnimalEventFilters';
 import AnimalEventList from './AnimalEventList';
 import AnimalEventSorting, { EventSortingMode } from './AnimalEventSorting';
+import NewEventObjectType from './NewEvent';
 import NewEventDialog from './NewEventDialog';
 
 const useStyles = makeStyles(theme => ({
@@ -69,16 +69,13 @@ export default function AnimalEvents({ events }: AnimalEventsProps) {
         setActiveSort(sortingMode);
     };
 
-    const handleEventDialogOpen = () => {
-        setEventDialogOpen(true);
-    };
-
     const handleEventCancel = () => {
         setEventDialogOpen(false);
     };
 
-    const handleEventCreate = () => {
-        alert('create');
+    const handleEventCreate = (newEvent: NewEventObjectType) => {
+        alert('to be implemented');
+        console.log('new event object', newEvent);
     };
 
     useEffect(() => {
@@ -95,21 +92,18 @@ export default function AnimalEvents({ events }: AnimalEventsProps) {
                 <Typography variant="h5" component="h3">
                     Events
                 </Typography>
-                <Button color="primary" variant="contained" startIcon={<AddIcon />} onClick={handleEventDialogOpen}>
-                    Create
-                </Button>
+                <NewEventDialog
+                    open={eventDialogOpen}
+                    setOpen={setEventDialogOpen}
+                    onCancel={handleEventCancel}
+                    onCreate={handleEventCreate}
+                    typeOptions={typeOptions}
+                    categories={category}
+                />
             </Box>
             <AnimalEventFilters activeFilter={activeFilter} onChange={handleFilterChange} />
             <AnimalEventSorting sortingMode={activeSort} onChange={handleSortChange} />
             <AnimalEventList events={filteredEvents} />
-            <NewEventDialog
-                open={eventDialogOpen}
-                setOpen={setEventDialogOpen}
-                onCancel={handleEventCancel}
-                onCreate={handleEventCreate}
-                typeOptions={typeOptions}
-                categories={category}
-            />
         </Box>
     );
 }

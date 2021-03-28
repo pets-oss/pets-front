@@ -13,16 +13,25 @@ import {
     TextField,
     Typography,
 } from '@material-ui/core';
+import AddIcon from '@material-ui/icons/Add';
+import NewEventObjectType from './NewEvent';
 
-function NewEventDialog({ onCancel, onCreate, open, setOpen, typeOptions, categories }: any) {
+export default function NewEventDialog({
+    onCancel,
+    onCreate,
+    open,
+    setOpen,
+    typeOptions,
+    categories,
+}: NewEventDialogProps) {
     const [typeValue, setTypeValue] = useState<string>('');
     const [categoryValue, setCategoryValue] = useState<string>('');
-    const [expensesValue, setExpensesValue] = useState<number | null>(null);
+    const [expensesValue, setExpensesValue] = useState<string>('');
     const [commentsValue, setCommentsValue] = useState<string>('');
     const [dateValue, setDateValue] = useState<string>('');
 
-    const handleClose = () => {
-        setOpen(false);
+    const handleEventDialogOpen = () => {
+        setOpen(true);
     };
 
     const handleTypeChange = (event: React.ChangeEvent<{ value: unknown }>) => {
@@ -34,7 +43,7 @@ function NewEventDialog({ onCancel, onCreate, open, setOpen, typeOptions, catego
     };
 
     const handleExpensesChange = (event: React.ChangeEvent<{ value: unknown }>) => {
-        setExpensesValue(Number(event.target.value) as number);
+        setExpensesValue(event.target.value as string);
     };
 
     const handleCommentsChange = (event: React.ChangeEvent<{ value: unknown }>) => {
@@ -44,9 +53,35 @@ function NewEventDialog({ onCancel, onCreate, open, setOpen, typeOptions, catego
     const handleDateChange = (event: React.ChangeEvent<{ value: unknown }>) => {
         setDateValue(event.target.value as string);
     };
+
+    const handleCreate = () => {
+        onCreate({
+            id: 123456,
+            typeValue,
+            categoryValue,
+            expensesValue,
+            commentsValue,
+            dateValue,
+        });
+    };
+
+    const handleCancel = () => {
+        setTypeValue('');
+        setCategoryValue('');
+        setExpensesValue('');
+        setCommentsValue('');
+        setDateValue('');
+
+        onCancel();
+    };
+
     return (
-        <div>
-            <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
+        <>
+            <Button color="primary" variant="contained" startIcon={<AddIcon />} onClick={handleEventDialogOpen}>
+                Create
+            </Button>
+
+            <Dialog open={open} onClose={onCancel} aria-labelledby="form-dialog-title">
                 <DialogTitle id="form-dialog-title">
                     <Typography variant="h6">Create new event</Typography>
                 </DialogTitle>
@@ -97,7 +132,7 @@ function NewEventDialog({ onCancel, onCreate, open, setOpen, typeOptions, catego
                         id="new-event-comments"
                         value={commentsValue}
                         onChange={handleCommentsChange}
-                        label="Comments"
+                        label="Comments..."
                         multiline
                         rows={4}
                         margin="dense"
@@ -121,16 +156,23 @@ function NewEventDialog({ onCancel, onCreate, open, setOpen, typeOptions, catego
                     />
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={onCancel} color="secondary" variant="outlined">
+                    <Button onClick={handleCancel} color="secondary" variant="outlined">
                         Cancel
                     </Button>
-                    <Button onClick={onCreate} color="secondary" variant="contained">
+                    <Button onClick={handleCreate} color="secondary" variant="contained">
                         Create
                     </Button>
                 </DialogActions>
             </Dialog>
-        </div>
+        </>
     );
 }
 
-export default NewEventDialog;
+interface NewEventDialogProps {
+    onCancel: () => void;
+    onCreate: (newEvent: NewEventObjectType) => void;
+    open: boolean;
+    setOpen: (open: boolean) => void;
+    typeOptions: string[];
+    categories: string[];
+}
