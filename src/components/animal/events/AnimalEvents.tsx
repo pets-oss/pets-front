@@ -1,11 +1,11 @@
 import React, { useCallback, useEffect, useState } from 'react';
 
-import { Box, Button, makeStyles, Typography } from '@material-ui/core';
-import AddIcon from '@material-ui/icons/Add';
+import { Box, makeStyles } from '@material-ui/core';
 import { Event } from '../../../graphql/types';
 import AnimalEventFilters, { EVENT_FILTER_ALL, EventCategory } from './AnimalEventFilters';
 import AnimalEventList from './AnimalEventList';
 import AnimalEventSorting, { EventSortingMode } from './AnimalEventSorting';
+import EventDialog from './EventDialog';
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -61,14 +61,7 @@ export default function AnimalEvents({ events }: AnimalEventsProps) {
 
     return (
         <Box className={classes.root}>
-            <Box mb={2} display="flex" justifyContent="space-between" alignItems="center">
-                <Typography variant="h5" component="h3">
-                    Events
-                </Typography>
-                <Button color="primary" variant="contained" startIcon={<AddIcon />}>
-                    Create
-                </Button>
-            </Box>
+            <EventDialog onCreate={event => setFilteredEvents([...filteredEvents, event])} />
             <AnimalEventFilters activeFilter={activeFilter} onChange={handleFilterChange} />
             <AnimalEventSorting sortingMode={activeSort} onChange={handleSortChange} />
             <AnimalEventList events={filteredEvents} />
