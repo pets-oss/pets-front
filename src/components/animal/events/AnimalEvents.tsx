@@ -3,6 +3,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { Box, Button, makeStyles, Typography } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 import { Event } from '../../../graphql/types';
+import AnimalEventDialog from './AnimalEventDialog';
 import AnimalEventFilters, { EVENT_FILTER_ALL, EventCategory } from './AnimalEventFilters';
 import AnimalEventList from './AnimalEventList';
 import AnimalEventSorting, { EventSortingMode } from './AnimalEventSorting';
@@ -24,6 +25,31 @@ export default function AnimalEvents({ events }: AnimalEventsProps) {
     const classes = useStyles();
     const [activeFilter, setActiveFilter] = useState<EventCategory>(EVENT_FILTER_ALL);
     const [activeSort, setActiveSort] = useState<EventSortingMode>(EventSortingMode.DESCENDING);
+    const [dialogOpen, setDialogOpen] = useState(false);
+
+    const typeOptions = [
+        'Ženklinimas ir įregistravimas',
+        'Laikytojo pasikeitimas',
+        'Laikymo vietos pasikeitimas',
+        'Savininko pasikeitimas',
+        'Dingimas',
+        'Suradimas',
+        'Nugaišimas',
+        'Nugaišinimas',
+        'Išvežimas',
+        'Vakcinavimas',
+        'Augintinio agresyvumas',
+    ];
+
+    const categories = ['General', 'Medical'];
+
+    const handleDialogOpen = () => {
+        setDialogOpen(true);
+    };
+
+    const handleDialogClose = () => {
+        setDialogOpen(false);
+    };
 
     const sortByDateComparator = useCallback(
         (event1: Event, event2: Event) => {
@@ -65,9 +91,15 @@ export default function AnimalEvents({ events }: AnimalEventsProps) {
                 <Typography variant="h5" component="h3">
                     Events
                 </Typography>
-                <Button color="primary" variant="contained" startIcon={<AddIcon />}>
+                <Button onClick={handleDialogOpen} color="primary" variant="contained" startIcon={<AddIcon />}>
                     Create
                 </Button>
+                <AnimalEventDialog
+                    categories={categories}
+                    typeOptions={typeOptions}
+                    dialogOpen={dialogOpen}
+                    setDialogOpen={setDialogOpen}
+                />
             </Box>
             <AnimalEventFilters activeFilter={activeFilter} onChange={handleFilterChange} />
             <AnimalEventSorting sortingMode={activeSort} onChange={handleSortChange} />
