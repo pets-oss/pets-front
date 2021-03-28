@@ -1,5 +1,7 @@
+import { loader } from 'graphql.macro';
 import React, { useEffect, useState } from 'react';
 
+import { useQuery } from '@apollo/client';
 import { Grid } from '@material-ui/core';
 import Divider from '@material-ui/core/Divider';
 import useTheme from '@material-ui/core/styles/useTheme';
@@ -10,7 +12,14 @@ import AnimalFiltersChips from '../components/animal/filters/AnimalFilterChips';
 import AnimalFilters from '../components/animal/filters/AnimalFilters';
 import Filter, { FilterOption } from '../components/animal/filters/Filter';
 import ViewSelector, { AnimalsViewType } from '../components/animal/ViewSelector';
+import { Animal } from '../graphql/types';
 import Page from './Page';
+
+const GET_ANIMALS_QUERY = loader('../graphql/queries/animal-list.graphql');
+
+interface Response {
+    animals: Animal[];
+}
 
 function AnimalsPage() {
     const theme = useTheme();
@@ -18,6 +27,8 @@ function AnimalsPage() {
     const [viewType, setViewType] = useState<AnimalsViewType>(AnimalsViewType.LIST);
     const mobile = useMediaQuery(theme.breakpoints.down('sm'));
     const [filters, setFilters] = useState<Filter[]>(INITIAL_FILTERS);
+
+    const { loading, error, data } = useQuery<Response>(GET_ANIMALS_QUERY);
 
     useEffect(() => {
         if (mobile && viewType === AnimalsViewType.TABLE) {
@@ -67,10 +78,11 @@ function AnimalsPage() {
                     onFiltersClear={handleClearAllFilters}
                     onFiltersApply={handleApplyFilters}
                     onFilterRemove={handleRemoveFilter}
+                    data={data}
                 />
             }
         >
-            <AnimalsListContainer viewType={viewType} />
+            <AnimalsListContainer viewType={viewType} loading={loading} error={error} data={data} />
         </Page>
     );
 }
@@ -83,6 +95,7 @@ function TopSection({
     onFiltersClear,
     onFiltersApply,
     onFilterRemove,
+    data,
 }: TopSectionProps) {
     return (
         <Grid container spacing={2} alignItems="center">
@@ -95,7 +108,12 @@ function TopSection({
                     </>
                 )}
                 <Grid item>
-                    <AnimalFilters filters={filters} onReset={onFiltersClear} onApply={onFiltersApply} count={34} />
+                    <AnimalFilters
+                        filters={filters}
+                        onReset={onFiltersClear}
+                        onApply={onFiltersApply}
+                        count={data?.animals.length ?? 0}
+                    />
                 </Grid>
                 <Grid item>
                     <AnimalFiltersChips filters={filters} onDelete={onFilterRemove} onClearFilters={onFiltersClear} />
@@ -120,6 +138,7 @@ interface TopSectionProps {
     onFiltersClear: (filters: Filter[]) => void;
     onFiltersApply: (filters: Filter[]) => void;
     onFilterRemove: (filter: Filter) => void;
+    data: Response | undefined;
 }
 
 const SPECIES: FilterOption[] = [
