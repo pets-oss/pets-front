@@ -77,16 +77,16 @@ export default function AnimalEvents({ events }: AnimalEventsProps) {
 
     return (
         <>
-            <CreateNewEventDialog
-                typeOptions={typeOptions}
-                categoryOptions={category}
-                onCreate={() => console.log('jau')}
-            />
             <Box className={classes.root}>
                 <Box mb={2} display="flex" justifyContent="space-between" alignItems="center">
                     <Typography variant="h5" component="h3">
                         Events
                     </Typography>
+                    <CreateNewEventDialog
+                        typeOptions={typeOptions}
+                        categoryOptions={category}
+                        onCreate={() => console.log('jau')}
+                    />
                 </Box>
                 <AnimalEventFilters activeFilter={activeFilter} onChange={handleFilterChange} />
                 <AnimalEventSorting sortingMode={activeSort} onChange={handleSortChange} />
@@ -99,3 +99,10 @@ export default function AnimalEvents({ events }: AnimalEventsProps) {
 interface AnimalEventsProps {
     events: Event[];
 }
+
+// interface Event {
+//     id: number;
+//     type: string;
+//     category: string;
+//     expenses: number;
+// }
