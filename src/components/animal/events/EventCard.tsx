@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 
 import { Card, CardContent, CardHeader, Collapse, IconButton, Typography } from '@material-ui/core';
 import Avatar from '@material-ui/core/Avatar';
+import green from '@material-ui/core/colors/green';
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import LocalHospitalIcon from '@material-ui/icons/LocalHospital';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
@@ -70,6 +71,9 @@ export default function EventCard({ event }: AnimalCardProps) {
 const useStyles = makeStyles(theme => ({
     root: {
         width: '100%',
+        '&:hover': {
+            backgroundColor: green[100],
+        },
     },
     headerText: {
         maxWidth: 150,
