@@ -106,7 +106,7 @@ function AnimalDetails({ onLoad }: AnimalDetailsProps) {
                     </Box>
                 </>
                 <Box className={classes.eventsContainer} py={3} px={2}>
-                    <AnimalEvents events={animalEvents} />
+                    <AnimalEvents events={animalEvents} animalId={animal.id} />
                 </Box>
             </LayoutMultiColRow>
         </div>

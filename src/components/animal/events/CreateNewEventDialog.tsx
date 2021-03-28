@@ -1,10 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, FormControl } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
-import { Category, Event } from '../../../graphql/types';
-import AutocompleteWithOptions from './inputs/AutocompleteWithOptions';
-import InputWithoutOptions from './inputs/InputWithoutOptions';
+import { Category, Event, EventType } from '../../../graphql/types';
+import AutocompleteDropdown from './inputs/AutocompleteDropdown';
+import TextFieldInput from './inputs/TextFieldInput';
 
 interface Props {
     typeOptions: string[];
@@ -13,12 +13,14 @@ interface Props {
 }
 
 export function CreateNewEventDialog({ typeOptions, categoryOptions, onCreate }: Props) {
-    const [open, setOpen] = React.useState<boolean>(false);
-    const [type, setType] = React.useState<string | null>('');
-    const [category, setCategory] = React.useState<Category | null>(null);
-    const [expenses, setExpenses] = React.useState<number | null>(null);
-    const [comments, setComments] = React.useState<string | null>('');
-    const [dateTime, setDateTime] = React.useState<string | null>(null);
+    const [open, setOpen] = useState<boolean>(false);
+    const [type, setType] = useState<string>('');
+    const [category, setCategory] = useState<Category | null>(null);
+    const [expenses, setExpenses] = useState<number | null>(null);
+    const [comments, setComments] = useState<string>('');
+    const [dateTime, setDateTime] = useState<string>('');
+    const [isValidated, setIsValidated] = useState<boolean>(false);
+    const [dateInputFocused, setDateInputFocused] = useState<boolean>(false);
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -28,8 +30,8 @@ export function CreateNewEventDialog({ typeOptions, categoryOptions, onCreate }:
         setOpen(false);
     };
 
-    const handleTypeChange = (value: string | null) => {
-        if (value) setType(value);
+    const handleTypeChange = (value: string) => {
+        setType(value);
     };
 
     const handleCategoryChange = (value: Category) => {
@@ -48,25 +50,47 @@ export function CreateNewEventDialog({ typeOptions, categoryOptions, onCreate }:
         setDateTime(value);
     };
 
-    console.log(type);
-    console.log(category);
-    console.log(expenses);
-    console.log(comments);
-    console.log(dateTime);
+    const resetValues = () => {
+        setType('');
+        setCategory(null);
+        setExpenses(null);
+        setComments('');
+        setDateTime('');
+        setIsValidated(false);
+    };
+
+    const onCancel = () => {
+        handleClose();
+        resetValues();
+    };
+
+    const areInputsValid = () => {
+        setIsValidated(true);
+        const isExpensesFloat = typeof expenses === 'number';
+        if (type && category && comments && dateTime && isExpensesFloat && expenses) {
+            return true;
+        }
+        return false;
+    };
 
     const handleCreateAndReset = () => {
-        handleClose();
-        // if (type) {
-        //     const typeObj: EventType = { type, id: 2589 };
-        //     onCreate({
-        //         id: 12345,
-        //         type: typeObj,
-        //         expenses,
-        //         dateTime,
-        //         comments,
-        //         category,
-        //     });
-        // }
+        const areValid = areInputsValid();
+        const typeObj: EventType = {
+            type,
+            id: 2589,
+        };
+        if (areValid) {
+            handleClose();
+            onCreate({
+                id: 12345,
+                type: typeObj,
+                expenses,
+                dateTime,
+                comments,
+                category,
+            });
+            resetValues();
+        }
     };
 
     return (
@@ -77,38 +101,45 @@ export function CreateNewEventDialog({ typeOptions, categoryOptions, onCreate }:
             <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
                 <DialogTitle id="form-dialog-title">Create new event</DialogTitle>
                 <DialogContent>
-                    {/* <form method="dialog" onSubmit={onCreate}> */}
                     <FormControl>
-                        <AutocompleteWithOptions
+                        <AutocompleteDropdown
                             options={typeOptions}
                             label="Type"
-                            onChange={value => handleTypeChange(value)}
+                            onChange={value => handleTypeChange(value as string)}
+                            isError={!!(isValidated && !type)}
                         />
-                        <AutocompleteWithOptions
+                        <AutocompleteDropdown
                             options={categoryOptions}
                             label="Category"
                             onChange={value => handleCategoryChange(value as Category)}
+                            isError={!!(isValidated && !category)}
                         />
-                        <InputWithoutOptions
+                        <TextFieldInput
                             inputType="number"
                             label="Expenses $"
                             onChange={value => handleExpensesChange(value as number)}
+                            isError={!!(isValidated && !expenses)}
                         />
-                        <InputWithoutOptions
+                        <TextFieldInput
                             inputType="text"
                             label="Comments"
                             onChange={value => handleCommentsChange(value as string)}
-                            customStyles={{ height: '130px' }}
+                            isError={!!(isValidated && !comments)}
+                            multiline
+                            rowsNum={5}
                         />
-                        <InputWithoutOptions
-                            inputType="date"
+                        <TextFieldInput
+                            inputType={`${dateInputFocused ? 'date' : 'text'}`}
                             label="Date"
                             onChange={value => handleDateTimeChange(value as string)}
+                            isError={!!(isValidated && !dateTime)}
+                            onFocus={() => setDateInputFocused(true)}
+                            onBlur={() => setDateInputFocused(false)}
                         />
                     </FormControl>
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={handleClose} color="secondary" variant="outlined">
+                    <Button onClick={onCancel} color="secondary" variant="outlined">
                         Cancel
                     </Button>
                     <Button onClick={handleCreateAndReset} color="secondary" variant="contained">

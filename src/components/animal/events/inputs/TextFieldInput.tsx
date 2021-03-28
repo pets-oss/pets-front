@@ -9,25 +9,48 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-export default function InputWithoutOptions({ inputType, label, onChange, customStyles }: Props) {
+export default function TextFieldInput({
+    inputType,
+    label,
+    onChange,
+    customStyles,
+    isError,
+    multiline,
+    rowsNum,
+    onFocus,
+    onBlur,
+}: Props) {
     const classes = useStyles();
     return (
         <TextField
             id={`${label}`}
-            className={classes.root}
+            className={`${classes.root}`}
+            color="secondary"
+            fullWidth
             style={customStyles}
             variant="outlined"
+            multiline={!!multiline}
+            rows={rowsNum}
             label={label}
             type={inputType}
-            placeholder=""
             onChange={(event: ChangeEvent<HTMLInputElement>) => onChange(event.target.value)}
+            error={isError}
+            required
+            helperText={isError ? 'Šis laukas yra privalomas' : null}
+            onFocus={onFocus}
+            onBlur={onBlur}
         />
     );
 }
 
 interface Props {
-    inputType: 'text' | 'number' | 'date';
+    inputType: string;
     label: string;
     onChange: (value: unknown) => void;
     customStyles?: any;
+    isError: boolean;
+    multiline?: boolean;
+    rowsNum?: number;
+    onFocus?: () => void;
+    onBlur?: () => void;
 }

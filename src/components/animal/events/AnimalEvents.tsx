@@ -20,7 +20,7 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-export default function AnimalEvents({ events }: AnimalEventsProps) {
+export default function AnimalEvents({ events, animalId }: AnimalEventsProps) {
     const classes = useStyles();
     const [activeFilter, setActiveFilter] = useState<EventCategory>(EVENT_FILTER_ALL);
     const [activeSort, setActiveSort] = useState<EventSortingMode>(EventSortingMode.DESCENDING);
@@ -75,6 +75,14 @@ export default function AnimalEvents({ events }: AnimalEventsProps) {
         );
     }, [activeFilter, events, sortByDateComparator]);
 
+    const handleCreateNewEvent = (newEvent: Omit<Event, 'animal'>) => {
+        const fullEvent = {
+            ...newEvent,
+            animal: animalId,
+        };
+        setFilteredEvents([...filteredEvents, fullEvent]);
+    };
+
     return (
         <>
             <Box className={classes.root}>
@@ -85,7 +93,7 @@ export default function AnimalEvents({ events }: AnimalEventsProps) {
                     <CreateNewEventDialog
                         typeOptions={typeOptions}
                         categoryOptions={category}
-                        onCreate={() => console.log('jau')}
+                        onCreate={object => handleCreateNewEvent(object)}
                     />
                 </Box>
                 <AnimalEventFilters activeFilter={activeFilter} onChange={handleFilterChange} />
@@ -98,11 +106,5 @@ export default function AnimalEvents({ events }: AnimalEventsProps) {
 
 interface AnimalEventsProps {
     events: Event[];
+    animalId: number;
 }
-
-// interface Event {
-//     id: number;
-//     type: string;
-//     category: string;
-//     expenses: number;
-// }

@@ -8,14 +8,10 @@ const useStyles = makeStyles(theme => ({
     root: {
         marginBottom: theme.spacing(2),
         width: 327,
-        '& input:valid + fieldset': {
-            borderColor: 'green',
-            borderWidth: 2,
-        },
     },
 }));
 
-export default function AutocompleteWithOptions({ options, label, onChange }: Props) {
+export default function AutocompleteDropdown({ options, label, onChange, isError }: Props) {
     const classes = useStyles();
     return (
         <Autocomplete
@@ -23,9 +19,18 @@ export default function AutocompleteWithOptions({ options, label, onChange }: Pr
             className={classes.root}
             options={options}
             getOptionLabel={option => option}
-            // eslint-disable-next-line @typescript-eslint/ban-types
-            onChange={(event, value) => onChange(value)}
-            renderInput={params => <TextField {...params} label={label} variant="outlined" />}
+            onChange={(_, value) => onChange(value)}
+            renderInput={params => (
+                <TextField
+                    {...params}
+                    label={label}
+                    variant="outlined"
+                    color="secondary"
+                    error={isError}
+                    required
+                    helperText={isError ? 'Šis laukas yra privalomas' : null}
+                />
+            )}
         />
     );
 }
@@ -34,4 +39,5 @@ interface Props {
     options: string[];
     label: string;
     onChange: (value: string | null) => void;
+    isError: boolean;
 }
