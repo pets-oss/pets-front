@@ -20,6 +20,22 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
+const typeOptions = [
+    'Ženklinimas ir įregistravimas',
+    'Laikytojo pasikeitimas',
+    'Laikymo vietos pasikeitimas',
+    'Savininko pasikeitimas',
+    'Dingimas',
+    'Suradimas',
+    'Nugaišimas',
+    'Nugaišinimas',
+    'Išvežimas',
+    'Vakcinavimas',
+    'Augintinio agresyvumas',
+];
+
+const category = ['General', 'Medical'];
+
 export default function AnimalEvents({ events, animalId }: AnimalEventsProps) {
     const classes = useStyles();
     const [activeFilter, setActiveFilter] = useState<EventCategory>(EVENT_FILTER_ALL);
@@ -42,22 +58,6 @@ export default function AnimalEvents({ events, animalId }: AnimalEventsProps) {
     );
 
     const [filteredEvents, setFilteredEvents] = useState(events.sort(sortByDateComparator));
-
-    const typeOptions = [
-        'Ženklinimas ir įregistravimas',
-        'Laikytojo pasikeitimas',
-        'Laikymo vietos pasikeitimas',
-        'Savininko pasikeitimas',
-        'Dingimas',
-        'Suradimas',
-        'Nugaišimas',
-        'Nugaišinimas',
-        'Išvežimas',
-        'Vakcinavimas',
-        'Augintinio agresyvumas',
-    ];
-
-    const category = ['General', 'Medical'];
 
     const handleFilterChange = (value: EventCategory) => {
         setActiveFilter(value);

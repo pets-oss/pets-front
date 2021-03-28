@@ -36,7 +36,7 @@ export default function TextFieldInput({
             onChange={(event: ChangeEvent<HTMLInputElement>) => onChange(event.target.value)}
             error={isError}
             required
-            helperText={isError ? 'Šis laukas yra privalomas' : null}
+            helperText={isError ? 'Required field' : null}
             onFocus={onFocus}
             onBlur={onBlur}
         />

@@ -77,7 +77,7 @@ export function CreateNewEventDialog({ typeOptions, categoryOptions, onCreate }:
         const areValid = areInputsValid();
         const typeObj: EventType = {
             type,
-            id: 2589,
+            id: typeOptions.indexOf(type),
         };
         if (areValid) {
             handleClose();
@@ -98,7 +98,7 @@ export function CreateNewEventDialog({ typeOptions, categoryOptions, onCreate }:
             <Button color="primary" variant="contained" startIcon={<AddIcon />} onClick={handleClickOpen}>
                 Create
             </Button>
-            <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
+            <Dialog open={open} onClose={handleClose} aria-labelledby="event-dialog-title">
                 <DialogTitle id="form-dialog-title">Create new event</DialogTitle>
                 <DialogContent>
                     <FormControl>
