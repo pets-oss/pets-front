@@ -94,7 +94,6 @@ export default function AnimalEventDialog({
                 dateTime: String(selectedDate.getTime()),
             };
             setShowEventDialog(false);
-            // setFilteredEvents(filteredEvents.push(event));
             setFilteredEvents([...filteredEvents, event]);
         }
     };
