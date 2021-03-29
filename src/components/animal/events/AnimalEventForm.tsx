@@ -6,6 +6,7 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import FormControl from '@material-ui/core/FormControl';
 import InputLabel from '@material-ui/core/InputLabel';
+import MenuItem from '@material-ui/core/MenuItem';
 import Select from '@material-ui/core/Select';
 import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
@@ -84,7 +85,7 @@ export default function AnimalEventForm({ open, handleClose, typeOptions, catego
                         }}
                     >
                         {typeOptions.map(typeOption => (
-                            <option value={typeOption}>{typeOption}</option>
+                            <MenuItem value={typeOption}>{typeOption}</MenuItem>
                         ))}
                     </Select>
                 </FormControl>
@@ -100,7 +101,7 @@ export default function AnimalEventForm({ open, handleClose, typeOptions, catego
                         }}
                     >
                         {categories.map(category => (
-                            <option value={category}>{category}</option>
+                            <MenuItem value={category}>{category}</MenuItem>
                         ))}
                     </Select>
                 </FormControl>
@@ -136,7 +137,6 @@ export default function AnimalEventForm({ open, handleClose, typeOptions, catego
                     <TextField
                         id="date"
                         defaultValue=""
-                        label="Date"
                         type="date"
                         variant="outlined"
                         value={values.date}
