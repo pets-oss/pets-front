@@ -6,6 +6,7 @@ import { Event } from '../../../graphql/types';
 import AnimalEventFilters, { EVENT_FILTER_ALL, EventCategory } from './AnimalEventFilters';
 import AnimalEventList from './AnimalEventList';
 import AnimalEventSorting, { EventSortingMode } from './AnimalEventSorting';
+import EventDialog from './EventDialog';
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -24,6 +25,7 @@ export default function AnimalEvents({ events }: AnimalEventsProps) {
     const classes = useStyles();
     const [activeFilter, setActiveFilter] = useState<EventCategory>(EVENT_FILTER_ALL);
     const [activeSort, setActiveSort] = useState<EventSortingMode>(EventSortingMode.DESCENDING);
+    const [openEventDialog, setOpenEventDialog] = useState(false);
 
     const sortByDateComparator = useCallback(
         (event1: Event, event2: Event) => {
@@ -41,7 +43,7 @@ export default function AnimalEvents({ events }: AnimalEventsProps) {
         [activeSort]
     );
 
-    const [filteredEvents, setFilteredEvents] = useState(events.sort(sortByDateComparator));
+    const [filteredEvents, setFilteredEvents] = useState([...events].sort(sortByDateComparator));
 
     const handleFilterChange = (value: EventCategory) => {
         setActiveFilter(value);
@@ -49,6 +51,18 @@ export default function AnimalEvents({ events }: AnimalEventsProps) {
 
     const handleSortChange = (sortingMode: EventSortingMode) => {
         setActiveSort(sortingMode);
+    };
+
+    const handleDialogOpen = () => {
+        setOpenEventDialog(true);
+    };
+
+    const handleDialogClose = () => {
+        setOpenEventDialog(false);
+    };
+
+    const handleEventCreate = (event: Event) => {
+        setFilteredEvents([...filteredEvents, event]);
     };
 
     useEffect(() => {
@@ -60,19 +74,22 @@ export default function AnimalEvents({ events }: AnimalEventsProps) {
     }, [activeFilter, events, sortByDateComparator]);
 
     return (
-        <Box className={classes.root}>
-            <Box mb={2} display="flex" justifyContent="space-between" alignItems="center">
-                <Typography variant="h5" component="h3">
-                    Events
-                </Typography>
-                <Button color="primary" variant="contained" startIcon={<AddIcon />}>
-                    Create
-                </Button>
+        <>
+            <Box className={classes.root}>
+                <Box mb={2} display="flex" justifyContent="space-between" alignItems="center">
+                    <Typography variant="h5" component="h3">
+                        Events
+                    </Typography>
+                    <Button color="primary" variant="contained" startIcon={<AddIcon />} onClick={handleDialogOpen}>
+                        Create
+                    </Button>
+                </Box>
+                <AnimalEventFilters activeFilter={activeFilter} onChange={handleFilterChange} />
+                <AnimalEventSorting sortingMode={activeSort} onChange={handleSortChange} />
+                <AnimalEventList events={filteredEvents} />
             </Box>
-            <AnimalEventFilters activeFilter={activeFilter} onChange={handleFilterChange} />
-            <AnimalEventSorting sortingMode={activeSort} onChange={handleSortChange} />
-            <AnimalEventList events={filteredEvents} />
-        </Box>
+            <EventDialog openEventDialog={openEventDialog} onCancel={handleDialogClose} onCreate={handleEventCreate} />
+        </>
     );
 }
 
