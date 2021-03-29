@@ -10,6 +10,7 @@ import { Skeleton } from '@material-ui/lab';
 import { Animal, Event } from '../../graphql/types';
 import { getAnimalAge, getAnimalWeight } from '../../utils/animal';
 import LayoutMultiColRow from '../layout/LayoutMultiColRow';
+import { ParamsTable } from '../ParamsTable';
 import AnimalDetailsHeader from './details/AnimalDetailsHeader';
 import AnimalEvents from './events/AnimalEvents';
 
@@ -72,6 +73,7 @@ function AnimalDetails({ onLoad }: AnimalDetailsProps) {
                     <Image src={animal.imageUrl!} aspectRatio={3 / 2} cover />
                     {animal.details && (
                         <>
+                            <ParamsTable items={[{ title: 'Title', value: 'Value' }]} />
                             <Box mt={3} mb={2}>
                                 {animal.microchip && (
                                     <Typography variant="body1" className={classes.secondaryProperty}>
