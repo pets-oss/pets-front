@@ -3,6 +3,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { Box, Button, makeStyles, Typography } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 import { Event } from '../../../graphql/types';
+import AnimalEventDialog from './AnimalEventDialog';
 import AnimalEventFilters, { EVENT_FILTER_ALL, EventCategory } from './AnimalEventFilters';
 import AnimalEventList from './AnimalEventList';
 import AnimalEventSorting, { EventSortingMode } from './AnimalEventSorting';
@@ -24,6 +25,7 @@ export default function AnimalEvents({ events }: AnimalEventsProps) {
     const classes = useStyles();
     const [activeFilter, setActiveFilter] = useState<EventCategory>(EVENT_FILTER_ALL);
     const [activeSort, setActiveSort] = useState<EventSortingMode>(EventSortingMode.DESCENDING);
+    const [showEventDialog, setShowEventDialog] = useState(false);
 
     const sortByDateComparator = useCallback(
         (event1: Event, event2: Event) => {
@@ -51,6 +53,10 @@ export default function AnimalEvents({ events }: AnimalEventsProps) {
         setActiveSort(sortingMode);
     };
 
+    const handleApplyDialog = () => {
+        setShowEventDialog(true);
+    };
+
     useEffect(() => {
         setFilteredEvents(
             events
@@ -59,19 +65,45 @@ export default function AnimalEvents({ events }: AnimalEventsProps) {
         );
     }, [activeFilter, events, sortByDateComparator]);
 
+    const TypeOptions = [
+        'Ženklinimas ir įregistravimas',
+        'Laikytojo pasikeitimas',
+        'Laikymo vietos pasikeitimas',
+        'Savininko pasikeitimas',
+        'Dingimas',
+        'Suradimas',
+        'Nugaišimas',
+        'Nugaišinimas',
+        'Išvežimas',
+        'Vakcinavimas',
+        'Augintinio agresyvumas',
+    ];
+
+    const CategoryOptions = ['General', 'Medical'];
+
     return (
         <Box className={classes.root}>
             <Box mb={2} display="flex" justifyContent="space-between" alignItems="center">
                 <Typography variant="h5" component="h3">
                     Events
                 </Typography>
-                <Button color="primary" variant="contained" startIcon={<AddIcon />}>
+                <Button color="primary" variant="contained" startIcon={<AddIcon />} onClick={handleApplyDialog}>
                     Create
                 </Button>
             </Box>
             <AnimalEventFilters activeFilter={activeFilter} onChange={handleFilterChange} />
             <AnimalEventSorting sortingMode={activeSort} onChange={handleSortChange} />
             <AnimalEventList events={filteredEvents} />
+            {showEventDialog && (
+                <AnimalEventDialog
+                    showEventDialog={showEventDialog}
+                    setShowEventDialog={setShowEventDialog}
+                    TypeOptions={TypeOptions}
+                    CategoryOptions={CategoryOptions}
+                    setFilteredEvents={setFilteredEvents}
+                    filteredEvents={filteredEvents}
+                />
+            )}
         </Box>
     );
 }
