@@ -21,35 +21,27 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
+const typeOptions = [
+    'Ženklinimas ir įregistravimas',
+    'Laikytojo pasikeitimas',
+    'Laikymo vietos pasikeitimas',
+    'Savininko pasikeitimas',
+    'Dingimas',
+    'Suradimas',
+    'Nugaišimas',
+    'Nugaišinimas',
+    'Išvežimas',
+    'Vakcinavimas',
+    'Augintinio agresyvumas',
+];
+
+const categories = ['General', 'Medical'];
+
 export default function AnimalEvents({ events }: AnimalEventsProps) {
     const classes = useStyles();
     const [activeFilter, setActiveFilter] = useState<EventCategory>(EVENT_FILTER_ALL);
     const [activeSort, setActiveSort] = useState<EventSortingMode>(EventSortingMode.DESCENDING);
     const [dialogOpen, setDialogOpen] = useState(false);
-
-    const typeOptions = [
-        'Ženklinimas ir įregistravimas',
-        'Laikytojo pasikeitimas',
-        'Laikymo vietos pasikeitimas',
-        'Savininko pasikeitimas',
-        'Dingimas',
-        'Suradimas',
-        'Nugaišimas',
-        'Nugaišinimas',
-        'Išvežimas',
-        'Vakcinavimas',
-        'Augintinio agresyvumas',
-    ];
-
-    const categories = ['General', 'Medical'];
-
-    const handleDialogOpen = () => {
-        setDialogOpen(true);
-    };
-
-    const handleDialogClose = () => {
-        setDialogOpen(false);
-    };
 
     const sortByDateComparator = useCallback(
         (event1: Event, event2: Event) => {
@@ -77,6 +69,18 @@ export default function AnimalEvents({ events }: AnimalEventsProps) {
         setActiveSort(sortingMode);
     };
 
+    const handleDialogOpen = () => {
+        setDialogOpen(true);
+    };
+
+    const handleDialogClose = () => {
+        setDialogOpen(false);
+    };
+
+    const handleCreateEvent = event => {
+        setFilteredEvents([...filteredEvents, event]);
+    };
+
     useEffect(() => {
         setFilteredEvents(
             events
@@ -94,16 +98,18 @@ export default function AnimalEvents({ events }: AnimalEventsProps) {
                 <Button onClick={handleDialogOpen} color="primary" variant="contained" startIcon={<AddIcon />}>
                     Create
                 </Button>
-                <AnimalEventDialog
-                    categories={categories}
-                    typeOptions={typeOptions}
-                    dialogOpen={dialogOpen}
-                    setDialogOpen={setDialogOpen}
-                />
             </Box>
             <AnimalEventFilters activeFilter={activeFilter} onChange={handleFilterChange} />
             <AnimalEventSorting sortingMode={activeSort} onChange={handleSortChange} />
             <AnimalEventList events={filteredEvents} />
+            <AnimalEventDialog
+                categories={categories}
+                typeOptions={typeOptions}
+                dialogOpen={dialogOpen}
+                setDialogOpen={setDialogOpen}
+                onCreate={handleCreateEvent}
+                handleDialogClose={handleDialogClose}
+            />
         </Box>
     );
 }
