@@ -4,9 +4,6 @@
         "airbnb/hooks",
         "plugin:@typescript-eslint/recommended",
         "plugin:jest/recommended",
-        "prettier",
-        "prettier/react",
-        "prettier/@typescript-eslint",
         "plugin:prettier/recommended"
     ],
     "plugins": [
@@ -14,8 +11,7 @@
         "react",
         "jest",
         "unused-imports",
-        "simple-import-sort",
-        "prettier"
+        "simple-import-sort"
     ],
     "parser": "@typescript-eslint/parser",
     "parserOptions": {
