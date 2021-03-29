@@ -1,6 +1,6 @@
-import clsx from 'clsx';
 import React from 'react';
 
+import { Box, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { fade } from '@material-ui/core/styles/colorManipulator';
 
@@ -8,14 +8,18 @@ export default function ParamTable({ items }: ParamTableProps) {
     const classes = useStyles();
 
     return (
-        <div className={classes.root}>
+        <Typography className={classes.root} component="div">
             {items.map((item: ParamTableItem, index: number) => (
-                <div className={classes.row} key={`param-row-${index}`}>
-                    <div className={clsx(classes.col, classes.title)}>{item.title}</div>
-                    <div className={clsx(classes.col, classes.value)}>{item.value ? item.value : 'n.d.'}</div>
-                </div>
+                <Box className={classes.row} key={`param-row-${index}`} display="flex" justifyContent="space-between">
+                    <Box className={classes.title} fontSize={16} p={1}>
+                        {item.title}
+                    </Box>
+                    <Box className={classes.value} fontSize={16} p={1}>
+                        {item.value ? item.value : 'n.d.'}
+                    </Box>
+                </Box>
             ))}
-        </div>
+        </Typography>
     );
 }
 
@@ -31,25 +35,15 @@ interface ParamTableItem {
 const useStyles = makeStyles(theme => ({
     root: {},
     row: {
-        display: 'flex',
-        justifyContent: 'space-between',
         borderWidth: '0 0 1px 0',
         borderStyle: 'solid',
         borderColor: fade(theme.palette.grey['600'], 0.2),
     },
-    col: {
-        paddingTop: theme.spacing(1),
-        paddingBottom: theme.spacing(1),
-        fontSize: '1rem',
-    },
     title: {
-        paddingLeft: theme.spacing(1),
-        paddingRight: theme.spacing(2),
         fontWeight: 500,
     },
     value: {
         marginLeft: 'auto',
-        paddingRight: theme.spacing(1),
         textAlign: 'right',
     },
 }));
