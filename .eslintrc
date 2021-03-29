@@ -98,19 +98,6 @@
             }
         ],
         "import/order": "off",
-        "simple-import-sort/imports": [
-            "error",
-            {
-                "groups": [
-                    [
-                        "^[^\\.@]"
-                    ],
-                    [
-                        "^@",
-                        "^\\."
-                    ]
-                ]
-            }
-        ]
+        "simple-import-sort/imports": "off"
     }
 }
