@@ -11,7 +11,8 @@
         "react",
         "jest",
         "unused-imports",
-        "simple-import-sort"
+        "simple-import-sort",
+        "prettier"
     ],
     "parser": "@typescript-eslint/parser",
     "parserOptions": {
