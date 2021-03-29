@@ -3,6 +3,8 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { Box, Button, makeStyles, Typography } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 import { Event } from '../../../graphql/types';
+import { CATEGORIES, TYPE_OPTIONS } from '../../../utils/defaultTextUtils';
+import AnimalEventModal from '../modals/AnimalEventModal';
 import AnimalEventFilters, { EVENT_FILTER_ALL, EventCategory } from './AnimalEventFilters';
 import AnimalEventList from './AnimalEventList';
 import AnimalEventSorting, { EventSortingMode } from './AnimalEventSorting';
@@ -24,6 +26,15 @@ export default function AnimalEvents({ events }: AnimalEventsProps) {
     const classes = useStyles();
     const [activeFilter, setActiveFilter] = useState<EventCategory>(EVENT_FILTER_ALL);
     const [activeSort, setActiveSort] = useState<EventSortingMode>(EventSortingMode.DESCENDING);
+    const [open, setOpen] = useState(false);
+
+    const handleClickOpen = () => {
+        setOpen(true);
+    };
+
+    const handleClose = () => {
+        setOpen(false);
+    };
 
     const sortByDateComparator = useCallback(
         (event1: Event, event2: Event) => {
@@ -41,7 +52,7 @@ export default function AnimalEvents({ events }: AnimalEventsProps) {
         [activeSort]
     );
 
-    const [filteredEvents, setFilteredEvents] = useState(events.sort(sortByDateComparator));
+    const [filteredEvents, setFilteredEvents] = useState([...events].sort(sortByDateComparator));
 
     const handleFilterChange = (value: EventCategory) => {
         setActiveFilter(value);
@@ -65,10 +76,19 @@ export default function AnimalEvents({ events }: AnimalEventsProps) {
                 <Typography variant="h5" component="h3">
                     Events
                 </Typography>
-                <Button color="primary" variant="contained" startIcon={<AddIcon />}>
+                <Button color="primary" variant="contained" startIcon={<AddIcon />} onClick={handleClickOpen}>
                     Create
                 </Button>
             </Box>
+            <AnimalEventModal
+                open={open}
+                onClose={handleClose}
+                onCreate={eventObject => {
+                    setFilteredEvents([...filteredEvents, eventObject]);
+                }}
+                categoryOptions={CATEGORIES}
+                typeOptions={TYPE_OPTIONS}
+            />
             <AnimalEventFilters activeFilter={activeFilter} onChange={handleFilterChange} />
             <AnimalEventSorting sortingMode={activeSort} onChange={handleSortChange} />
             <AnimalEventList events={filteredEvents} />
