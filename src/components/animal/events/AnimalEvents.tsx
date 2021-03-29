@@ -1,9 +1,11 @@
 import React, { useCallback, useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
 
 import { Box, Button, makeStyles, Typography } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 import { Event } from '../../../graphql/types';
 import AnimalEventFilters, { EVENT_FILTER_ALL, EventCategory } from './AnimalEventFilters';
+import AnimalEventForm from './AnimalEventForm';
 import AnimalEventList from './AnimalEventList';
 import AnimalEventSorting, { EventSortingMode } from './AnimalEventSorting';
 
@@ -21,6 +23,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export default function AnimalEvents({ events }: AnimalEventsProps) {
+    const params = useParams<{ id: string }>();
     const classes = useStyles();
     const [activeFilter, setActiveFilter] = useState<EventCategory>(EVENT_FILTER_ALL);
     const [activeSort, setActiveSort] = useState<EventSortingMode>(EventSortingMode.DESCENDING);
@@ -41,7 +44,7 @@ export default function AnimalEvents({ events }: AnimalEventsProps) {
         [activeSort]
     );
 
-    const [filteredEvents, setFilteredEvents] = useState(events.sort(sortByDateComparator));
+    const [filteredEvents, setFilteredEvents] = useState([...events].sort(sortByDateComparator));
 
     const handleFilterChange = (value: EventCategory) => {
         setActiveFilter(value);
@@ -59,13 +62,58 @@ export default function AnimalEvents({ events }: AnimalEventsProps) {
         );
     }, [activeFilter, events, sortByDateComparator]);
 
+    const [open, setOpen] = React.useState(false);
+
+    const handleClickOpen = () => {
+        setOpen(true);
+    };
+
+    const handleClose = () => {
+        setOpen(false);
+    };
+    const typeOptions = [
+        'Ženklinimas ir įregistravimas',
+        'Laikytojo pasikeitimas',
+        'Laikymo vietos pasikeitimas',
+        'Savininko pasikeitimas',
+        'Dingimas',
+        'Suradimas',
+        'Nugaišimas',
+        'Nugaišinimas',
+        'Išvežimas',
+        'Vakcinavimas',
+        'Augintinio agresyvumas',
+    ];
+
+    const categories = ['General', 'Medical'];
+    const handleCreate = formValues => {
+        setFilteredEvents([
+            ...filteredEvents,
+            {
+                id: Math.random(),
+                animal: parseInt(params.id, 10),
+                type: formValues.typeOption,
+                expenses: formValues.expense,
+                dateTime: formValues.date,
+                comments: formValues.comment,
+                category: formValues.category,
+            },
+        ]);
+    };
     return (
         <Box className={classes.root}>
+            <AnimalEventForm
+                handleCreate={handleCreate}
+                handleClose={handleClose}
+                open={open}
+                typeOptions={typeOptions}
+                categories={categories}
+            />
             <Box mb={2} display="flex" justifyContent="space-between" alignItems="center">
                 <Typography variant="h5" component="h3">
                     Events
                 </Typography>
-                <Button color="primary" variant="contained" startIcon={<AddIcon />}>
+                <Button color="primary" variant="contained" startIcon={<AddIcon />} onClick={handleClickOpen}>
                     Create
                 </Button>
             </Box>
