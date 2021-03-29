@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Box, Button, makeStyles, Typography } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
@@ -6,6 +6,7 @@ import { Event } from '../../../graphql/types';
 import AnimalEventFilters, { EVENT_FILTER_ALL, EventCategory } from './AnimalEventFilters';
 import AnimalEventList from './AnimalEventList';
 import AnimalEventSorting, { EventSortingMode } from './AnimalEventSorting';
+import NewEventDialog from './NewEventDialog';
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -20,8 +21,25 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
+const TypeOptions = [
+    'Ženklinimas ir įregistravimas',
+    'Laikytojo pasikeitimas',
+    'Laikymo vietos pasikeitimas',
+    'Savininko pasikeitimas',
+    'Dingimas',
+    'Suradimas',
+    'Nugaišimas',
+    'Nugaišinimas',
+    'Išvežimas',
+    'Vakcinavimas',
+    'Augintinio agresyvumas',
+];
+
+const Category = ['General', 'Medical'];
+
 export default function AnimalEvents({ events }: AnimalEventsProps) {
     const classes = useStyles();
+    const [newEventDialogVisible, setNewEventDialogVisible] = useState<boolean>(false);
     const [activeFilter, setActiveFilter] = useState<EventCategory>(EVENT_FILTER_ALL);
     const [activeSort, setActiveSort] = useState<EventSortingMode>(EventSortingMode.DESCENDING);
 
@@ -42,6 +60,18 @@ export default function AnimalEvents({ events }: AnimalEventsProps) {
     );
 
     const [filteredEvents, setFilteredEvents] = useState(events.sort(sortByDateComparator));
+
+    const showNewEventDialog = useCallback(() => setNewEventDialogVisible(true), []);
+    const hideNewEventDialog = useCallback(() => setNewEventDialogVisible(false), []);
+    const onCreateNewEvent = useCallback(
+        newEvent => {
+            setFilteredEvents(oldEvents => [...oldEvents, newEvent]);
+            hideNewEventDialog();
+        },
+        [hideNewEventDialog]
+    );
+
+    const newEventDialogOptions = useMemo(() => ({ types: TypeOptions, categories: Category }), []);
 
     const handleFilterChange = (value: EventCategory) => {
         setActiveFilter(value);
@@ -65,13 +95,19 @@ export default function AnimalEvents({ events }: AnimalEventsProps) {
                 <Typography variant="h5" component="h3">
                     Events
                 </Typography>
-                <Button color="primary" variant="contained" startIcon={<AddIcon />}>
+                <Button onClick={showNewEventDialog} color="primary" variant="contained" startIcon={<AddIcon />}>
                     Create
                 </Button>
             </Box>
             <AnimalEventFilters activeFilter={activeFilter} onChange={handleFilterChange} />
             <AnimalEventSorting sortingMode={activeSort} onChange={handleSortChange} />
             <AnimalEventList events={filteredEvents} />
+            <NewEventDialog
+                visible={newEventDialogVisible}
+                options={newEventDialogOptions}
+                onCreate={onCreateNewEvent}
+                onCancel={hideNewEventDialog}
+            />
         </Box>
     );
 }
