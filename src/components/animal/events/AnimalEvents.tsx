@@ -5,7 +5,6 @@ import { Event } from '../../../graphql/types';
 import AnimalEventFilters, { EVENT_FILTER_ALL, EventCategory } from './AnimalEventFilters';
 import AnimalEventList from './AnimalEventList';
 import AnimalEventSorting, { EventSortingMode } from './AnimalEventSorting';
-import NewEventObjectType from './NewEvent';
 import NewEventDialog from './NewEventDialog';
 
 const useStyles = makeStyles(theme => ({
@@ -69,13 +68,13 @@ export default function AnimalEvents({ events }: AnimalEventsProps) {
         setActiveSort(sortingMode);
     };
 
-    const handleEventCancel = () => {
+    const handleEventClose = () => {
         setEventDialogOpen(false);
     };
 
-    const handleEventCreate = (newEvent: NewEventObjectType) => {
-        alert('to be implemented');
-        console.log('new event object', newEvent);
+    const handleEventCreate = (newEvent: Event) => {
+        setFilteredEvents([...filteredEvents, newEvent]);
+        handleEventClose();
     };
 
     useEffect(() => {
@@ -95,7 +94,7 @@ export default function AnimalEvents({ events }: AnimalEventsProps) {
                 <NewEventDialog
                     open={eventDialogOpen}
                     setOpen={setEventDialogOpen}
-                    onCancel={handleEventCancel}
+                    onCancel={handleEventClose}
                     onCreate={handleEventCreate}
                     typeOptions={typeOptions}
                     categories={category}

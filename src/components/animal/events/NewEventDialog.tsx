@@ -14,7 +14,7 @@ import {
     Typography,
 } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
-import NewEventObjectType from './NewEvent';
+import { Category, Event } from '../../../graphql/types';
 
 export default function NewEventDialog({
     onCancel,
@@ -25,8 +25,8 @@ export default function NewEventDialog({
     categories,
 }: NewEventDialogProps) {
     const [typeValue, setTypeValue] = useState<string>('');
-    const [categoryValue, setCategoryValue] = useState<string>('');
-    const [expensesValue, setExpensesValue] = useState<string>('');
+    const [categoryValue, setCategoryValue] = useState<Category | ''>('');
+    const [expensesValue, setExpensesValue] = useState<number | null>(null);
     const [commentsValue, setCommentsValue] = useState<string>('');
     const [dateValue, setDateValue] = useState<string>('');
 
@@ -39,11 +39,11 @@ export default function NewEventDialog({
     };
 
     const handleCategoryChange = (event: React.ChangeEvent<{ value: unknown }>) => {
-        setCategoryValue(event.target.value as string);
+        setCategoryValue(event.target.value as Category);
     };
 
     const handleExpensesChange = (event: React.ChangeEvent<{ value: unknown }>) => {
-        setExpensesValue(event.target.value as string);
+        setExpensesValue(event.target.value as number);
     };
 
     const handleCommentsChange = (event: React.ChangeEvent<{ value: unknown }>) => {
@@ -54,24 +54,31 @@ export default function NewEventDialog({
         setDateValue(event.target.value as string);
     };
 
+    const resetState = () => {
+        setTypeValue('');
+        setCategoryValue('');
+        setExpensesValue(null);
+        setCommentsValue('');
+        setDateValue('');
+    };
+
     const handleCreate = () => {
-        onCreate({
-            id: 123456,
-            typeValue,
-            categoryValue,
-            expensesValue,
-            commentsValue,
-            dateValue,
-        });
+        if (typeValue && expensesValue && dateValue && commentsValue && categoryValue) {
+            onCreate({
+                id: 123456,
+                animal: 123456,
+                type: { id: 3, type: typeValue },
+                expenses: expensesValue,
+                dateTime: Date.parse(dateValue).toString(),
+                comments: commentsValue.trim(),
+                category: categoryValue,
+            });
+            resetState();
+        }
     };
 
     const handleCancel = () => {
-        setTypeValue('');
-        setCategoryValue('');
-        setExpensesValue('');
-        setCommentsValue('');
-        setDateValue('');
-
+        resetState();
         onCancel();
     };
 
@@ -85,6 +92,7 @@ export default function NewEventDialog({
                 <DialogTitle id="form-dialog-title">
                     <Typography variant="h6">Create new event</Typography>
                 </DialogTitle>
+
                 <DialogContent>
                     <FormControl variant="outlined" color="secondary" fullWidth margin="dense">
                         <InputLabel htmlFor="new-event-type">Type</InputLabel>
@@ -123,6 +131,7 @@ export default function NewEventDialog({
                         value={expensesValue}
                         onChange={handleExpensesChange}
                         label="Expenses $"
+                        type="number"
                         margin="dense"
                         fullWidth
                         variant="outlined"
@@ -155,6 +164,7 @@ export default function NewEventDialog({
                         color="secondary"
                     />
                 </DialogContent>
+
                 <DialogActions>
                     <Button onClick={handleCancel} color="secondary" variant="outlined">
                         Cancel
@@ -170,7 +180,7 @@ export default function NewEventDialog({
 
 interface NewEventDialogProps {
     onCancel: () => void;
-    onCreate: (newEvent: NewEventObjectType) => void;
+    onCreate: (newEvent: Event) => void;
     open: boolean;
     setOpen: (open: boolean) => void;
     typeOptions: string[];
