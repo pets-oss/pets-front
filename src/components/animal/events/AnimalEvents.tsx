@@ -21,6 +21,22 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
+const typeOptions: string[] = [
+    'Ženklinimas ir įregistravimas',
+    'Laikytojo pasikeitimas',
+    'Laikymo vietos pasikeitimas',
+    'Savininko pasikeitimas',
+    'Dingimas',
+    'Suradimas',
+    'Nugaišimas',
+    'Nugaišinimas',
+    'Išvežimas',
+    'Vakcinavimas',
+    'Augintinio agresyvumas',
+];
+
+const category: string[] = ['General', 'Medical'];
+
 export default function AnimalEvents({ events }: AnimalEventsProps) {
     const classes = useStyles();
     const [activeFilter, setActiveFilter] = useState<EventCategory>(EVENT_FILTER_ALL);
@@ -87,7 +103,14 @@ export default function AnimalEvents({ events }: AnimalEventsProps) {
                 <Button color="primary" variant="contained" startIcon={<AddIcon />} onClick={handleClickOpen}>
                     Create
                 </Button>
-                <NewEventDialog open={open} onClose={handleClose} onCancel={onCancel} onCreate={onCreate} />
+                <NewEventDialog
+                    open={open}
+                    onClose={handleClose}
+                    onCancel={onCancel}
+                    onCreate={onCreate}
+                    typeOptions={typeOptions}
+                    category={category}
+                />
             </Box>
             <AnimalEventFilters activeFilter={activeFilter} onChange={handleFilterChange} />
             <AnimalEventSorting sortingMode={activeSort} onChange={handleSortChange} />
