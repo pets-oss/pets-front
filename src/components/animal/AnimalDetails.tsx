@@ -10,6 +10,7 @@ import { Skeleton } from '@material-ui/lab';
 import { Animal, Event } from '../../graphql/types';
 import { getAnimalAge, getAnimalWeight } from '../../utils/animal';
 import LayoutMultiColRow from '../layout/LayoutMultiColRow';
+import ParamTable from '../ParamTable';
 import AnimalDetailsHeader from './details/AnimalDetailsHeader';
 import AnimalEvents from './events/AnimalEvents';
 
@@ -84,19 +85,17 @@ function AnimalDetails({ onLoad }: AnimalDetailsProps) {
                                     </Typography>
                                 )}
                             </Box>
+                            <ParamTable title="Age" value={`${birthDay}`} />
+                            {animal.details.weight && (
+                                <ParamTable title="Weight" value={`${getAnimalWeight(animal.details.weight)}`} />
+                            )}
+                            <ParamTable title="Color" value={`${animal.details.color?.value}`} />
                             <Box
                                 display="flex"
                                 flexDirection="column"
                                 alignItems="flexStart"
                                 justifyContent="flexStart"
                             >
-                                <Typography variant="body2">{`Age - ${birthDay}`}</Typography>
-                                {animal.details.weight && (
-                                    <Typography variant="body2">
-                                        {`Weight - ${getAnimalWeight(animal.details.weight)}`}
-                                    </Typography>
-                                )}
-                                <Typography variant="body2">{`Color - ${animal.details.color?.value}`}</Typography>
                                 <Typography variant="body2">{animal.comments}</Typography>
                             </Box>
                         </>

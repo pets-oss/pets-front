@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 
 import { Card, CardContent, CardHeader, Collapse, IconButton, Typography } from '@material-ui/core';
 import Avatar from '@material-ui/core/Avatar';
+import Paper from '@material-ui/core/Paper';
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import LocalHospitalIcon from '@material-ui/icons/LocalHospital';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
@@ -16,7 +17,7 @@ export default function EventCard({ event }: AnimalCardProps) {
     const subHeader = `${event.dateTime ? getFormattedDate(event.dateTime) : '-'} / Author`;
 
     return (
-        <Card className={classes.root}>
+        <Paper component={Card} className={classes.root}>
             <CardHeader
                 avatar={
                     <Avatar aria-label="event" alt="event">
@@ -58,7 +59,7 @@ export default function EventCard({ event }: AnimalCardProps) {
                     </Typography>
                 </CardContent>
             </Collapse>
-        </Card>
+        </Paper>
     );
 }
 
