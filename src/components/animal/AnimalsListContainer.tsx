@@ -7,21 +7,14 @@ import AnimalsList from './AnimalsList';
 import AnimalsTable from './AnimalsTable';
 import { AnimalsViewType } from './ViewSelector';
 
-// const GET_ANIMALS_QUERY = loader('../../graphql/queries/animal-list.graphql');
-
-interface Response {
-    animals: Animal[];
-}
-
 interface AnimalsListContainerProps {
     viewType: AnimalsViewType;
     loading: boolean;
     error: ApolloError | undefined;
-    data: Response | undefined;
+    animals: Animal[] | undefined;
 }
 
-export default function AnimalsListContainer({ loading, error, data, viewType }: AnimalsListContainerProps) {
-    // const { loading, error, data } = useQuery<Response>(GET_ANIMALS_QUERY);
+export default function AnimalsListContainer({ loading, error, animals, viewType }: AnimalsListContainerProps) {
     if (loading) {
         return <Skeleton animation="wave" variant="rect" height={500} />;
     }
@@ -31,14 +24,14 @@ export default function AnimalsListContainer({ loading, error, data, viewType }:
         return <p>Error!</p>;
     }
 
-    if (!data?.animals.length) {
+    if (!animals?.length) {
         // TODO: replace with proper UI elements
         return <p>No data</p>;
     }
 
     if (viewType === AnimalsViewType.TABLE) {
-        return <AnimalsTable animals={data.animals} />;
+        return <AnimalsTable animals={animals} />;
     }
 
-    return <AnimalsList animals={data.animals} />;
+    return <AnimalsList animals={animals} />;
 }

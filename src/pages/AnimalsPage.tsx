@@ -78,11 +78,11 @@ function AnimalsPage() {
                     onFiltersClear={handleClearAllFilters}
                     onFiltersApply={handleApplyFilters}
                     onFilterRemove={handleRemoveFilter}
-                    data={data}
+                    data={data?.animals}
                 />
             }
         >
-            <AnimalsListContainer viewType={viewType} loading={loading} error={error} data={data} />
+            <AnimalsListContainer viewType={viewType} loading={loading} error={error} animals={data?.animals} />
         </Page>
     );
 }
@@ -138,7 +138,7 @@ interface TopSectionProps {
     onFiltersClear: (filters: Filter[]) => void;
     onFiltersApply: (filters: Filter[]) => void;
     onFilterRemove: (filter: Filter) => void;
-    data: Response | undefined;
+    data: Animal[] | undefined;
 }
 
 const SPECIES: FilterOption[] = [
