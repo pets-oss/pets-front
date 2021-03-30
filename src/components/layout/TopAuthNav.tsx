@@ -38,8 +38,9 @@ export default function TopAuthNav() {
         setAnchorEl(null);
     };
 
-    const handleLinkProfile = () => {
+    const handleLinkProfileAndClose = () => {
         history.push('/user-profile');
+        setAnchorEl(null);
     };
 
     return (
@@ -73,7 +74,7 @@ export default function TopAuthNav() {
                         open={open}
                         onClose={handleClose}
                     >
-                        <MenuItem onClick={handleLinkProfile}>Profile</MenuItem>
+                        <MenuItem onClick={handleLinkProfileAndClose}>Profile</MenuItem>
                         <MenuItem
                             onClick={() =>
                                 logout({
