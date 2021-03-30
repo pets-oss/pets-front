@@ -78,7 +78,7 @@ function AnimalsPage() {
                     onFiltersClear={handleClearAllFilters}
                     onFiltersApply={handleApplyFilters}
                     onFilterRemove={handleRemoveFilter}
-                    data={data?.animals}
+                    animals={data?.animals}
                 />
             }
         >
@@ -95,7 +95,7 @@ function TopSection({
     onFiltersClear,
     onFiltersApply,
     onFilterRemove,
-    data,
+    animals,
 }: TopSectionProps) {
     return (
         <Grid container spacing={2} alignItems="center">
@@ -112,7 +112,7 @@ function TopSection({
                         filters={filters}
                         onReset={onFiltersClear}
                         onApply={onFiltersApply}
-                        count={data?.animals.length ?? 0}
+                        count={animals?.length ?? 0}
                     />
                 </Grid>
                 <Grid item>
@@ -138,7 +138,7 @@ interface TopSectionProps {
     onFiltersClear: (filters: Filter[]) => void;
     onFiltersApply: (filters: Filter[]) => void;
     onFilterRemove: (filter: Filter) => void;
-    data: Animal[] | undefined;
+    animals: Animal[] | undefined;
 }
 
 const SPECIES: FilterOption[] = [
