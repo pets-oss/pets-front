@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
 
-import { Card, CardContent, CardHeader, Collapse, IconButton, Typography } from '@material-ui/core';
+import { Card, CardContent, CardHeader, Collapse, IconButton, Typography, Paper } from '@material-ui/core';
 import Avatar from '@material-ui/core/Avatar';
+import purple from '@material-ui/core/colors/purple';
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import LocalHospitalIcon from '@material-ui/icons/LocalHospital';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import { Event } from '../../../graphql/types';
 import { getFormattedDate } from '../../../utils/date';
+import ParamsTable from '../ParamsTable';
 
 export default function EventCard({ event }: AnimalCardProps) {
     const classes = useStyles();
@@ -14,9 +16,16 @@ export default function EventCard({ event }: AnimalCardProps) {
     const eventName = event.type?.type || '';
     const header = `Event type - ${eventName}`;
     const subHeader = `${event.dateTime ? getFormattedDate(event.dateTime) : '-'} / Author`;
+    const dynamicElevation = expanded ? 5 : 1;
+
+    const values = [
+                        {title: 'Expenses:', value: event.expenses || '-'},
+                        {title: 'Comments:', value: event.comments || '-'},
+                        {title: 'Author:', value: '-'}
+                    ]
 
     return (
-        <Card className={classes.root}>
+        <Paper className={classes.root} component={Card} elevation={dynamicElevation}>
             <CardHeader
                 avatar={
                     <Avatar aria-label="event" alt="event">
@@ -38,33 +47,19 @@ export default function EventCard({ event }: AnimalCardProps) {
             />
             <Collapse in={expanded} timeout="auto" unmountOnExit>
                 <CardContent className={classes.content}>
-                    <Typography color="textPrimary" className={classes.label}>
-                        Expenses:
-                    </Typography>
-                    <Typography paragraph color="textSecondary">
-                        {event.expenses || '-'}
-                    </Typography>
-                    <Typography color="textPrimary" className={classes.label}>
-                        Comments:
-                    </Typography>
-                    <Typography paragraph color="textSecondary">
-                        {event.comments || '-'}
-                    </Typography>
-                    <Typography color="textPrimary" className={classes.label}>
-                        Author:
-                    </Typography>
-                    <Typography paragraph color="textSecondary">
-                        -
-                    </Typography>
+                    <ParamsTable items={values} />
                 </CardContent>
             </Collapse>
-        </Card>
+        </Paper>
     );
 }
 
 const useStyles = makeStyles(theme => ({
     root: {
         width: '100%',
+        '&:hover': {
+            backgroundColor: purple[100],
+        },
     },
     headerText: {
         maxWidth: 150,
