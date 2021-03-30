@@ -11,7 +11,7 @@ import Select from '@material-ui/core/Select';
 import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles({
     margin: {
         marginBottom: 24,
         marginLeft: 15,
@@ -47,7 +47,7 @@ const useStyles = makeStyles(theme => ({
         textTransform: 'uppercase',
         color: '#FFFFFF',
     },
-}));
+});
 
 export default function AnimalEventForm({ open, handleClose, typeOptions, categories, handleCreate }) {
     const classes = useStyles();
@@ -65,9 +65,15 @@ export default function AnimalEventForm({ open, handleClose, typeOptions, catego
             [e.target.name]: e.target.value,
         });
     };
-    const onCreate = e => {
+    const onCreate = () => {
         handleCreate(values);
     };
+    const isValid =
+        values.typeOption != null &&
+        values.category != null &&
+        values.expense != null &&
+        values.comment != null &&
+        values.date != null;
 
     return (
         <div>
@@ -148,10 +154,10 @@ export default function AnimalEventForm({ open, handleClose, typeOptions, catego
                     />
                 </FormControl>
                 <DialogActions>
-                    <Button onClick={handleClose} color="primary">
+                    <Button onClick={handleClose} color="primary" variant="outlined">
                         Cancel
                     </Button>
-                    <Button onClick={onCreate} color="primary">
+                    <Button onClick={onCreate} color="primary" disabled={!isValid} variant="contained">
                         Create
                     </Button>
                 </DialogActions>

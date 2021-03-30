@@ -99,6 +99,7 @@ export default function AnimalEvents({ events }: AnimalEventsProps) {
                 category: formValues.category,
             },
         ]);
+        handleClose();
     };
     return (
         <Box className={classes.root}>
