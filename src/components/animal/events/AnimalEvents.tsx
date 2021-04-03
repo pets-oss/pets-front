@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Box, Button, makeStyles, Typography } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
@@ -10,99 +10,85 @@ import AnimalEventSorting, { EventSortingMode } from './AnimalEventSorting';
 
 const useStyles = makeStyles(theme => ({
     root: {
-        backgroundColor: theme.palette.tertiary.main,
-        // Full bleed effect on mobile
-        marginTop: theme.spacing(2),
-        marginLeft: -theme.spacing(2),
-        marginRight: -theme.spacing(2),
-        [theme.breakpoints.up('lg')]: {
-            margin: 0,
-        },
+    backgroundColor: theme.palette.tertiary.main,
+    // Full bleed effect on mobile
+    marginTop: theme.spacing(2),
+    marginLeft: -theme.spacing(2),
+    marginRight: -theme.spacing(2),
+    [theme.breakpoints.up('lg')]: {
+      margin: 0,
     },
+  },
 }));
 
-const typeOptions = [
-    'Ženklinimas ir įregistravimas',
-    'Laikytojo pasikeitimas',
-    'Laikymo vietos pasikeitimas',
-    'Savininko pasikeitimas',
-    'Dingimas',
-    'Suradimas',
-    'Nugaišimas',
-    'Nugaišinimas',
-    'Išvežimas',
-    'Vakcinavimas',
-    'Augintinio agresyvumas',
-];
+function AnimalEvents({ events }: AnimalEventsProps) {
+  const classes = useStyles();
+  const [activeFilter, setActiveFilter] = useState<EventCategory>(EVENT_FILTER_ALL);
+  const [activeSort, setActiveSort] = useState<EventSortingMode>(EventSortingMode.DESCENDING);
+  const [dialogOpen, setDialogOpen] = useState(false);
 
-const categories = ['General', 'Medical'];
+  const sortByDateComparator = useCallback(
+    (event1: Event, event2: Event) => {
+      if (!event1 || !event2) {
+        return 0;
+      }
 
-export default function AnimalEvents({ events }: AnimalEventsProps) {
-    const classes = useStyles();
-    const [activeFilter, setActiveFilter] = useState<EventCategory>(EVENT_FILTER_ALL);
-    const [activeSort, setActiveSort] = useState<EventSortingMode>(EventSortingMode.DESCENDING);
-    const [dialogOpen, setDialogOpen] = useState(false);
+      const date1 = parseInt(event1.dateTime as string, 10);
+      const date2 = parseInt(event2.dateTime as string, 10);
+      if (activeSort === EventSortingMode.DESCENDING) {
+        return date2 - date1;
+      }
+      return date1 - date2;
+    },
+    [activeSort],
+  );
 
-    const sortByDateComparator = useCallback(
-        (event1: Event, event2: Event) => {
-            if (!event1 || !event2) {
-                return 0;
-            }
+  const memoizedEvents = useMemo(() => {
+    return [...events].sort(sortByDateComparator);
+  }, [events, sortByDateComparator]);
 
-            const date1 = parseInt(event1.dateTime as string, 10);
-            const date2 = parseInt(event2.dateTime as string, 10);
-            if (activeSort === EventSortingMode.DESCENDING) {
-                return date2 - date1;
-            }
-            return date1 - date2;
-        },
-        [activeSort]
+  const [filteredEvents, setFilteredEvents] = useState(memoizedEvents);
+
+  const handleFilterChange = (value: EventCategory) => {
+    setActiveFilter(value);
+  };
+
+  const handleSortChange = (sortingMode: EventSortingMode) => {
+    setActiveSort(sortingMode);
+  };
+
+  const handleDialogOpen = () => {
+    setDialogOpen(true);
+  };
+
+  const handleDialogClose = () => {
+    setDialogOpen(false);
+  };
+
+  const handleCreateEvent = event => {
+    setFilteredEvents([...filteredEvents, event]);
+  };
+
+  useEffect(() => {
+    setFilteredEvents(
+      memoizedEvents.filter(event => event.category === activeFilter || activeFilter === EVENT_FILTER_ALL),
     );
+  }, [activeFilter, memoizedEvents]);
 
-    const [filteredEvents, setFilteredEvents] = useState(events.sort(sortByDateComparator));
-
-    const handleFilterChange = (value: EventCategory) => {
-        setActiveFilter(value);
-    };
-
-    const handleSortChange = (sortingMode: EventSortingMode) => {
-        setActiveSort(sortingMode);
-    };
-
-    const handleDialogOpen = () => {
-        setDialogOpen(true);
-    };
-
-    const handleDialogClose = () => {
-        setDialogOpen(false);
-    };
-
-    const handleCreateEvent = event => {
-        setFilteredEvents([...filteredEvents, event]);
-    };
-
-    useEffect(() => {
-        setFilteredEvents(
-            events
-                .filter(event => event.category === activeFilter || activeFilter === EVENT_FILTER_ALL)
-                .sort(sortByDateComparator)
-        );
-    }, [activeFilter, events, sortByDateComparator]);
-
-    return (
+  return (
         <Box className={classes.root}>
-            <Box mb={2} display="flex" justifyContent="space-between" alignItems="center">
+          <Box mb={2} display="flex" justifyContent="space-between" alignItems="center">
                 <Typography variant="h5" component="h3">
-                    Events
+                  Events
                 </Typography>
                 <Button onClick={handleDialogOpen} color="primary" variant="contained" startIcon={<AddIcon />}>
-                    Create
+                  Create
                 </Button>
             </Box>
-            <AnimalEventFilters activeFilter={activeFilter} onChange={handleFilterChange} />
-            <AnimalEventSorting sortingMode={activeSort} onChange={handleSortChange} />
-            <AnimalEventList events={filteredEvents} />
-            <AnimalEventDialog
+          <AnimalEventFilters activeFilter={activeFilter} onChange={handleFilterChange} />
+          <AnimalEventSorting sortingMode={activeSort} onChange={handleSortChange} />
+          <AnimalEventList events={filteredEvents} />
+          <AnimalEventDialog
                 categories={categories}
                 typeOptions={typeOptions}
                 dialogOpen={dialogOpen}
@@ -110,10 +96,12 @@ export default function AnimalEvents({ events }: AnimalEventsProps) {
                 onCreate={handleCreateEvent}
                 handleDialogClose={handleDialogClose}
             />
-        </Box>
-    );
+      </Box>
+  );
 }
 
+export default AnimalEvents;
+
 interface AnimalEventsProps {
-    events: Event[];
+  events: Event[];
 }
