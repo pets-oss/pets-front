@@ -40,6 +40,7 @@ export default function TopAuthNav() {
 
     const handleLinkProfile = () => {
         history.push('/user-profile');
+        setAnchorEl(null);
     };
 
     return (
