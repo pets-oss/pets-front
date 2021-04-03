@@ -61,25 +61,12 @@ function AnimalEvents({ events }: AnimalEventsProps) {
         );
     }, [activeFilter, memoizedEvents]);
 
-    // const [open, setOpen] = React.useState(false);
-
-    // const handleClickOpen = () => {
-    //     setOpen(true);
-    // };
-
-    // const handleClose = () => {
-    //     setOpen(false);
-    // };
-
     return (
         <Box className={classes.root}>
             <Box mb={2} display="flex" justifyContent="space-between" alignItems="center">
                 <Typography variant="h5" component="h3">
                     Events
                 </Typography>
-                {/* <Button color="primary" variant="contained" onClick={handleClickOpen} startIcon={<AddIcon />}>
-                    Create
-                </Button> */}
                 <EventDialog />
             </Box>
             <AnimalEventFilters activeFilter={activeFilter} onChange={handleFilterChange} />
