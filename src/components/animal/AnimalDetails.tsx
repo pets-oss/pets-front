@@ -12,6 +12,7 @@ import { getAnimalAge, getAnimalWeight } from '../../utils/animal';
 import LayoutMultiColRow from '../layout/LayoutMultiColRow';
 import AnimalDetailsHeader from './details/AnimalDetailsHeader';
 import AnimalEvents from './events/AnimalEvents';
+import ParamListTable, { ParamTableItem } from './ParamListTable';
 
 const GET_ANIMAL_DETAILS = loader('../../graphql/queries/animal-details.graphql');
 
@@ -54,8 +55,19 @@ function AnimalDetails({ onLoad }: AnimalDetailsProps) {
     }
 
     const { animal, events } = data;
+
     const birthDay = animal.details?.birthDate ? getAnimalAge(animal.details.birthDate) : '';
+    const weight = animal.details?.weight ? getAnimalWeight(animal.details.weight) : '';
+    const color = animal.details?.color ? animal.details.color.value : '';
+    const comments = animal.comments ? animal.comments : '';
     const animalEvents = events?.[0]?.animalAll ?? [];
+
+    const animalInformation: ParamTableItem[] = [
+        { title: 'Age', value: birthDay },
+        { title: 'Weight', value: weight },
+        { title: 'Color', value: color },
+        { title: 'Comments', value: comments },
+    ];
 
     return (
         <div className={classes.root}>
@@ -70,36 +82,20 @@ function AnimalDetails({ onLoad }: AnimalDetailsProps) {
                         breed={animal.details?.breed?.value}
                     />
                     <Image src={animal.imageUrl!} aspectRatio={3 / 2} cover />
+                    {animal.details && <ParamListTable items={animalInformation} />}
                     {animal.details && (
-                        <>
-                            <Box mt={3} mb={2}>
-                                {animal.microchip && (
-                                    <Typography variant="body1" className={classes.secondaryProperty}>
-                                        {`Microchip Id - ${animal.microchip}`}
-                                    </Typography>
-                                )}
-                                {animal.registration && (
-                                    <Typography variant="body1" className={classes.secondaryProperty}>
-                                        {`Registration No - ${animal.registration?.registrationNo}`}
-                                    </Typography>
-                                )}
-                            </Box>
-                            <Box
-                                display="flex"
-                                flexDirection="column"
-                                alignItems="flexStart"
-                                justifyContent="flexStart"
-                            >
-                                <Typography variant="body2">{`Age - ${birthDay}`}</Typography>
-                                {animal.details.weight && (
-                                    <Typography variant="body2">
-                                        {`Weight - ${getAnimalWeight(animal.details.weight)}`}
-                                    </Typography>
-                                )}
-                                <Typography variant="body2">{`Color - ${animal.details.color?.value}`}</Typography>
-                                <Typography variant="body2">{animal.comments}</Typography>
-                            </Box>
-                        </>
+                        <Box mt={3} mb={2}>
+                            {animal.microchip && (
+                                <Typography variant="body1" className={classes.secondaryProperty}>
+                                    {`Microchip Id - ${animal.microchip}`}
+                                </Typography>
+                            )}
+                            {animal.registration && (
+                                <Typography variant="body1" className={classes.secondaryProperty}>
+                                    {`Registration No - ${animal.registration?.registrationNo}`}
+                                </Typography>
+                            )}
+                        </Box>
                     )}
                     <Box mt={1}>
                         <Typography variant="body1">Referencing Animal ID:{id}</Typography>
