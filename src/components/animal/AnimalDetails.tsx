@@ -8,8 +8,7 @@ import { Box, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { Skeleton } from '@material-ui/lab';
 import { Animal, Event } from '../../graphql/types';
-import { getAnimalAge, getAnimalWeight } from '../../utils/animal';
-import { getAnimalParameters } from '../../utils/paramTable';
+import { getAnimalDetails } from '../../utils/paramTable';
 import LayoutMultiColRow from '../layout/LayoutMultiColRow';
 import AnimalDetailsHeader from './details/AnimalDetailsHeader';
 import AnimalEvents from './events/AnimalEvents';
@@ -56,10 +55,8 @@ function AnimalDetails({ onLoad }: AnimalDetailsProps) {
     }
 
     const { animal, events } = data;
-    const birthDay = animal.details?.birthDate ? getAnimalAge(animal.details.birthDate) : '';
     const animalEvents = events?.[0]?.animalAll ?? [];
-
-    const animalParameters = getAnimalParameters(animal);
+    const animalDetails = getAnimalDetails(animal);
 
     return (
         <div className={classes.root}>
@@ -74,7 +71,6 @@ function AnimalDetails({ onLoad }: AnimalDetailsProps) {
                         breed={animal.details?.breed?.value}
                     />
                     <Image src={animal.imageUrl!} aspectRatio={3 / 2} cover />
-                    <ParamTable parameters={animalParameters} />
                     {animal.details && (
                         <>
                             <Box mt={3} mb={2}>
@@ -89,20 +85,8 @@ function AnimalDetails({ onLoad }: AnimalDetailsProps) {
                                     </Typography>
                                 )}
                             </Box>
-                            <Box
-                                display="flex"
-                                flexDirection="column"
-                                alignItems="flexStart"
-                                justifyContent="flexStart"
-                            >
-                                <Typography variant="body2">{`Age - ${birthDay}`}</Typography>
-                                {animal.details.weight && (
-                                    <Typography variant="body2">
-                                        {`Weight - ${getAnimalWeight(animal.details.weight)}`}
-                                    </Typography>
-                                )}
-                                <Typography variant="body2">{`Color - ${animal.details.color?.value}`}</Typography>
-                                <Typography variant="body2">{animal.comments}</Typography>
+                            <Box mt={3} mb={2}>
+                                <ParamTable details={animalDetails} />
                             </Box>
                         </>
                     )}

@@ -1,15 +1,28 @@
 import { Animal } from '../graphql/types';
+import { getAnimalAge, getAnimalWeight } from './animal';
 
-export const getAnimalParameters = (animal: Animal) => {
+export const getAnimalDetails = (animal: Animal) => {
     const { details: animalDetails } = animal;
-    return (
-        animalDetails &&
-        Object.keys(animalDetails)
-            .filter(key => {
-                return typeof animalDetails[key] === 'object' && animalDetails[key] !== null;
-            })
-            .map(key => {
-                return { title: animalDetails[key].__typename, value: animalDetails[key].value };
-            })
-    );
+
+    const birthDay = {
+        title: 'Birthday',
+        value: animalDetails?.birthDate ? getAnimalAge(animalDetails.birthDate) : '',
+    };
+
+    const weight = {
+        title: 'Weight',
+        value: animalDetails?.weight ? getAnimalWeight(animalDetails.weight) : '',
+    };
+
+    const otherDetails = animalDetails
+        ? Object.keys(animalDetails)
+              .filter(key => {
+                  return typeof animalDetails[key] === 'object' && animalDetails[key] !== null;
+              })
+              .map(key => {
+                  return { title: animalDetails[key].__typename, value: animalDetails[key].value };
+              })
+        : [];
+
+    return [birthDay, ...otherDetails, weight];
 };
