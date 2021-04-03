@@ -9,9 +9,11 @@ import { makeStyles } from '@material-ui/core/styles';
 import { Skeleton } from '@material-ui/lab';
 import { Animal, Event } from '../../graphql/types';
 import { getAnimalAge, getAnimalWeight } from '../../utils/animal';
+import { getAnimalParameters } from '../../utils/paramTable';
 import LayoutMultiColRow from '../layout/LayoutMultiColRow';
 import AnimalDetailsHeader from './details/AnimalDetailsHeader';
 import AnimalEvents from './events/AnimalEvents';
+import ParamTable from './ParamTable';
 
 const GET_ANIMAL_DETAILS = loader('../../graphql/queries/animal-details.graphql');
 
@@ -57,6 +59,8 @@ function AnimalDetails({ onLoad }: AnimalDetailsProps) {
     const birthDay = animal.details?.birthDate ? getAnimalAge(animal.details.birthDate) : '';
     const animalEvents = events?.[0]?.animalAll ?? [];
 
+    const animalParameters = getAnimalParameters(animal);
+
     return (
         <div className={classes.root}>
             <LayoutMultiColRow>
@@ -70,6 +74,7 @@ function AnimalDetails({ onLoad }: AnimalDetailsProps) {
                         breed={animal.details?.breed?.value}
                     />
                     <Image src={animal.imageUrl!} aspectRatio={3 / 2} cover />
+                    <ParamTable parameters={animalParameters} />
                     {animal.details && (
                         <>
                             <Box mt={3} mb={2}>
