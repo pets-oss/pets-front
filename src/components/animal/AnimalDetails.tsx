@@ -12,6 +12,7 @@ import { getAnimalAge, getAnimalWeight } from '../../utils/animal';
 import LayoutMultiColRow from '../layout/LayoutMultiColRow';
 import AnimalDetailsHeader from './details/AnimalDetailsHeader';
 import AnimalEvents from './events/AnimalEvents';
+import Paramstable from './filters/Paramstable';
 
 const GET_ANIMAL_DETAILS = loader('../../graphql/queries/animal-details.graphql');
 
@@ -56,6 +57,21 @@ function AnimalDetails({ onLoad }: AnimalDetailsProps) {
     const { animal, events } = data;
     const birthDay = animal.details?.birthDate ? getAnimalAge(animal.details.birthDate) : '';
     const animalEvents = events?.[0]?.animalAll ?? [];
+    const weight = animal.details?.weight ? getAnimalWeight(animal.details.weight) : '';
+    const color = animal.details?.color?.value ?? '';
+
+    // const values = [
+    //     {
+    //         age: `${birthDay}`,
+    //         weight: `${weight}`,
+    //         color: `${color}`,
+    //     },
+    // ];
+    const values = [
+        { label: 'Age', value: birthDay },
+        { label: 'Weight', value: weight },
+        { label: 'Color', value: color },
+    ];
 
     return (
         <div className={classes.root}>
@@ -84,7 +100,7 @@ function AnimalDetails({ onLoad }: AnimalDetailsProps) {
                                     </Typography>
                                 )}
                             </Box>
-                            <Box
+                            {/* <Box
                                 display="flex"
                                 flexDirection="column"
                                 alignItems="flexStart"
@@ -98,12 +114,13 @@ function AnimalDetails({ onLoad }: AnimalDetailsProps) {
                                 )}
                                 <Typography variant="body2">{`Color - ${animal.details.color?.value}`}</Typography>
                                 <Typography variant="body2">{animal.comments}</Typography>
-                            </Box>
+                            </Box> */}
+                            <Paramstable items={values} />
                         </>
                     )}
-                    <Box mt={1}>
+                    {/* <Box mt={1}>
                         <Typography variant="body1">Referencing Animal ID:{id}</Typography>
-                    </Box>
+                    </Box> */}
                 </>
                 <Box className={classes.eventsContainer} py={3} px={2}>
                     <AnimalEvents events={animalEvents} />
