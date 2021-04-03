@@ -2,6 +2,7 @@ import React from 'react';
 import { NavLink } from 'react-router-dom';
 
 import { useAuth0 } from '@auth0/auth0-react';
+import { Grow } from '@material-ui/core';
 import AppBar from '@material-ui/core/AppBar';
 import Link from '@material-ui/core/Link';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
@@ -35,21 +36,25 @@ export default function AppTopNavigation() {
 
     return (
         <AppBar className={classes.appBar} position="fixed" color="default">
-            <Toolbar>
-                <Typography variant="h6" className={classes.title}>
-                    PetBook
-                </Typography>
-                {navigation
-                    .filter((item: NavigationItem) => {
-                        return item.authRequired ? isAuthenticated : true;
-                    })
-                    .map((item: NavigationItem) => (
-                        <Link component={NavLink} className={classes.link} key={item.title} to={item.to}>
-                            {item.title}
-                        </Link>
-                    ))}
-                <TopAuthNav />
-            </Toolbar>
+            <Grow in timeout={800}>
+                <div>
+                    <Toolbar>
+                        <Typography variant="h6" className={classes.title}>
+                            PetBook
+                        </Typography>
+                        {navigation
+                            .filter((item: NavigationItem) => {
+                                return item.authRequired ? isAuthenticated : true;
+                            })
+                            .map((item: NavigationItem) => (
+                                <Link component={NavLink} className={classes.link} key={item.title} to={item.to}>
+                                    {item.title}
+                                </Link>
+                            ))}
+                        <TopAuthNav />
+                    </Toolbar>
+                </div>
+            </Grow>
         </AppBar>
     );
 }

@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { useAuth0 } from '@auth0/auth0-react';
-import { makeStyles, Typography } from '@material-ui/core';
+import { Grow, makeStyles, Typography } from '@material-ui/core';
 import Page from './Page';
 
 const useStyles = makeStyles(theme => ({
@@ -27,16 +27,20 @@ function UserProfile() {
     }
 
     return (
-        <Page title="User preferences">
-            <div className={classes.infoContainer}>
-                <img alt="" src={user.picture} className={classes.avatar} />
-                <Typography variant="h4" component="p">
-                    {user.name}
-                </Typography>
-                <Typography>{user.email}</Typography>
+        <Grow in timeout={800}>
+            <div>
+                <Page title="User preferences">
+                    <div className={classes.infoContainer}>
+                        <img alt="" src={user.picture} className={classes.avatar} />
+                        <Typography variant="h4" component="p">
+                            {user.name}
+                        </Typography>
+                        <Typography>{user.email}</Typography>
+                    </div>
+                    <Typography variant="body1">User and Organization details</Typography>
+                </Page>
             </div>
-            <Typography variant="body1">User and Organization details</Typography>
-        </Page>
+        </Grow>
     );
 }
 
