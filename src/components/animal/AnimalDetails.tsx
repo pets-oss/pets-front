@@ -60,13 +60,6 @@ function AnimalDetails({ onLoad }: AnimalDetailsProps) {
     const weight = animal.details?.weight ? getAnimalWeight(animal.details.weight) : '';
     const color = animal.details?.color?.value ?? '';
 
-    // const values = [
-    //     {
-    //         age: `${birthDay}`,
-    //         weight: `${weight}`,
-    //         color: `${color}`,
-    //     },
-    // ];
     const values = [
         { label: 'Age', value: birthDay },
         { label: 'Weight', value: weight },
