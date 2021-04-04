@@ -12,7 +12,8 @@ import {
     Theme,
 } from '@material-ui/core';
 import Dialog from '@material-ui/core/Dialog';
-import { NewEvent } from '../../../graphql/types';
+import { EventType } from '../../../graphql/types';
+import { getYMDDateFromTS } from '../../../utils/dateFormatters';
 
 const useStyles = makeStyles((theme: Theme) => ({
     formControl: {
@@ -24,39 +25,65 @@ const useStyles = makeStyles((theme: Theme) => ({
     },
 }));
 
+export type NewEvent = {
+    id: number | null;
+    category: string;
+    expenses: number | null;
+    comments: string;
+    dateTime: string;
+    type: string;
+};
+
 interface Props {
     open: boolean;
     onClose: (value: string) => void;
     onCancel: () => void;
-    onCreate: (object: NewEvent) => void;
+    onCreate: (newEvent: any) => void;
     typeOptions: string[];
     categories: string[];
-    newEvent: NewEvent;
-    handleChange: (e: any) => void;
+    animalId: number;
 }
 
-function NewEventDialog({ open, onClose, onCancel, onCreate, typeOptions, categories, newEvent, handleChange }: Props) {
+function NewEventDialog({ open, onClose, onCancel, onCreate, typeOptions, categories, animalId }: Props) {
     const classes = useStyles();
 
-    const { type, category, expenses, comments, date } = newEvent;
+    const [newEvent, setNewEvent] = React.useState<NewEvent>({
+        id: null,
+        type: '',
+        category: '',
+        expenses: null,
+        comments: '',
+        dateTime: `${Date.now()}`,
+    });
 
-    // const [state, setState] = React.useState<NewEvent>({
-    //     id: null,
-    //     type: '',
-    //     category: '',
-    //     expenses: null,
-    //     comments: '',
-    //     date: getYMDDateFromTS(`${Date.now()}`),
-    // });
+    const { type, category, expenses, comments, dateTime } = newEvent;
 
-    // const handleChange = (event: React.ChangeEvent<{ name?: string; value: unknown }>) => {
-    //     const name = event.target.name as keyof typeof state;
-    //     setState({
-    //         ...state,
-    //         id: 123456,
-    //         [name]: event.target.value,
-    //     });
-    // };
+    const handleChange = (event: React.ChangeEvent<{ name?: string; value: unknown }>) => {
+        const name = event.target.name as keyof typeof newEvent;
+        setNewEvent({
+            ...newEvent,
+            id: 123456,
+            [name]: event.target.value,
+        });
+    };
+
+    const handleCreate = () => {
+        const typeObj: EventType = {
+            type,
+            id: typeOptions.indexOf(type),
+        };
+        if (type && category && expenses && comments && dateTime) {
+            onCreate({
+                id: 12345,
+                animal: animalId,
+                type: typeObj,
+                expenses,
+                dateTime,
+                comments,
+                category,
+            });
+        }
+    };
 
     return (
         <Dialog open={open} onClose={onClose}>
@@ -137,7 +164,7 @@ function NewEventDialog({ open, onClose, onCancel, onCreate, typeOptions, catego
                     fullWidth
                     type="date"
                     name="date"
-                    value={date}
+                    value={getYMDDateFromTS(dateTime)}
                     variant="outlined"
                     onChange={handleChange}
                     InputLabelProps={{
@@ -150,7 +177,7 @@ function NewEventDialog({ open, onClose, onCancel, onCreate, typeOptions, catego
                 <Button autoFocus onClick={onCancel} color="primary">
                     Cancel
                 </Button>
-                <Button onClick={() => onCreate(newEvent)} color="primary">
+                <Button onClick={handleCreate} color="primary">
                     Create
                 </Button>
             </DialogActions>

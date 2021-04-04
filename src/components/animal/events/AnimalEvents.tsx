@@ -2,8 +2,7 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Box, Button, makeStyles, Typography } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
-import { Event, NewEvent } from '../../../graphql/types';
-import { getYMDDateFromTS } from '../../../utils/dateFormatters';
+import { Event } from '../../../graphql/types';
 import AnimalEventFilters, { EVENT_FILTER_ALL, EventCategory } from './AnimalEventFilters';
 import AnimalEventList from './AnimalEventList';
 import AnimalEventSorting, { EventSortingMode } from './AnimalEventSorting';
@@ -38,19 +37,10 @@ const typeOptions: string[] = [
 
 const category: string[] = ['General', 'Medical'];
 
-function AnimalEvents({ events }: AnimalEventsProps) {
+function AnimalEvents({ events, animalId }: AnimalEventsProps) {
     const classes = useStyles();
     const [activeFilter, setActiveFilter] = useState<EventCategory>(EVENT_FILTER_ALL);
     const [activeSort, setActiveSort] = useState<EventSortingMode>(EventSortingMode.DESCENDING);
-
-    const [newEvent, setNewEvent] = useState<NewEvent>({
-        id: null,
-        type: '',
-        category: '',
-        expenses: null,
-        comments: '',
-        date: getYMDDateFromTS(`${Date.now()}`),
-    });
 
     const sortByDateComparator = useCallback(
         (event1: Event, event2: Event) => {
@@ -94,7 +84,7 @@ function AnimalEvents({ events }: AnimalEventsProps) {
         setOpen(true);
     };
 
-    const handleClose = (value: string) => {
+    const handleClose = () => {
         setOpen(false);
     };
 
@@ -102,18 +92,9 @@ function AnimalEvents({ events }: AnimalEventsProps) {
         setOpen(false);
     };
 
-    const onCreate = (object: NewEvent) => {
+    const createEvent = (event: Event) => {
         setOpen(false);
-        console.log('object ', object);
-    };
-
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const { name, value } = e.target;
-        setNewEvent({
-            ...newEvent,
-            id: 123456,
-            [name]: value,
-        });
+        setFilteredEvents([...filteredEvents, event]);
     };
 
     return (
@@ -129,11 +110,10 @@ function AnimalEvents({ events }: AnimalEventsProps) {
                     open={open}
                     onClose={handleClose}
                     onCancel={onCancel}
-                    onCreate={eventObj => onCreate(eventObj)}
+                    onCreate={newEvent => createEvent(newEvent)}
                     typeOptions={typeOptions}
                     categories={category}
-                    newEvent={newEvent}
-                    handleChange={handleChange}
+                    animalId={animalId}
                 />
             </Box>
             <AnimalEventFilters activeFilter={activeFilter} onChange={handleFilterChange} />
@@ -147,4 +127,5 @@ export default AnimalEvents;
 
 interface AnimalEventsProps {
     events: Event[];
+    animalId: number;
 }

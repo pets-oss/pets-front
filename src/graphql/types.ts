@@ -673,12 +673,3 @@ export type UserInput = {
     /** User email (255 characters max) */
     email?: Maybe<Scalars['String']>;
 };
-
-export type NewEvent = {
-    id: number | null;
-    type: string | number;
-    category: string;
-    expenses: number | null;
-    comments: string;
-    date: string;
-};
