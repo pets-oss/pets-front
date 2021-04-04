@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Box, Button, makeStyles, Typography } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
@@ -37,7 +37,7 @@ const typeOptions: string[] = [
 
 const category: string[] = ['General', 'Medical'];
 
-export default function AnimalEvents({ events }: AnimalEventsProps) {
+function AnimalEvents({ events }: AnimalEventsProps) {
     const classes = useStyles();
     const [activeFilter, setActiveFilter] = useState<EventCategory>(EVENT_FILTER_ALL);
     const [activeSort, setActiveSort] = useState<EventSortingMode>(EventSortingMode.DESCENDING);
@@ -58,7 +58,11 @@ export default function AnimalEvents({ events }: AnimalEventsProps) {
         [activeSort]
     );
 
-    const [filteredEvents, setFilteredEvents] = useState(events.sort(sortByDateComparator));
+    const memoizedEvents = useMemo(() => {
+        return [...events].sort(sortByDateComparator);
+    }, [events, sortByDateComparator]);
+
+    const [filteredEvents, setFilteredEvents] = useState(memoizedEvents);
 
     const handleFilterChange = (value: EventCategory) => {
         setActiveFilter(value);
@@ -70,11 +74,9 @@ export default function AnimalEvents({ events }: AnimalEventsProps) {
 
     useEffect(() => {
         setFilteredEvents(
-            events
-                .filter(event => event.category === activeFilter || activeFilter === EVENT_FILTER_ALL)
-                .sort(sortByDateComparator)
+            memoizedEvents.filter(event => event.category === activeFilter || activeFilter === EVENT_FILTER_ALL)
         );
-    }, [activeFilter, events, sortByDateComparator]);
+    }, [activeFilter, memoizedEvents]);
 
     const [open, setOpen] = React.useState(false);
 
@@ -118,6 +120,8 @@ export default function AnimalEvents({ events }: AnimalEventsProps) {
         </Box>
     );
 }
+
+export default AnimalEvents;
 
 interface AnimalEventsProps {
     events: Event[];
