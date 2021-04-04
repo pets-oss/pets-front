@@ -2,7 +2,8 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Box, Button, makeStyles, Typography } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
-import { Event } from '../../../graphql/types';
+import { Event, NewEvent } from '../../../graphql/types';
+import { getYMDDateFromTS } from '../../../utils/dateFormatters';
 import AnimalEventFilters, { EVENT_FILTER_ALL, EventCategory } from './AnimalEventFilters';
 import AnimalEventList from './AnimalEventList';
 import AnimalEventSorting, { EventSortingMode } from './AnimalEventSorting';
@@ -41,6 +42,15 @@ function AnimalEvents({ events }: AnimalEventsProps) {
     const classes = useStyles();
     const [activeFilter, setActiveFilter] = useState<EventCategory>(EVENT_FILTER_ALL);
     const [activeSort, setActiveSort] = useState<EventSortingMode>(EventSortingMode.DESCENDING);
+
+    const [newEvent, setNewEvent] = useState<NewEvent>({
+        id: null,
+        type: '',
+        category: '',
+        expenses: null,
+        comments: '',
+        date: getYMDDateFromTS(`${Date.now()}`),
+    });
 
     const sortByDateComparator = useCallback(
         (event1: Event, event2: Event) => {
@@ -92,8 +102,18 @@ function AnimalEvents({ events }: AnimalEventsProps) {
         setOpen(false);
     };
 
-    const onCreate = () => {
+    const onCreate = (object: NewEvent) => {
         setOpen(false);
+        console.log('object ', object);
+    };
+
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const { name, value } = e.target;
+        setNewEvent({
+            ...newEvent,
+            id: 123456,
+            [name]: value,
+        });
     };
 
     return (
@@ -109,9 +129,11 @@ function AnimalEvents({ events }: AnimalEventsProps) {
                     open={open}
                     onClose={handleClose}
                     onCancel={onCancel}
-                    onCreate={onCreate}
+                    onCreate={eventObj => onCreate(eventObj)}
                     typeOptions={typeOptions}
-                    category={category}
+                    categories={category}
+                    newEvent={newEvent}
+                    handleChange={handleChange}
                 />
             </Box>
             <AnimalEventFilters activeFilter={activeFilter} onChange={handleFilterChange} />
