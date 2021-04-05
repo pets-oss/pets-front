@@ -26,9 +26,9 @@ const useStyles = makeStyles((theme: Theme) => ({
 }));
 
 export type NewEvent = {
-    id: number | null;
+    id: number;
     category: string;
-    expenses: number | null;
+    expenses: number;
     comments: string;
     dateTime: string;
     type: string;
@@ -48,10 +48,10 @@ function NewEventDialog({ open, onClose, onCancel, onCreate, typeOptions, catego
     const classes = useStyles();
 
     const [newEvent, setNewEvent] = React.useState<NewEvent>({
-        id: null,
+        id: animalId,
         type: '',
         category: '',
-        expenses: null,
+        expenses: 0,
         comments: '',
         dateTime: `${Date.now()}`,
     });
@@ -67,8 +67,19 @@ function NewEventDialog({ open, onClose, onCancel, onCreate, typeOptions, catego
         });
     };
 
+    const resetState = () => {
+        setNewEvent({
+            id: 0,
+            type: '',
+            category: '',
+            expenses: 0,
+            comments: '',
+            dateTime: `${Date.now()}`,
+        });
+    };
+
     const handleCreate = () => {
-        const typeObj: EventType = {
+        const eventTypeObj: EventType = {
             type,
             id: typeOptions.indexOf(type),
         };
@@ -76,13 +87,14 @@ function NewEventDialog({ open, onClose, onCancel, onCreate, typeOptions, catego
             onCreate({
                 id: 12345,
                 animal: animalId,
-                type: typeObj,
+                type: eventTypeObj,
                 expenses,
                 dateTime,
                 comments,
                 category,
             });
         }
+        resetState();
     };
 
     return (
@@ -138,7 +150,7 @@ function NewEventDialog({ open, onClose, onCancel, onCreate, typeOptions, catego
                     type="number"
                     fullWidth
                     variant="outlined"
-                    value={parseFloat(`${expenses}`)}
+                    value={expenses}
                     onChange={handleChange}
                 />
             </FormControl>
