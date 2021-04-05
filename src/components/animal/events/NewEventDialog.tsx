@@ -12,7 +12,6 @@ import {
     Theme,
 } from '@material-ui/core';
 import Dialog from '@material-ui/core/Dialog';
-import { EventType } from '../../../graphql/types';
 import { getYMDDateFromTS } from '../../../utils/dateFormatters';
 
 const useStyles = makeStyles((theme: Theme) => ({
@@ -79,15 +78,11 @@ function NewEventDialog({ open, onClose, onCancel, onCreate, typeOptions, catego
     };
 
     const handleCreate = () => {
-        const eventTypeObj: EventType = {
-            type,
-            id: typeOptions.indexOf(type),
-        };
         if (type && category && expenses && comments && dateTime) {
             onCreate({
                 id: 12345,
                 animal: animalId,
-                type: eventTypeObj,
+                type: { id: typeOptions.indexOf(type), type },
                 expenses,
                 dateTime,
                 comments,
