@@ -1,4 +1,4 @@
-import { Animal } from '../graphql/types';
+import { Animal, Event } from '../graphql/types';
 import { getAnimalAge, getAnimalWeight } from './animal';
 
 export const getAnimalDetails = (animal: Animal) => {
@@ -26,3 +26,18 @@ export const getAnimalDetails = (animal: Animal) => {
 
     return [birthDay, ...otherDetails, weight];
 };
+
+export const getCardDetails = (event: Event) => [
+    {
+        title: 'Expenses',
+        value: event.expenses || '-',
+    },
+    {
+        title: 'Comments',
+        value: event.comments || '-',
+    },
+    {
+        title: 'Author',
+        value: '-',
+    },
+];

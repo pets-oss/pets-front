@@ -8,8 +8,8 @@ export default function ParamTable({ details }: ParamTableProps) {
     return (
         <>
             {details &&
-                details.map((item: any) => (
-                    <Box display="flex" justifyContent="space-between" className={classes.root} p={1}>
+                details.map((item, index) => (
+                    <Box key={index} display="flex" justifyContent="space-between" className={classes.root} p={1}>
                         <Typography className={classes.title} color="textPrimary">
                             {item.title}
                         </Typography>
@@ -25,14 +25,22 @@ export default function ParamTable({ details }: ParamTableProps) {
 const useStyles = makeStyles(theme => ({
     root: {
         borderBottom: `1px solid ${theme.palette.grey['400']}`,
+        flexDirection: 'column',
+        [theme.breakpoints.up('sm')]: {
+            flexDirection: 'row',
+        },
     },
     title: {
         flex: 1,
         fontWeight: theme.typography.fontWeightBold,
     },
     value: {
-        flex: 3,
-        textAlign: 'right',
+        flex: 1,
+        textAlign: 'left',
+        [theme.breakpoints.up('sm')]: {
+            flex: 3,
+            textAlign: 'right',
+        },
     },
 }));
 
