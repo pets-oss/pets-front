@@ -13,65 +13,38 @@ import {
     TextField,
     Typography,
 } from '@material-ui/core';
-import AddIcon from '@material-ui/icons/Add';
 import { Category, Event } from '../../../graphql/types';
 
-export default function NewEventDialog({
-    onCancel,
-    onCreate,
-    open,
-    setOpen,
-    typeOptions,
-    categories,
-}: NewEventDialogProps) {
-    const [typeValue, setTypeValue] = useState<string>('');
-    const [categoryValue, setCategoryValue] = useState<Category | ''>('');
-    const [expensesValue, setExpensesValue] = useState<number | null>(null);
-    const [commentsValue, setCommentsValue] = useState<string>('');
-    const [dateValue, setDateValue] = useState<string>('');
-
-    const handleEventDialogOpen = () => {
-        setOpen(true);
+export default function NewEventDialog({ onCancel, onCreate, open, typeOptions, categories }: NewEventDialogProps) {
+    const initialInputState = {
+        type: '',
+        category: undefined,
+        expenses: undefined,
+        comments: '',
+        date: '',
     };
+    const [inputs, setInputs] = useState<InputTypes>(initialInputState);
 
-    const handleTypeChange = (event: React.ChangeEvent<{ value: unknown }>) => {
-        setTypeValue(event.target.value as string);
-    };
-
-    const handleCategoryChange = (event: React.ChangeEvent<{ value: unknown }>) => {
-        setCategoryValue(event.target.value as Category);
-    };
-
-    const handleExpensesChange = (event: React.ChangeEvent<{ value: unknown }>) => {
-        setExpensesValue(event.target.value as number);
-    };
-
-    const handleCommentsChange = (event: React.ChangeEvent<{ value: unknown }>) => {
-        setCommentsValue(event.target.value as string);
-    };
-
-    const handleDateChange = (event: React.ChangeEvent<{ value: unknown }>) => {
-        setDateValue(event.target.value as string);
+    const handleInputChange = (e: any) => {
+        setInputs(prevInputs => ({ ...prevInputs, [e.target.name]: e.target.value }));
     };
 
     const resetState = () => {
-        setTypeValue('');
-        setCategoryValue('');
-        setExpensesValue(null);
-        setCommentsValue('');
-        setDateValue('');
+        setInputs(initialInputState);
     };
 
     const handleCreate = () => {
-        if (typeValue && expensesValue && dateValue && commentsValue && categoryValue) {
+        const { type, expenses, category, date, comments } = inputs;
+
+        if (type && expenses && date && comments && category) {
             onCreate({
                 id: 123456,
                 animal: 123456,
-                type: { id: 3, type: typeValue },
-                expenses: expensesValue,
-                dateTime: Date.parse(dateValue).toString(),
-                comments: commentsValue.trim(),
-                category: categoryValue,
+                type: { id: 3, type },
+                expenses,
+                dateTime: Date.parse(date).toString(),
+                comments: comments.trim(),
+                category,
             });
             resetState();
         }
@@ -84,10 +57,6 @@ export default function NewEventDialog({
 
     return (
         <>
-            <Button color="primary" variant="contained" startIcon={<AddIcon />} onClick={handleEventDialogOpen}>
-                Create
-            </Button>
-
             <Dialog open={open} onClose={onCancel} aria-labelledby="form-dialog-title">
                 <DialogTitle id="form-dialog-title">
                     <Typography variant="h6">Create new event</Typography>
@@ -95,14 +64,14 @@ export default function NewEventDialog({
 
                 <DialogContent>
                     <FormControl variant="outlined" color="secondary" fullWidth margin="dense">
-                        <InputLabel htmlFor="new-event-type">Type</InputLabel>
+                        <InputLabel htmlFor="type">Type</InputLabel>
                         <Select
-                            value={typeValue}
-                            onChange={handleTypeChange}
+                            value={inputs.type}
+                            onChange={handleInputChange}
                             label="Type"
                             inputProps={{
-                                name: 'new-event-type',
-                                id: 'new-event-type',
+                                name: 'type',
+                                id: 'type',
                             }}
                         >
                             {typeOptions.map(option => (
@@ -111,14 +80,14 @@ export default function NewEventDialog({
                         </Select>
                     </FormControl>
                     <FormControl variant="outlined" color="secondary" fullWidth margin="dense">
-                        <InputLabel htmlFor="new-event-category">Category</InputLabel>
+                        <InputLabel htmlFor="category">Category</InputLabel>
                         <Select
-                            value={categoryValue}
-                            onChange={handleCategoryChange}
+                            value={inputs.category}
+                            onChange={handleInputChange}
                             label="Category"
                             inputProps={{
-                                name: 'new-event-category',
-                                id: 'new-event-category',
+                                name: 'category',
+                                id: 'category',
                             }}
                         >
                             {categories.map(category => (
@@ -127,9 +96,10 @@ export default function NewEventDialog({
                         </Select>
                     </FormControl>
                     <TextField
-                        id="new-event-expenses"
-                        value={expensesValue}
-                        onChange={handleExpensesChange}
+                        id="expenses"
+                        name="expenses"
+                        value={inputs.expenses}
+                        onChange={handleInputChange}
                         label="Expenses $"
                         type="number"
                         margin="dense"
@@ -138,9 +108,10 @@ export default function NewEventDialog({
                         color="secondary"
                     />
                     <TextField
-                        id="new-event-comments"
-                        value={commentsValue}
-                        onChange={handleCommentsChange}
+                        id="comments"
+                        name="comments"
+                        value={inputs.comments}
+                        onChange={handleInputChange}
                         label="Comments..."
                         multiline
                         rows={4}
@@ -150,11 +121,12 @@ export default function NewEventDialog({
                         color="secondary"
                     />
                     <TextField
-                        id="new-event-date"
-                        value={dateValue}
-                        onChange={handleDateChange}
+                        id="date"
+                        name="date"
+                        value={inputs.date}
+                        onChange={handleInputChange}
                         label="Date"
-                        type="datetime-local"
+                        type="date"
                         InputLabelProps={{
                             shrink: true,
                         }}
@@ -178,11 +150,18 @@ export default function NewEventDialog({
     );
 }
 
+interface InputTypes {
+    type: string;
+    category: Category | undefined;
+    expenses: number | undefined;
+    comments: string;
+    date: string;
+}
+
 interface NewEventDialogProps {
     onCancel: () => void;
     onCreate: (newEvent: Event) => void;
     open: boolean;
-    setOpen: (open: boolean) => void;
     typeOptions: string[];
     categories: string[];
 }

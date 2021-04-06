@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 
-import { Box, makeStyles, Typography } from '@material-ui/core';
+import { Box, Button, makeStyles, Typography } from '@material-ui/core';
+import AddIcon from '@material-ui/icons/Add';
 import { Event } from '../../../graphql/types';
 import AnimalEventFilters, { EVENT_FILTER_ALL, EventCategory } from './AnimalEventFilters';
 import AnimalEventList from './AnimalEventList';
@@ -86,24 +87,35 @@ export default function AnimalEvents({ events }: AnimalEventsProps) {
     }, [activeFilter, events, sortByDateComparator]);
 
     return (
-        <Box className={classes.root}>
-            <Box mb={2} display="flex" justifyContent="space-between" alignItems="center">
-                <Typography variant="h5" component="h3">
-                    Events
-                </Typography>
-                <NewEventDialog
-                    open={eventDialogOpen}
-                    setOpen={setEventDialogOpen}
-                    onCancel={handleEventClose}
-                    onCreate={handleEventCreate}
-                    typeOptions={typeOptions}
-                    categories={category}
-                />
+        <>
+            <Box className={classes.root}>
+                <Box mb={2} display="flex" justifyContent="space-between" alignItems="center">
+                    <Typography variant="h5" component="h3">
+                        Events
+                    </Typography>
+                    <Button
+                        color="primary"
+                        variant="contained"
+                        startIcon={<AddIcon />}
+                        onClick={() => {
+                            setEventDialogOpen(true);
+                        }}
+                    >
+                        Create
+                    </Button>
+                </Box>
+                <AnimalEventFilters activeFilter={activeFilter} onChange={handleFilterChange} />
+                <AnimalEventSorting sortingMode={activeSort} onChange={handleSortChange} />
+                <AnimalEventList events={filteredEvents} />
             </Box>
-            <AnimalEventFilters activeFilter={activeFilter} onChange={handleFilterChange} />
-            <AnimalEventSorting sortingMode={activeSort} onChange={handleSortChange} />
-            <AnimalEventList events={filteredEvents} />
-        </Box>
+            <NewEventDialog
+                open={eventDialogOpen}
+                onCancel={handleEventClose}
+                onCreate={handleEventCreate}
+                typeOptions={typeOptions}
+                categories={category}
+            />
+        </>
     );
 }
 
