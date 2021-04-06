@@ -6,6 +6,7 @@ import { Grid } from '@material-ui/core';
 import Divider from '@material-ui/core/Divider';
 import useTheme from '@material-ui/core/styles/useTheme';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
+import { Skeleton } from '@material-ui/lab';
 import AnimalsListContainer from '../components/animal/AnimalsListContainer';
 import CreateButton from '../components/animal/create/CreateButton';
 import AnimalFiltersChips from '../components/animal/filters/AnimalFilterChips';
@@ -82,7 +83,9 @@ function AnimalsPage() {
                 />
             }
         >
-            <AnimalsListContainer viewType={viewType} loading={loading} error={error} animals={data?.animals} />
+            {loading && <Skeleton animation="wave" variant="rect" height={500} />}
+            {!loading && error && <p>Error!</p>}
+            {!loading && !error && <AnimalsListContainer viewType={viewType} animals={data?.animals} />}
         </Page>
     );
 }
