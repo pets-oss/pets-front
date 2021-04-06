@@ -10,6 +10,7 @@ import { Skeleton } from '@material-ui/lab';
 import { Animal, Event } from '../../graphql/types';
 import { getAnimalAge, getAnimalWeight } from '../../utils/animal';
 import LayoutMultiColRow from '../layout/LayoutMultiColRow';
+import ParamTable from '../ParamTable';
 import AnimalDetailsHeader from './details/AnimalDetailsHeader';
 import AnimalEvents from './events/AnimalEvents';
 
@@ -56,6 +57,12 @@ function AnimalDetails({ onLoad }: AnimalDetailsProps) {
     const { animal, events } = data;
     const birthDay = animal.details?.birthDate ? getAnimalAge(animal.details.birthDate) : '';
     const animalEvents = events?.[0]?.animalAll ?? [];
+    const list = [
+        {
+            title: 'Age',
+            value: birthDay,
+        },
+    ];
 
     return (
         <div className={classes.root}>
@@ -101,6 +108,7 @@ function AnimalDetails({ onLoad }: AnimalDetailsProps) {
                             </Box>
                         </>
                     )}
+                    <ParamTable data={list} />
                     <Box mt={1}>
                         <Typography variant="body1">Referencing Animal ID:{id}</Typography>
                     </Box>
