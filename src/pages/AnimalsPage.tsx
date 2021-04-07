@@ -84,6 +84,7 @@ function AnimalsPage() {
             }
         >
             {loading && <Skeleton animation="wave" variant="rect" height={500} />}
+            {/* TODO: replace with proper UI elements */}
             {!loading && error && <p>Error!</p>}
             {!loading && !error && <AnimalsListContainer viewType={viewType} animals={data?.animals} />}
         </Page>
