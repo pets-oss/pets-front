@@ -2,17 +2,6 @@ import React from 'react';
 
 import { Box, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableContainer from '@material-ui/core/TableContainer';
-import TableRow from '@material-ui/core/TableRow';
-
-const useStyles = makeStyles({
-    table: {
-        minWidth: '650',
-    },
-});
 
 type ParamTableProps = {
     items: ParamsTableRow[];
@@ -23,34 +12,31 @@ type ParamsTableRow = {
     value: string;
 };
 
-export default function Paramstable({ items }: ParamTableProps) {
+export default function ParamsTable({ items }: ParamTableProps) {
     const classes = useStyles();
     return (
-        <>
-            <TableContainer>
-                <Table className={classes.table} size="small" aria-label="a dense table">
-                    <TableBody>
-                        {items.map((item: ParamsTableRow, index: number) => (
-                            <TableRow hover key={index}>
-                                <TableCell scope="row">
-                                    <Typography component="h1">
-                                        <Box fontWeight="fontWeightBold" m={1}>
-                                            {item.label}
-                                        </Box>
-                                    </Typography>
-                                </TableCell>
-                                <TableCell scope="row" align="right">
-                                    <Typography component="h5">
-                                        <Box fontWeight="fontWeightRegular" m={1}>
-                                            {item.value}
-                                        </Box>
-                                    </Typography>
-                                </TableCell>
-                            </TableRow>
-                        ))}
-                    </TableBody>
-                </Table>
-            </TableContainer>
-        </>
+        <Typography>
+            {items.map((item: ParamsTableRow, index: number) => (
+                <div style={{ width: '100%' }}>
+                    <Box display="flex" justifyContent="space-between" key={index} className={classes.MuiBoxRoot129}>
+                        <Box p={1} fontWeight="fontWeightBold">
+                            {item.label}
+                        </Box>
+                        <Box p={1} className={classes.boxColor}>
+                            {item.value || '-'}
+                        </Box>
+                    </Box>
+                </div>
+            ))}
+        </Typography>
     );
 }
+
+const useStyles = makeStyles(theme => ({
+    MuiBoxRoot129: {
+        borderBottom: `1px ${theme.palette.tertiary.dark} solid`,
+    },
+    boxColor: {
+        color: theme.palette.tertiary.dark,
+    },
+}));
