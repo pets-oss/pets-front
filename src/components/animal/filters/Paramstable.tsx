@@ -1,19 +1,11 @@
 import React from 'react';
 
 import { Box, Typography } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
-
-type ParamTableProps = {
-    items: ParamsTableRow[];
-};
-
-type ParamsTableRow = {
-    label: string;
-    value: string;
-};
+import { makeStyles, Theme } from '@material-ui/core/styles';
 
 export default function ParamsTable({ items }: ParamTableProps) {
     const classes = useStyles();
+
     return (
         <Typography>
             {items.map((item: ParamsTableRow, index: number) => (
@@ -32,7 +24,7 @@ export default function ParamsTable({ items }: ParamTableProps) {
     );
 }
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme: Theme) => ({
     MuiBoxRoot129: {
         borderBottom: `1px ${theme.palette.tertiary.dark} solid`,
     },
@@ -40,3 +32,12 @@ const useStyles = makeStyles(theme => ({
         color: theme.palette.tertiary.dark,
     },
 }));
+
+interface ParamTableProps {
+    items: ParamsTableRow[];
+}
+
+export interface ParamsTableRow {
+    value?: string;
+    label?: string | number;
+}
