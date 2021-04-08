@@ -9,8 +9,8 @@ export default function ParamsTable({ items }: ParamTableProps) {
     return (
         <Typography>
             {items.map((item: ParamsTableRow, index: number) => (
-                <div style={{ width: '100%' }}>
-                    <Box display="flex" justifyContent="space-between" key={index} className={classes.MuiBoxRoot129}>
+                <Typography>
+                    <Box display="flex" justifyContent="space-between" key={index} className={classes.row}>
                         <Box p={1} fontWeight="fontWeightBold">
                             {item.label}
                         </Box>
@@ -18,14 +18,14 @@ export default function ParamsTable({ items }: ParamTableProps) {
                             {item.value || '-'}
                         </Box>
                     </Box>
-                </div>
+                </Typography>
             ))}
         </Typography>
     );
 }
 
 const useStyles = makeStyles((theme: Theme) => ({
-    MuiBoxRoot129: {
+    row: {
         borderBottom: `1px ${theme.palette.tertiary.dark} solid`,
     },
     boxColor: {
