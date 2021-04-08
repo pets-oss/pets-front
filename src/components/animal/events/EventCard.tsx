@@ -16,7 +16,7 @@ export default function EventCard({ event }: AnimalCardProps) {
     const header = `Event type - ${eventName}`;
     const subHeader = `${event.dateTime ? getFormattedDate(event.dateTime) : '-'} / Author`;
 
-    const animalDeclarations: ParamsTableRow[] = [
+    const animalCharacteristics: ParamsTableRow[] = [
         { label: 'Expenses', value: event.expenses?.toString() },
         { label: 'Comments', value: event.comments?.toString() },
         { label: 'Author', value: '-' },
@@ -45,7 +45,7 @@ export default function EventCard({ event }: AnimalCardProps) {
             />
             <Collapse in={expanded} timeout="auto" unmountOnExit>
                 <CardContent className={classes.content}>
-                    <ParamsTable items={animalDeclarations} />
+                    <ParamsTable items={animalCharacteristics} />
                 </CardContent>
             </Collapse>
         </Card>

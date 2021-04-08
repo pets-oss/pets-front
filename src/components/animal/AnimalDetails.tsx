@@ -60,7 +60,7 @@ function AnimalDetails({ onLoad }: AnimalDetailsProps) {
     const weight = animal.details?.weight ? getAnimalWeight(animal.details.weight) : '';
     const color = animal.details?.color?.value ?? '';
 
-    const animalDeclarations = [
+    const animalCharacteristics = [
         { label: 'Age', value: birthDay },
         { label: 'Weight', value: weight },
         { label: 'Color', value: color },
@@ -93,7 +93,7 @@ function AnimalDetails({ onLoad }: AnimalDetailsProps) {
                                     </Typography>
                                 )}
                             </Box>
-                            <ParamsTable items={animalDeclarations} />
+                            <ParamsTable items={animalCharacteristics} />
                         </>
                     )}
                 </>
