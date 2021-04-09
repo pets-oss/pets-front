@@ -1,5 +1,6 @@
 import clsx from 'clsx';
 import { loader } from 'graphql.macro';
+import MUIRichTextEditor from 'mui-rte';
 import React, { memo, useEffect } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 import { useHistory } from 'react-router-dom';
@@ -7,6 +8,7 @@ import { useHistory } from 'react-router-dom';
 import { Grid } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
 import Divider from '@material-ui/core/Divider';
+import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles';
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import { Species } from '../../../graphql/types';
 import DynamicSelector from '../../form/DynamicSelector';
@@ -17,6 +19,10 @@ const GET_GENDERS = loader('../../../graphql/queries/genders.graphql');
 const GET_BREEDS = loader('../../../graphql/queries/breeds.graphql');
 const GET_COLORS = loader('../../../graphql/queries/colors.graphql');
 const GET_STATUSES = loader('../../../graphql/queries/statuses.graphql');
+
+const save = data => {
+    console.log(data.getData());
+};
 
 function DetailsStep({ onNext }: DetailsStepProps) {
     const classes = useStyles();
@@ -94,14 +100,22 @@ function DetailsStep({ onNext }: DetailsStepProps) {
                     <TextInput name="imageUrl" label="Image URL" id="imageUrl" fullWidth />
                 </Grid>
                 <Grid item xs={12} className={classes.relative}>
-                    <TextInput
-                        name="description"
-                        label="Description"
-                        id="description"
-                        fullWidth
-                        showLettersCount
-                        maxLength={200}
-                    />
+                    <MuiThemeProvider theme={defaultTheme}>
+                        <MUIRichTextEditor
+                            label="Type here your description"
+                            onSave={save}
+                            inlineToolbar
+                            maxLength={200}
+                        />
+                    </MuiThemeProvider>
+                    {/* <TextInput
+                            name="description"
+                            label="Description"
+                            id="description"
+                            fullWidth
+                            showLettersCount
+                            maxLength={200}
+                        /> */}
                 </Grid>
                 <Grid item xs={12} sm={6}>
                     <DynamicSelector
@@ -151,7 +165,35 @@ const useStyles = makeStyles(() => ({
     fullWidth: {
         width: '100%',
     },
+    richTextEditorContainer: {
+        position: 'relative',
+        height: '100px',
+        border: '1px #757575 solid',
+    },
 }));
+
+const defaultTheme = createMuiTheme();
+
+Object.assign(defaultTheme, {
+    overrides: {
+        MUIRichTextEditor: {
+            root: {
+                width: '100%',
+                border: '1px #c7c2be solid',
+                // '&:hover': {
+                //     border: 'rgba (0, 0, 0, 0.87)',
+                // },
+                // '&:focus': {
+                //     border: '#4e2c1a',
+                // },
+                borderRadius: '4px',
+            },
+            editor: {
+                height: '300px',
+            },
+        },
+    },
+});
 
 export default memo(DetailsStep);
 
