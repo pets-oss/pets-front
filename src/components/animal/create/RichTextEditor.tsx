@@ -20,7 +20,7 @@ export default function RichTextEditor({ name }: RichTextEditorProps) {
                             defaultValue={props.value}
                             label="Type here your description"
                             inlineToolbar
-                            maxLength={400}
+                            maxLength={200}
                             controls={['bold', 'italic', 'underline', 'strikethrough', 'highlight', 'clear', 'save']}
                             onFocus={() => setFocused(true)}
                             onBlur={() => setFocused(false)}
@@ -51,7 +51,7 @@ Object.assign(defaultTheme, {
             },
             editor: {
                 height: '150px',
-                wordBreak: 'break-all',
+                wordBreak: 'break-word',
             },
         },
     },
@@ -70,7 +70,7 @@ Object.assign(focusedTheme, {
             },
             editor: {
                 height: '150px',
-                wordBreak: 'break-all',
+                wordBreak: 'break-word',
             },
         },
     },
