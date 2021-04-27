@@ -3,7 +3,7 @@ import React from 'react';
 
 import { useQuery } from '@apollo/client';
 import { Card, CardActions, CardContent, Typography } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles, Theme } from '@material-ui/core/styles';
 import { Skeleton } from '@material-ui/lab';
 import Page from './Page';
 
@@ -42,8 +42,8 @@ export default function OrganizationTasksPage() {
                             </Typography>
                         </CardActions>
                     ) : (
-                        <CardActions className={classes.NotDone}>
-                            <Typography align="center" className={classes.NotDone}>
+                        <CardActions className={classes.notDone}>
+                            <Typography align="center" className={classes.notDone}>
                                 Task to be taken
                             </Typography>
                         </CardActions>
@@ -54,14 +54,14 @@ export default function OrganizationTasksPage() {
     );
 }
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme: Theme) => ({
     isDone: {
-        backgroundColor: 'rgb(99, 206, 98)',
+        backgroundColor: theme.palette.success.light,
         width: '100%',
         padding: '10px',
     },
-    NotDone: {
-        backgroundColor: 'rgb(249, 185, 207)',
+    notDone: {
+        backgroundColor: theme.palette.error.light,
         width: '100%',
         padding: '10px',
     },
