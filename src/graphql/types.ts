@@ -9,6 +9,8 @@ export type Scalars = {
     Boolean: boolean;
     Int: number;
     Float: number;
+    /** The `Upload` scalar type represents a file upload. */
+    Upload: any;
 };
 
 export type Query = {
@@ -38,6 +40,14 @@ export type Query = {
      */
     breeds?: Maybe<Array<Maybe<Breed>>>;
     /**
+     * Get all chipCompanies.
+     *
+     * Examples:
+     *
+     * chipCompanies(language: "lt")
+     */
+    chipCompanies?: Maybe<Array<Maybe<ChipCompany>>>;
+    /**
      * Get all colors.
      *
      * Examples:
@@ -53,6 +63,22 @@ export type Query = {
      */
     events?: Maybe<Array<Maybe<Events>>>;
     /**
+     * Get all former animal owners.
+     *
+     * Examples:
+     *
+     * formerAnimalOwners
+     */
+    formerAnimalOwners?: Maybe<Array<Maybe<FormerAnimalOwner>>>;
+    /**
+     * Get a former animal owner with a specific ID.
+     *
+     * Examples:
+     *
+     * formerAnimalOwner(id: 1)
+     */
+    formerAnimalOwner?: Maybe<FormerAnimalOwner>;
+    /**
      * Get all genders.
      *
      * Examples:
@@ -60,6 +86,7 @@ export type Query = {
      * genders(language: "lt")
      */
     genders?: Maybe<Array<Maybe<Gender>>>;
+    municipalities?: Maybe<Array<Maybe<Municipality>>>;
     /**
      * Lookup an organization.
      *
@@ -76,6 +103,8 @@ export type Query = {
      * organizations
      */
     organizations?: Maybe<Array<Maybe<Organization>>>;
+    organizationTasks?: Maybe<Array<Maybe<OrganizationTask>>>;
+    organizationTask?: Maybe<OrganizationTask>;
     _empty?: Maybe<Scalars['String']>;
     /**
      * Get all species.
@@ -115,8 +144,16 @@ export type QueryAnimalArgs = {
     id: Scalars['Int'];
 };
 
+export type QueryAnimalsArgs = {
+    ids?: Maybe<Array<Scalars['Int']>>;
+};
+
 export type QueryBreedsArgs = {
     species: Scalars['String'];
+    language: Scalars['String'];
+};
+
+export type QueryChipCompaniesArgs = {
     language: Scalars['String'];
 };
 
@@ -128,12 +165,20 @@ export type QueryEventsArgs = {
     language: Scalars['String'];
 };
 
+export type QueryFormerAnimalOwnerArgs = {
+    id: Scalars['Int'];
+};
+
 export type QueryGendersArgs = {
     language: Scalars['String'];
 };
 
 export type QueryOrganizationArgs = {
     id: Scalars['Int'];
+};
+
+export type QueryOrganizationTaskArgs = {
+    id?: Maybe<Scalars['Int']>;
 };
 
 export type QuerySpeciesArgs = {
@@ -273,8 +318,8 @@ export type CreateAnimalInput = {
     organization: Scalars['Int'];
     /** Status */
     status?: Maybe<AnimalStatus>;
-    /** Image URL */
-    image_url?: Maybe<Scalars['String']>;
+    /** Image File */
+    image?: Maybe<Scalars['Upload']>;
     /** Comments */
     comments?: Maybe<Scalars['String']>;
     /** AnimalRegistration */
@@ -294,8 +339,8 @@ export type UpdateAnimalInput = {
     organization?: Maybe<Scalars['Int']>;
     /** Status */
     status?: Maybe<AnimalStatus>;
-    /** Image URL */
-    image_url?: Maybe<Scalars['String']>;
+    /** Image File */
+    image?: Maybe<Scalars['Upload']>;
     /** Comments */
     comments?: Maybe<Scalars['String']>;
     /** AnimalRegistration */
@@ -481,6 +526,15 @@ export type Breed = {
     value: Scalars['String'];
 };
 
+/** Represents a chip company. */
+export type ChipCompany = {
+    __typename?: 'ChipCompany';
+    /** Chip company id */
+    id: Scalars['String'];
+    /** Chip company value */
+    value: Scalars['String'];
+};
+
 /** Represents a color. */
 export type Color = {
     __typename?: 'Color';
@@ -557,6 +611,19 @@ export type EventsAnimalMedicalArgs = {
     animalId: Scalars['Int'];
 };
 
+/** Represents a former animal owner. */
+export type FormerAnimalOwner = {
+    __typename?: 'FormerAnimalOwner';
+    /** Former animal owner ID, e.g., 1 */
+    id: Scalars['Int'];
+    /** Former animal owner name */
+    name: Scalars['String'];
+    /** Former animal owner surname */
+    surname?: Maybe<Scalars['String']>;
+    /** Former animal owner phone number */
+    phone?: Maybe<Scalars['String']>;
+};
+
 /** Represents a gender. */
 export type Gender = {
     __typename?: 'Gender';
@@ -564,6 +631,17 @@ export type Gender = {
     id: Scalars['String'];
     /** Gender name */
     value: Scalars['String'];
+};
+
+export type Municipality = {
+    __typename?: 'municipality';
+    id: Scalars['Int'];
+    name: Scalars['String'];
+};
+
+export type Subscription = {
+    __typename?: 'Subscription';
+    organizationCreated?: Maybe<Organization>;
 };
 
 /** Represents an organization. */
@@ -613,6 +691,15 @@ export type UpdateOrganizationInput = {
     streetAddress?: Maybe<Scalars['String']>;
     /** Phone (64 characters max) */
     phone?: Maybe<Scalars['String']>;
+};
+
+export type OrganizationTask = {
+    __typename?: 'OrganizationTask';
+    id: Scalars['Int'];
+    title?: Maybe<Scalars['String']>;
+    description?: Maybe<Scalars['String']>;
+    organization: Scalars['Int'];
+    isDone?: Maybe<Scalars['Boolean']>;
 };
 
 /** Represents a breed. */
