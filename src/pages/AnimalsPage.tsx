@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-import { Grid, Grow } from '@material-ui/core';
+import { Fade, Grid } from '@material-ui/core';
 import Divider from '@material-ui/core/Divider';
 import useTheme from '@material-ui/core/styles/useTheme';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
@@ -56,7 +56,7 @@ function AnimalsPage() {
     };
 
     return (
-        <Grow in timeout={600}>
+        <Fade in timeout={600}>
             <div>
                 <Page
                     title="Animals List"
@@ -75,7 +75,7 @@ function AnimalsPage() {
                     <AnimalsListContainer viewType={viewType} />
                 </Page>
             </div>
-        </Grow>
+        </Fade>
     );
 }
 

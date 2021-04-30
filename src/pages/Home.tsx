@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Grow } from '@material-ui/core';
+import { Fade } from '@material-ui/core';
 import AppLogoHeader from '../components/layout/AppLogoHeader';
 import RecentAnimalsContainer from '../components/layout/RecentAnimalsContainer';
 import RecentEventsContainer from '../components/layout/RecentEventsContainer';
@@ -8,7 +8,7 @@ import Page from './Page';
 
 function Home() {
     return (
-        <Grow in timeout={800}>
+        <Fade in timeout={600}>
             <div>
                 <Page>
                     <AppLogoHeader />
@@ -16,7 +16,7 @@ function Home() {
                     <RecentEventsContainer />
                 </Page>
             </div>
-        </Grow>
+        </Fade>
     );
 }
 

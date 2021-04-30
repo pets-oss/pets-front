@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { useAuth0 } from '@auth0/auth0-react';
-import { Grow, makeStyles, Typography } from '@material-ui/core';
+import { Fade, makeStyles, Typography } from '@material-ui/core';
 import Page from './Page';
 
 const useStyles = makeStyles(theme => ({
@@ -27,7 +27,7 @@ function UserProfile() {
     }
 
     return (
-        <Grow in timeout={800}>
+        <Fade in timeout={600}>
             <div>
                 <Page title="User preferences">
                     <div className={classes.infoContainer}>
@@ -40,7 +40,7 @@ function UserProfile() {
                     <Typography variant="body1">User and Organization details</Typography>
                 </Page>
             </div>
-        </Grow>
+        </Fade>
     );
 }
 

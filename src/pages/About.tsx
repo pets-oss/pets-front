@@ -1,11 +1,11 @@
 import React from 'react';
 
-import { Box, Grow, Typography } from '@material-ui/core';
+import { Box, Fade, Typography } from '@material-ui/core';
 import Page from './Page';
 
 function About() {
     return (
-        <Grow in timeout={800}>
+        <Fade in timeout={600}>
             <div>
                 <Page title="About this project">
                     <Typography variant="body1" paragraph>
@@ -32,7 +32,7 @@ function About() {
                     </Typography>
                 </Page>{' '}
             </div>
-        </Grow>
+        </Fade>
     );
 }
 

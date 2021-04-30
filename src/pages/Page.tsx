@@ -1,5 +1,6 @@
 import React, { ReactNode } from 'react';
 
+import { Fade } from '@material-ui/core';
 import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
@@ -19,23 +20,25 @@ export default function Page({ title, topSection, children, displayTitleOnMobile
     const matchesMobile = useMobile();
 
     return (
-        <Container component="main" className={classes.root} maxWidth="lg">
-            <Grid container spacing={4}>
-                {(!matchesMobile || displayTitleOnMobile) && (
-                    <Grid item xs={12}>
-                        {title && <PageTitle title={title} />}
+        <Fade in timeout={600}>
+            <Container component="main" className={classes.root} maxWidth="lg">
+                <Grid container spacing={4}>
+                    {(!matchesMobile || displayTitleOnMobile) && (
+                        <Grid item xs={12}>
+                            {title && <PageTitle title={title} />}
+                        </Grid>
+                    )}
+                    {topSection && (
+                        <Grid item xs={12}>
+                            {topSection}
+                        </Grid>
+                    )}
+                    <Grid item xs={12} className={classes.content}>
+                        {children}
                     </Grid>
-                )}
-                {topSection && (
-                    <Grid item xs={12}>
-                        {topSection}
-                    </Grid>
-                )}
-                <Grid item xs={12} className={classes.content}>
-                    {children}
                 </Grid>
-            </Grid>
-        </Container>
+            </Container>
+        </Fade>
     );
 }
 

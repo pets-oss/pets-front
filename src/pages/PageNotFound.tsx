@@ -1,12 +1,12 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-import { Grow, Typography } from '@material-ui/core';
+import { Fade, Typography } from '@material-ui/core';
 import Page from './Page';
 
 function PageNotFound() {
     return (
-        <Grow in timeout={800}>
+        <Fade in timeout={600}>
             <div>
                 <Page>
                     <Typography variant="h3" component="h1">
@@ -17,7 +17,7 @@ function PageNotFound() {
                     </Typography>
                 </Page>
             </div>
-        </Grow>
+        </Fade>
     );
 }
 
