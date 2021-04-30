@@ -28,18 +28,16 @@ function UserProfile() {
 
     return (
         <Fade in timeout={600}>
-            <div>
-                <Page title="User preferences">
-                    <div className={classes.infoContainer}>
-                        <img alt="" src={user.picture} className={classes.avatar} />
-                        <Typography variant="h4" component="p">
-                            {user.name}
-                        </Typography>
-                        <Typography>{user.email}</Typography>
-                    </div>
-                    <Typography variant="body1">User and Organization details</Typography>
-                </Page>
-            </div>
+            <Page title="User preferences">
+                <div className={classes.infoContainer}>
+                    <img alt="" src={user.picture} className={classes.avatar} />
+                    <Typography variant="h4" component="p">
+                        {user.name}
+                    </Typography>
+                    <Typography>{user.email}</Typography>
+                </div>
+                <Typography variant="body1">User and Organization details</Typography>
+            </Page>
         </Fade>
     );
 }

@@ -57,24 +57,22 @@ function AnimalsPage() {
 
     return (
         <Fade in timeout={600}>
-            <div>
-                <Page
-                    title="Animals List"
-                    topSection={
-                        <TopSection
-                            viewType={viewType}
-                            onChange={handleViewChange}
-                            mobile={mobile}
-                            filters={filters}
-                            onFiltersClear={handleClearAllFilters}
-                            onFiltersApply={handleApplyFilters}
-                            onFilterRemove={handleRemoveFilter}
-                        />
-                    }
-                >
-                    <AnimalsListContainer viewType={viewType} />
-                </Page>
-            </div>
+            <Page
+                title="Animals List"
+                topSection={
+                    <TopSection
+                        viewType={viewType}
+                        onChange={handleViewChange}
+                        mobile={mobile}
+                        filters={filters}
+                        onFiltersClear={handleClearAllFilters}
+                        onFiltersApply={handleApplyFilters}
+                        onFilterRemove={handleRemoveFilter}
+                    />
+                }
+            >
+                <AnimalsListContainer viewType={viewType} />
+            </Page>
         </Fade>
     );
 }

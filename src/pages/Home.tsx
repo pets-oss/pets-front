@@ -9,13 +9,11 @@ import Page from './Page';
 function Home() {
     return (
         <Fade in timeout={600}>
-            <div>
-                <Page>
-                    <AppLogoHeader />
-                    <RecentAnimalsContainer />
-                    <RecentEventsContainer />
-                </Page>
-            </div>
+            <Page>
+                <AppLogoHeader />
+                <RecentAnimalsContainer />
+                <RecentEventsContainer />
+            </Page>
         </Fade>
     );
 }

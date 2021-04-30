@@ -10,11 +10,9 @@ import Page from './Page';
 function NewAnimalPage() {
     return (
         <Fade in timeout={600}>
-            <div>
-                <Page topSection={<TopSection />}>
-                    <AnimalForm />
-                </Page>
-            </div>
+            <Page topSection={<TopSection />}>
+                <AnimalForm />
+            </Page>
         </Fade>
     );
 }
