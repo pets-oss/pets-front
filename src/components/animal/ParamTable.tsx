@@ -9,7 +9,7 @@ export default function ParamTable({ details }: ParamTableProps) {
         <>
             {details &&
                 details.map((item, index) => (
-                    <Box key={index} display="flex" justifyContent="space-between" className={classes.root} p={1}>
+                    <Box key={index} display="flex" justifyContent="space-between" className={classes.item} p={1}>
                         <Typography className={classes.title} color="textPrimary">
                             {item.title}
                         </Typography>
@@ -23,7 +23,7 @@ export default function ParamTable({ details }: ParamTableProps) {
 }
 
 const useStyles = makeStyles(theme => ({
-    root: {
+    item: {
         borderBottom: `1px solid ${theme.palette.grey['400']}`,
         flexDirection: 'column',
         [theme.breakpoints.up('sm')]: {

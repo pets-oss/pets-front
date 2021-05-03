@@ -7,7 +7,7 @@ import LocalHospitalIcon from '@material-ui/icons/LocalHospital';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import { Event } from '../../../graphql/types';
 import { getFormattedDate } from '../../../utils/date';
-import { getCardDetails } from '../../../utils/paramTable';
+import { getEventDetails } from '../../../utils/paramTable';
 import ParamTable from '../ParamTable';
 
 export default function EventCard({ event }: AnimalCardProps) {
@@ -16,7 +16,7 @@ export default function EventCard({ event }: AnimalCardProps) {
     const eventName = event.type?.type || '';
     const header = `Event type - ${eventName}`;
     const subHeader = `${event.dateTime ? getFormattedDate(event.dateTime) : '-'} / Author`;
-    const cardDetails = getCardDetails(event);
+    const eventDetails = getEventDetails(event);
 
     return (
         <Card className={classes.root}>
@@ -41,7 +41,7 @@ export default function EventCard({ event }: AnimalCardProps) {
             />
             <Collapse in={expanded} timeout="auto" unmountOnExit>
                 <CardContent className={classes.content}>
-                    <ParamTable details={cardDetails} />
+                    <ParamTable details={eventDetails} />
                 </CardContent>
             </Collapse>
         </Card>
