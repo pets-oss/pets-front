@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Box } from '@material-ui/core';
+import { Box, Fade } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import AnimalForm from '../components/animal/create/AnimalForm';
@@ -9,9 +9,11 @@ import Page from './Page';
 
 function NewAnimalPage() {
     return (
-        <Page topSection={<TopSection />}>
-            <AnimalForm />
-        </Page>
+        <Fade in timeout={600}>
+            <Page topSection={<TopSection />}>
+                <AnimalForm />
+            </Page>
+        </Fade>
     );
 }
 

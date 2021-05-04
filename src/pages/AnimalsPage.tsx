@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-import { Grid } from '@material-ui/core';
+import { Fade, Grid } from '@material-ui/core';
 import Divider from '@material-ui/core/Divider';
 import useTheme from '@material-ui/core/styles/useTheme';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
@@ -56,22 +56,24 @@ function AnimalsPage() {
     };
 
     return (
-        <Page
-            title="Animals List"
-            topSection={
-                <TopSection
-                    viewType={viewType}
-                    onChange={handleViewChange}
-                    mobile={mobile}
-                    filters={filters}
-                    onFiltersClear={handleClearAllFilters}
-                    onFiltersApply={handleApplyFilters}
-                    onFilterRemove={handleRemoveFilter}
-                />
-            }
-        >
-            <AnimalsListContainer viewType={viewType} />
-        </Page>
+        <Fade in timeout={600}>
+            <Page
+                title="Animals List"
+                topSection={
+                    <TopSection
+                        viewType={viewType}
+                        onChange={handleViewChange}
+                        mobile={mobile}
+                        filters={filters}
+                        onFiltersClear={handleClearAllFilters}
+                        onFiltersApply={handleApplyFilters}
+                        onFilterRemove={handleRemoveFilter}
+                    />
+                }
+            >
+                <AnimalsListContainer viewType={viewType} />
+            </Page>
+        </Fade>
     );
 }
 
