@@ -1,8 +1,6 @@
 name: 'integrate'
-on:
-    pull_request:
-        branches-ignore:
-            - main
+on: pull_request
+
 
 jobs:
     test_pull_request:
