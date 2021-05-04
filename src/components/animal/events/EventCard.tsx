@@ -7,7 +7,7 @@ import LocalHospitalIcon from '@material-ui/icons/LocalHospital';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import { Event } from '../../../graphql/types';
 import { getFormattedDate } from '../../../utils/date';
-import { getEventDetails } from '../../../utils/paramTable';
+import { getEventDetails } from '../../../utils/events';
 import ParamTable from '../ParamTable';
 
 export default function EventCard({ event }: AnimalCardProps) {

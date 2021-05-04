@@ -8,7 +8,7 @@ import { Box, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { Skeleton } from '@material-ui/lab';
 import { Animal, Event } from '../../graphql/types';
-import { getAnimalDetails } from '../../utils/animalDetails';
+import { getAnimalDetails } from '../../utils/animal';
 import LayoutMultiColRow from '../layout/LayoutMultiColRow';
 import AnimalDetailsHeader from './details/AnimalDetailsHeader';
 import AnimalEvents from './events/AnimalEvents';
