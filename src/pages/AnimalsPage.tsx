@@ -18,6 +18,7 @@ function AnimalsPage() {
     const [viewType, setViewType] = useState<AnimalsViewType>(AnimalsViewType.LIST);
     const mobile = useMediaQuery(theme.breakpoints.down('sm'));
     const [filters, setFilters] = useState<Filter[]>(INITIAL_FILTERS);
+    const [numOfFilteredAnimals, setNumOfFilteredAnimals] = useState(0);
 
     useEffect(() => {
         if (mobile && viewType === AnimalsViewType.TABLE) {
@@ -55,6 +56,10 @@ function AnimalsPage() {
         console.log(activeFilters.filter(filter => filter.value));
     };
 
+    const updateNumOfFilteredAnimals = (value: number) => {
+        setNumOfFilteredAnimals(value);
+    };
+
     return (
         <Fade in timeout={600}>
             <Page
@@ -85,6 +90,7 @@ function TopSection({
     onFiltersClear,
     onFiltersApply,
     onFilterRemove,
+    numOfFilteredAnimals,
 }: TopSectionProps) {
     return (
         <Grid container spacing={2} alignItems="center">
@@ -97,7 +103,12 @@ function TopSection({
                     </>
                 )}
                 <Grid item>
-                    <AnimalFilters filters={filters} onReset={onFiltersClear} onApply={onFiltersApply} count={34} />
+                    <AnimalFilters
+                        filters={filters}
+                        onReset={onFiltersClear}
+                        onApply={onFiltersApply}
+                        count={numOfFilteredAnimals}
+                    />
                 </Grid>
                 <Grid item>
                     <AnimalFiltersChips filters={filters} onDelete={onFilterRemove} onClearFilters={onFiltersClear} />
@@ -122,6 +133,7 @@ interface TopSectionProps {
     onFiltersClear: (filters: Filter[]) => void;
     onFiltersApply: (filters: Filter[]) => void;
     onFilterRemove: (filter: Filter) => void;
+    numOfFilteredAnimals: number;
 }
 
 const SPECIES: FilterOption[] = [
