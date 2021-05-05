@@ -21,7 +21,11 @@ export default function TopAuthNav() {
 
     const matchesMobileXS = useMobileXS();
 
-    const getShortUserName = (username: string): string => {
+    const getShortUserName = (username?: string): string => {
+        if (!username) {
+            return '';
+        }
+
         const words = username.split(' ');
         let initials = '';
         words.forEach(word => {
@@ -55,7 +59,7 @@ export default function TopAuthNav() {
                         startIcon={<AccountCircleTwoToneIcon />}
                     >
                         <Typography component="span" className={classes.label} noWrap>
-                            {matchesMobileXS ? getShortUserName(user.name) : user.name}
+                            {matchesMobileXS ? getShortUserName(user?.name) : user?.name}
                         </Typography>
                     </Button>
                     <Menu
