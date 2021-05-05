@@ -16,10 +16,10 @@ interface Response {
 
 interface AnimalsListContainerProps {
     viewType: AnimalsViewType;
-    updateNumOfFilteredAnimals: (value: number) => void;
+    setAnimalsCount: (value: number) => void;
 }
 
-export default function AnimalsListContainer({ viewType, updateNumOfFilteredAnimals }: AnimalsListContainerProps) {
+export default function AnimalsListContainer({ viewType, setAnimalsCount }: AnimalsListContainerProps) {
     const { loading, error, data } = useQuery<Response>(GET_ANIMALS_QUERY);
     if (loading) {
         return <Skeleton animation="wave" variant="rect" height={500} />;
@@ -35,7 +35,7 @@ export default function AnimalsListContainer({ viewType, updateNumOfFilteredAnim
         return <p>No data</p>;
     }
 
-    updateNumOfFilteredAnimals(data.animals.length);
+    setAnimalsCount(data.animals.length);
 
     if (viewType === AnimalsViewType.TABLE) {
         return <AnimalsTable animals={data.animals} />;
