@@ -18,7 +18,7 @@ function AnimalsPage() {
     const [viewType, setViewType] = useState<AnimalsViewType>(AnimalsViewType.LIST);
     const mobile = useMediaQuery(theme.breakpoints.down('sm'));
     const [filters, setFilters] = useState<Filter[]>(INITIAL_FILTERS);
-    const [numOfFilteredAnimals, setNumOfFilteredAnimals] = useState(0);
+    const [animalsCount, setAnimalsCount] = useState(0);
 
     useEffect(() => {
         if (mobile && viewType === AnimalsViewType.TABLE) {
@@ -56,8 +56,8 @@ function AnimalsPage() {
         console.log(activeFilters.filter(filter => filter.value));
     };
 
-    const updateNumOfFilteredAnimals = (value: number) => {
-        setNumOfFilteredAnimals(value);
+    const handleAnimalsCountChange = (value: number) => {
+        setAnimalsCount(value);
     };
 
     return (
@@ -73,10 +73,11 @@ function AnimalsPage() {
                         onFiltersClear={handleClearAllFilters}
                         onFiltersApply={handleApplyFilters}
                         onFilterRemove={handleRemoveFilter}
+                        animalsCount={animalsCount}
                     />
                 }
             >
-                <AnimalsListContainer viewType={viewType} />
+                <AnimalsListContainer viewType={viewType} setAnimalsCount={handleAnimalsCountChange} />
             </Page>
         </Fade>
     );
@@ -90,7 +91,7 @@ function TopSection({
     onFiltersClear,
     onFiltersApply,
     onFilterRemove,
-    numOfFilteredAnimals,
+    animalsCount,
 }: TopSectionProps) {
     return (
         <Grid container spacing={2} alignItems="center">
@@ -107,7 +108,7 @@ function TopSection({
                         filters={filters}
                         onReset={onFiltersClear}
                         onApply={onFiltersApply}
-                        count={numOfFilteredAnimals}
+                        count={animalsCount}
                     />
                 </Grid>
                 <Grid item>
@@ -133,7 +134,7 @@ interface TopSectionProps {
     onFiltersClear: (filters: Filter[]) => void;
     onFiltersApply: (filters: Filter[]) => void;
     onFilterRemove: (filter: Filter) => void;
-    numOfFilteredAnimals: number;
+    animalsCount: number;
 }
 
 const SPECIES: FilterOption[] = [
