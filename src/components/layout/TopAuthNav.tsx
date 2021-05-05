@@ -21,7 +21,11 @@ export default function TopAuthNav() {
 
     const matchesMobileXS = useMobileXS();
 
-    const getShortUserName = (username: string): string => {
+    const getShortUserName = (username?: string): string => {
+        if (!username) {
+            return '';
+        }
+
         const words = username.split(' ');
         let initials = '';
         words.forEach(word => {
