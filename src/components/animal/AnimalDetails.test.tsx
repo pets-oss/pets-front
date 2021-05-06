@@ -54,8 +54,8 @@ describe('AnimalDetails', () => {
 
         expect(screen.getByText(/Loading.../)).toBeInTheDocument();
 
-        await waitFor(() => expect(screen.getByText(/Labrador/i)).toBeInTheDocument());
-        await waitFor(() => expect(screen.getByText(/Color - Black/i)).toBeInTheDocument());
-        await waitFor(() => expect(screen.getByText(/Weight - 1kg/i)).toBeInTheDocument());
+        await waitFor(() => expect(screen.getAllByText(/Labrador/i)).toHaveLength(2));
+        await waitFor(() => expect(screen.getAllByText(/Black/i)).toHaveLength(2));
+        await waitFor(() => expect(screen.getAllByText(/Weight/i)).toHaveLength(1));
     });
 });
