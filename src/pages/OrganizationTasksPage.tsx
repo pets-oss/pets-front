@@ -2,9 +2,9 @@ import { loader } from 'graphql.macro';
 import React from 'react';
 
 import { useQuery } from '@apollo/client';
-import { Box, Card, CardContent, Typography } from '@material-ui/core';
+import { Typography } from '@material-ui/core';
 import { Skeleton } from '@material-ui/lab';
-import { OrganizationTask } from '../graphql/types';
+import OrganizationTaskComponent from './OrganizationTaskComponent';
 import Page from './Page';
 
 const GET_ORGANIZATION_TASKS_QUERY = loader('src/graphql/queries/organization-tasks.graphql');
@@ -25,19 +25,7 @@ export default function OrganizationTasksPage() {
 
     return (
         <Page title="Organization Tasks">
-            {data.organizationTasks.map((task: OrganizationTask) => (
-                <Box key={task.id} width="20vw" my={1}>
-                    <Card>
-                        <CardContent>
-                            <Typography variant="body1">{task.title}</Typography>
-                            <Typography variant="body1">{task.description}</Typography>
-                        </CardContent>
-                        <Box bgcolor={task.isDone ? 'lightGreen' : 'pink'} height="50px" p={1.5}>
-                            <Typography align="center">{task.isDone ? 'Task is done' : 'Task to be taken'}</Typography>
-                        </Box>
-                    </Card>
-                </Box>
-            ))}
+            <OrganizationTaskComponent organizationTasks={data.organizationTasks} />
         </Page>
     );
 }
