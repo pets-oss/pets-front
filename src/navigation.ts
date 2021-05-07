@@ -11,6 +11,7 @@ const navigation: Array<NavigationItem> = [
     { authRequired: true, title: 'Animals', to: '/animal-list', pageTitle: 'Animal list' },
     { authRequired: true, title: 'Favourites', to: '/favourites', pageTitle: 'Favourites' },
     { authRequired: true, title: 'Reports', to: '/reports', pageTitle: 'Reports' },
+    { authRequired: true, title: 'Organization Tasks', to: '/organization-tasks', pageTitle: 'Organization Tasks' },
 ];
 
 export { navigation };
