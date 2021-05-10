@@ -3,6 +3,7 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Box, Button, makeStyles, Typography } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 import { Event } from '../../../graphql/types';
+import AnimalEventDialog from './AnimalEventDialog';
 import AnimalEventFilters, { EVENT_FILTER_ALL, EventCategory } from './AnimalEventFilters';
 import AnimalEventList from './AnimalEventList';
 import AnimalEventSorting, { EventSortingMode } from './AnimalEventSorting';
@@ -20,10 +21,31 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-function AnimalEvents({ events }: AnimalEventsProps) {
+const TYPE_OPTIONS = [
+    'Ženklinimas ir įregistravimas',
+    'Laikytojo pasikeitimas',
+    'Laikymo vietos pasikeitimas',
+    'Savininko pasikeitimas',
+    'Dingimas',
+    'Suradimas',
+    'Nugaišimas',
+    'Nugaišinimas',
+    'Išvežimas',
+    'Vakcinavimas',
+    'Augintinio agresyvumas',
+];
+
+const CATEGORY_OPTIONS = ['General', 'Medical'];
+
+export default function AnimalEvents({ events }: AnimalEventsProps) {
     const classes = useStyles();
     const [activeFilter, setActiveFilter] = useState<EventCategory>(EVENT_FILTER_ALL);
     const [activeSort, setActiveSort] = useState<EventSortingMode>(EventSortingMode.DESCENDING);
+    const [dialogOpen, setDialogOpen] = useState(false);
+
+    const handleDialogOpen = () => {
+        setDialogOpen(true);
+    };
 
     const sortByDateComparator = useCallback(
         (event1: Event, event2: Event) => {
@@ -67,9 +89,20 @@ function AnimalEvents({ events }: AnimalEventsProps) {
                 <Typography variant="h5" component="h3">
                     Events
                 </Typography>
-                <Button color="primary" variant="contained" startIcon={<AddIcon />}>
+                <Button color="primary" variant="contained" startIcon={<AddIcon />} onClick={handleDialogOpen}>
                     Create
                 </Button>
+                <AnimalEventDialog
+                    dialogOpen={dialogOpen}
+                    categoryOptions={CATEGORY_OPTIONS}
+                    typeOptions={TYPE_OPTIONS}
+                    onCancel={showDialog => {
+                        setDialogOpen(showDialog);
+                    }}
+                    onCreate={eventObject => {
+                        setFilteredEvents([...filteredEvents, eventObject]);
+                    }}
+                />
             </Box>
             <AnimalEventFilters activeFilter={activeFilter} onChange={handleFilterChange} />
             <AnimalEventSorting sortingMode={activeSort} onChange={handleSortChange} />
@@ -77,8 +110,6 @@ function AnimalEvents({ events }: AnimalEventsProps) {
         </Box>
     );
 }
-
-export default AnimalEvents;
 
 interface AnimalEventsProps {
     events: Event[];
