@@ -25,3 +25,29 @@ export const sortAnimalsByDate = (animal1: Animal, animal2: Animal, descending =
 
     return descending ? date2 - date1 : date1 - date2;
 };
+
+export const getAnimalDetails = (animal: Animal) => {
+    const { details: animalDetails } = animal;
+
+    const birthDay = {
+        title: 'Birthday',
+        value: animalDetails?.birthDate ? getAnimalAge(animalDetails.birthDate) : '',
+    };
+
+    const weight = {
+        title: 'Weight',
+        value: animalDetails?.weight ? getAnimalWeight(animalDetails.weight) : '',
+    };
+
+    const otherDetails = animalDetails
+        ? Object.keys(animalDetails)
+              .filter(key => {
+                  return typeof animalDetails[key] === 'object' && animalDetails[key] !== null;
+              })
+              .map(key => {
+                  return { title: animalDetails[key].__typename, value: animalDetails[key].value };
+              })
+        : [];
+
+    return [birthDay, ...otherDetails, weight];
+};

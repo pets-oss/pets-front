@@ -7,6 +7,8 @@ import LocalHospitalIcon from '@material-ui/icons/LocalHospital';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import { Event } from '../../../graphql/types';
 import { getFormattedDate } from '../../../utils/date';
+import { getEventDetails } from '../../../utils/events';
+import ParamTable from '../ParamTable';
 
 export default function EventCard({ event }: AnimalCardProps) {
     const classes = useStyles();
@@ -14,6 +16,7 @@ export default function EventCard({ event }: AnimalCardProps) {
     const eventName = event.type?.type || '';
     const header = `Event type - ${eventName}`;
     const subHeader = `${event.dateTime ? getFormattedDate(event.dateTime) : '-'} / Author`;
+    const eventDetails = getEventDetails(event);
 
     return (
         <Card className={classes.root}>
@@ -38,24 +41,7 @@ export default function EventCard({ event }: AnimalCardProps) {
             />
             <Collapse in={expanded} timeout="auto" unmountOnExit>
                 <CardContent className={classes.content}>
-                    <Typography color="textPrimary" className={classes.label}>
-                        Expenses:
-                    </Typography>
-                    <Typography paragraph color="textSecondary">
-                        {event.expenses || '-'}
-                    </Typography>
-                    <Typography color="textPrimary" className={classes.label}>
-                        Comments:
-                    </Typography>
-                    <Typography paragraph color="textSecondary">
-                        {event.comments || '-'}
-                    </Typography>
-                    <Typography color="textPrimary" className={classes.label}>
-                        Author:
-                    </Typography>
-                    <Typography paragraph color="textSecondary">
-                        -
-                    </Typography>
+                    <ParamTable details={eventDetails} />
                 </CardContent>
             </Collapse>
         </Card>
