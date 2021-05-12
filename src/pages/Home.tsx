@@ -8,13 +8,13 @@ import RecentEventsContainer from '../components/layout/RecentEventsContainer';
 import Page from './Page';
 
 function Home() {
-    const { user } = useAuth0();
+    const { isAuthenticated } = useAuth0();
 
     return (
         <Fade in timeout={600}>
             <Page>
                 <AppLogoHeader />
-                {user && (
+                {isAuthenticated && (
                     <>
                         <RecentAnimalsContainer />
                         <RecentEventsContainer />
