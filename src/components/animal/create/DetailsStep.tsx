@@ -95,7 +95,7 @@ function DetailsStep({ onNext }: DetailsStepProps) {
                     <TextInput name="imageUrl" label="Image URL" id="imageUrl" fullWidth />
                 </Grid>
                 <Grid item xs={12} className={classes.relative}>
-                    <RichTextEditor name="description" />
+                    <RichTextEditor name="description" maxLength={200} />
                 </Grid>
                 <Grid item xs={12} sm={6}>
                     <DynamicSelector

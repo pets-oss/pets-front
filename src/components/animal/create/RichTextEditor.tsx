@@ -3,9 +3,9 @@ import React, { useState } from 'react';
 import { Controller } from 'react-hook-form';
 
 import { FormHelperText, makeStyles } from '@material-ui/core';
-import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles';
+import { createMuiTheme, MuiThemeProvider, Theme } from '@material-ui/core/styles';
 
-export default function RichTextEditor({ name }: RichTextEditorProps) {
+export default function RichTextEditor({ name, maxLength }: RichTextEditorProps) {
     const [focused, setFocused] = useState(false);
 
     const classes = useStyles();
@@ -20,7 +20,7 @@ export default function RichTextEditor({ name }: RichTextEditorProps) {
                             defaultValue={props.value}
                             label="Type here your description"
                             inlineToolbar
-                            maxLength={200}
+                            maxLength={maxLength}
                             controls={['bold', 'italic', 'underline', 'strikethrough', 'highlight', 'clear', 'save']}
                             onFocus={() => setFocused(true)}
                             onBlur={() => setFocused(false)}
@@ -76,12 +76,12 @@ Object.assign(focusedTheme, {
     },
 });
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme: Theme) => ({
     formHelperText: {
         position: 'relative',
         top: 5,
         left: 15,
-        color: `#919191`,
+        color: theme.palette.text.secondary,
         fontSize: `0.85em`,
         fontWeight: 400,
         transition: 'all 0.2s',
@@ -90,4 +90,5 @@ const useStyles = makeStyles(() => ({
 
 interface RichTextEditorProps {
     name: string;
+    maxLength: number;
 }
