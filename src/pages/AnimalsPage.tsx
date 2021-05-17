@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-import { Grid } from '@material-ui/core';
+import { Fade, Grid } from '@material-ui/core';
 import Divider from '@material-ui/core/Divider';
 import useTheme from '@material-ui/core/styles/useTheme';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
@@ -18,6 +18,7 @@ function AnimalsPage() {
     const [viewType, setViewType] = useState<AnimalsViewType>(AnimalsViewType.LIST);
     const mobile = useMediaQuery(theme.breakpoints.down('sm'));
     const [filters, setFilters] = useState<Filter[]>(INITIAL_FILTERS);
+    const [animalsCount, setAnimalsCount] = useState(0);
 
     useEffect(() => {
         if (mobile && viewType === AnimalsViewType.TABLE) {
@@ -55,23 +56,30 @@ function AnimalsPage() {
         console.log(activeFilters.filter(filter => filter.value));
     };
 
+    const handleAnimalsCountChange = (value: number) => {
+        setAnimalsCount(value);
+    };
+
     return (
-        <Page
-            title="Animals List"
-            topSection={
-                <TopSection
-                    viewType={viewType}
-                    onChange={handleViewChange}
-                    mobile={mobile}
-                    filters={filters}
-                    onFiltersClear={handleClearAllFilters}
-                    onFiltersApply={handleApplyFilters}
-                    onFilterRemove={handleRemoveFilter}
-                />
-            }
-        >
-            <AnimalsListContainer viewType={viewType} />
-        </Page>
+        <Fade in timeout={600}>
+            <Page
+                title="Animals List"
+                topSection={
+                    <TopSection
+                        viewType={viewType}
+                        onChange={handleViewChange}
+                        mobile={mobile}
+                        filters={filters}
+                        onFiltersClear={handleClearAllFilters}
+                        onFiltersApply={handleApplyFilters}
+                        onFilterRemove={handleRemoveFilter}
+                        animalsCount={animalsCount}
+                    />
+                }
+            >
+                <AnimalsListContainer viewType={viewType} setAnimalsCount={handleAnimalsCountChange} />
+            </Page>
+        </Fade>
     );
 }
 
@@ -83,6 +91,7 @@ function TopSection({
     onFiltersClear,
     onFiltersApply,
     onFilterRemove,
+    animalsCount,
 }: TopSectionProps) {
     return (
         <Grid container spacing={2} alignItems="center">
@@ -95,7 +104,12 @@ function TopSection({
                     </>
                 )}
                 <Grid item>
-                    <AnimalFilters filters={filters} onReset={onFiltersClear} onApply={onFiltersApply} count={34} />
+                    <AnimalFilters
+                        filters={filters}
+                        onReset={onFiltersClear}
+                        onApply={onFiltersApply}
+                        count={animalsCount}
+                    />
                 </Grid>
                 <Grid item>
                     <AnimalFiltersChips filters={filters} onDelete={onFilterRemove} onClearFilters={onFiltersClear} />
@@ -120,6 +134,7 @@ interface TopSectionProps {
     onFiltersClear: (filters: Filter[]) => void;
     onFiltersApply: (filters: Filter[]) => void;
     onFilterRemove: (filter: Filter) => void;
+    animalsCount: number;
 }
 
 const SPECIES: FilterOption[] = [
