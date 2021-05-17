@@ -11,6 +11,7 @@ import makeStyles from '@material-ui/core/styles/makeStyles';
 import { Species } from '../../../graphql/types';
 import DynamicSelector from '../../form/DynamicSelector';
 import TextInput from '../../form/TextInput';
+import TextEditor from './TextEditor';
 
 const GET_SPECIES = loader('../../../graphql/queries/species.graphql');
 const GET_GENDERS = loader('../../../graphql/queries/genders.graphql');
@@ -94,14 +95,7 @@ function DetailsStep({ onNext }: DetailsStepProps) {
                     <TextInput name="imageUrl" label="Image URL" id="imageUrl" fullWidth />
                 </Grid>
                 <Grid item xs={12} className={classes.relative}>
-                    <TextInput
-                        name="description"
-                        label="Description"
-                        id="description"
-                        fullWidth
-                        showLettersCount
-                        maxLength={200}
-                    />
+                    <TextEditor />
                 </Grid>
                 <Grid item xs={12} sm={6}>
                     <DynamicSelector
