@@ -35,7 +35,7 @@ function DetailsStep({ onNext }: DetailsStepProps) {
     }, [specie, setValue]);
 
     const handleCancel = () => {
-        history.push('/');
+        history.push('/animal-list');
     };
 
     return (

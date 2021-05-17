@@ -8,10 +8,11 @@ import { Box, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { Skeleton } from '@material-ui/lab';
 import { Animal, Event } from '../../graphql/types';
-import { getAnimalAge, getAnimalWeight } from '../../utils/animal';
+import { getAnimalDetails } from '../../utils/animal';
 import LayoutMultiColRow from '../layout/LayoutMultiColRow';
 import AnimalDetailsHeader from './details/AnimalDetailsHeader';
 import AnimalEvents from './events/AnimalEvents';
+import ParamTable from './ParamTable';
 
 const GET_ANIMAL_DETAILS = loader('../../graphql/queries/animal-details.graphql');
 
@@ -54,8 +55,8 @@ function AnimalDetails({ onLoad }: AnimalDetailsProps) {
     }
 
     const { animal, events } = data;
-    const birthDay = animal.details?.birthDate ? getAnimalAge(animal.details.birthDate) : '';
     const animalEvents = events?.[0]?.animalAll ?? [];
+    const animalDetails = getAnimalDetails(animal);
 
     return (
         <div className={classes.root}>
@@ -84,20 +85,8 @@ function AnimalDetails({ onLoad }: AnimalDetailsProps) {
                                     </Typography>
                                 )}
                             </Box>
-                            <Box
-                                display="flex"
-                                flexDirection="column"
-                                alignItems="flexStart"
-                                justifyContent="flexStart"
-                            >
-                                <Typography variant="body2">{`Age - ${birthDay}`}</Typography>
-                                {animal.details.weight && (
-                                    <Typography variant="body2">
-                                        {`Weight - ${getAnimalWeight(animal.details.weight)}`}
-                                    </Typography>
-                                )}
-                                <Typography variant="body2">{`Color - ${animal.details.color?.value}`}</Typography>
-                                <Typography variant="body2">{animal.comments}</Typography>
+                            <Box mt={3} mb={2}>
+                                <ParamTable details={animalDetails} />
                             </Box>
                         </>
                     )}
