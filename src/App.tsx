@@ -66,6 +66,11 @@ export default function App() {
                             path="/logout"
                             component={React.lazy(() => import('./pages/PageNotImplemented'))}
                         />
+                        <Route
+                            exact
+                            path="/organization-tasks"
+                            component={React.lazy(() => import('./pages/OrganizationTasksPage'))}
+                        />
                         <Route exact path="/" component={React.lazy(() => import('./pages/Home'))} />
                         <Route component={PageNotFound} />
                     </Switch>
