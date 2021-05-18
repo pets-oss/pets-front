@@ -19,7 +19,7 @@ const GET_BREEDS = loader('../../../graphql/queries/breeds.graphql');
 const GET_COLORS = loader('../../../graphql/queries/colors.graphql');
 const GET_STATUSES = loader('../../../graphql/queries/statuses.graphql');
 
-function DetailsStep({ onNext }: DetailsStepProps) {
+function DetailsStep() {
     const classes = useStyles();
     const { control, setValue } = useFormContext();
     const history = useHistory();
@@ -123,8 +123,8 @@ function DetailsStep({ onNext }: DetailsStepProps) {
                     </Button>
                 </Grid>
                 <Grid item>
-                    <Button color="secondary" variant="contained" onClick={onNext}>
-                        Next
+                    <Button type="submit" color="secondary" variant="contained">
+                        Submit
                     </Button>
                 </Grid>
             </Grid>
@@ -148,7 +148,3 @@ const useStyles = makeStyles(() => ({
 }));
 
 export default memo(DetailsStep);
-
-interface DetailsStepProps {
-    onNext: () => void;
-}
