@@ -1,10 +1,9 @@
 import React, { useRef } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 
-import { Grid, GridProps, Theme } from '@material-ui/core';
+import { Grid, GridProps } from '@material-ui/core';
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import { Breed, Color, Gender, RegistrationStatus, Species, Status } from '../../../graphql/types';
-import useResize from '../../../hooks/useResize';
 import DetailsStep from './DetailsStep';
 import { MicrochipStatus } from './MicrochipStep';
 import { AnimalIncomingType } from './RegistrationStep';

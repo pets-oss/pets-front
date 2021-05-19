@@ -92,7 +92,7 @@ function DetailsStep() {
                     />
                 </Grid>
                 <Grid item xs={12} sm={6}>
-                    <TextInput type="file" name="imageUrl" label="Image file" id="imageUrl" fullWidth />
+                    <TextInput type="file" name="imageUrl" id="imageUrl" fullWidth />
                 </Grid>
                 <Grid item xs={12} className={classes.relative}>
                     <RichTextEditor name="description" maxLength={200} />
