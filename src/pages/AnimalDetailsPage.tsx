@@ -10,7 +10,7 @@ function AnimalDetailsPage() {
 
     return (
         <Fade in timeout={600}>
-            <Page title={animalName ?? 'Pet details'}>
+            <Page>
                 <AnimalDetails onLoad={(animal: Animal) => setAnimalName(animal.name ?? '')} />
             </Page>
         </Fade>
