@@ -4,7 +4,7 @@ import React, { memo, useEffect } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 import { useHistory } from 'react-router-dom';
 
-import { Grid } from '@material-ui/core';
+import { Grid, Input } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
 import Divider from '@material-ui/core/Divider';
 import makeStyles from '@material-ui/core/styles/makeStyles';
@@ -63,7 +63,7 @@ function DetailsStep() {
                 <Grid item xs={12} sm={6}>
                     <DynamicSelector
                         name="details.breed"
-                        label="Gender"
+                        label="Breed"
                         disabled={!specie}
                         gqlOptions={{
                             query: GET_BREEDS,
@@ -92,7 +92,9 @@ function DetailsStep() {
                     />
                 </Grid>
                 <Grid item xs={12} sm={6}>
-                    <TextInput name="imageUrl" label="Image URL" id="imageUrl" fullWidth />
+                    {/* <TextInput name="imageUrl" label="Image URL" id="imageUrl" fullWidth /> */}
+                    {/* <InputLabel>Image URL</InputLabel> */}
+                    <Input type="file" name="imageUrl" id="imageUrl" fullWidth />
                 </Grid>
                 <Grid item xs={12} className={classes.relative}>
                     <RichTextEditor name="description" maxLength={200} />
@@ -105,12 +107,6 @@ function DetailsStep() {
                 </Grid>
                 <Grid item xs={12} sm={6}>
                     <TextInput name="details.weight" id="weight" label="Weight, kg" type="number" fullWidth />
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                    <TextInput name="details.allergy" id="allergy" label="Allergy" fullWidth />
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                    <TextInput name="details.food" id="food" label="Food" fullWidth />
                 </Grid>
             </Grid>
             <Grid item container>
