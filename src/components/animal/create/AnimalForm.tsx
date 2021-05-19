@@ -26,7 +26,6 @@ export default function AnimalForm() {
     const methods = useForm({ defaultValues: DEFAULT_VALUES });
     const { handleSubmit } = methods;
     const formRef = useRef<HTMLFormElement>(null);
-    const { width: formWidth } = useResize(formRef);
 
     const onSubmit = (data: AnimalFormData) => {
         // eslint-disable-next-line no-console
@@ -58,7 +57,7 @@ export function FormRow({ children, ...props }: GridProps) {
     );
 }
 
-const useStyles = makeStyles((theme: Theme) => ({
+const useStyles = makeStyles(() => ({
     form: {
         maxWidth: 800,
     },
