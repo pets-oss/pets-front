@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 
 import { Grid, GridProps, Theme } from '@material-ui/core';
@@ -33,10 +33,6 @@ export default function AnimalForm() {
         console.log('FORM DATA: ', data);
     };
 
-    const scrollToTop = () => {
-        window.scrollTo({ left: 0, top: 168, behavior: 'smooth' });
-    };
-
     return (
         <FormProvider {...methods}>
             <Grid
@@ -65,9 +61,6 @@ export function FormRow({ children, ...props }: GridProps) {
 const useStyles = makeStyles((theme: Theme) => ({
     form: {
         maxWidth: 800,
-    },
-    fullWidth: {
-        width: '100%',
     },
 }));
 
