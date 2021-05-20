@@ -23,11 +23,12 @@ export default function Page({ title, topSection, children, displayTitleOnMobile
         <Fade in timeout={600}>
             <Container component="main" className={classes.root} maxWidth="lg">
                 <Grid container spacing={4}>
-                    {(!matchesMobile || displayTitleOnMobile) && (
+                    {(!matchesMobile || displayTitleOnMobile) && title && (
                         <Grid item xs={12}>
-                            {title && <PageTitle title={title} />}
+                            <PageTitle title={title} />
                         </Grid>
                     )}
+
                     {topSection && (
                         <Grid item xs={12}>
                             {topSection}
