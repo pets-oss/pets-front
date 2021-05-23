@@ -68,6 +68,7 @@ const useStyles = makeStyles(theme => ({
         [theme.breakpoints.up('md')]: {
             marginTop: 64 + theme.spacing(3), // follow fixed AppBar minHeight: 64
         },
+        position: 'absolute',
         marginBottom: theme.spacing(10),
     },
     heading: {
