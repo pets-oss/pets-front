@@ -49,7 +49,7 @@ describe('AnimalDetails', () => {
                     <AnimalDetails />
                 </Route>
             </MemoryRouter>,
-            { query: GET_ANIMAL_DETAILS, variables: { id: 1, language: 'lt' }, data: mockedData }
+            { query: GET_ANIMAL_DETAILS, variables: { id: 1 }, data: mockedData }
         );
 
         expect(screen.getByText(/Loading.../)).toBeInTheDocument();
