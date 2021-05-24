@@ -9,7 +9,7 @@ export function FilterSelectInput({ value, label, options, onChange }: FilterSel
 
     return (
         <Box marginTop={2.5} marginBottom={2.5}>
-            <FormControl variant="outlined" fullWidth>
+            <FormControl variant="outlined" fullWidth size="small">
                 <InputLabel id={labelId} htmlFor={selectId}>
                     {label}
                 </InputLabel>

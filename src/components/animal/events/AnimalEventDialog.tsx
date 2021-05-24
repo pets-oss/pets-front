@@ -148,8 +148,8 @@ export default function AnimalEventDialog({
         >
             <DialogTitle id="event-dialog-title">Create new event</DialogTitle>
             <DialogContent>
-                <Box marginTop={2.5} marginBottom={2.5}>
-                    <FormControl variant="outlined" color="secondary" fullWidth>
+                <Box marginBottom={2.5}>
+                    <FormControl variant="outlined" color="secondary" fullWidth size="small">
                         <InputLabel id="type">Type</InputLabel>
                         <Select
                             labelId="type"
@@ -167,7 +167,7 @@ export default function AnimalEventDialog({
                     </FormControl>
                 </Box>
                 <Box marginTop={2.5} marginBottom={2.5}>
-                    <FormControl variant="outlined" color="secondary" fullWidth>
+                    <FormControl variant="outlined" color="secondary" fullWidth size="small">
                         <InputLabel id="category">Category</InputLabel>
                         <Select
                             labelId="category"
@@ -195,6 +195,7 @@ export default function AnimalEventDialog({
                         color="secondary"
                         type="number"
                         error={expensesError}
+                        size="small"
                     />
                 </Box>
                 <Box marginTop={2.5} marginBottom={2.5}>
@@ -212,7 +213,7 @@ export default function AnimalEventDialog({
                         error={commentsError}
                     />
                 </Box>
-                <Box marginTop={2.5} marginBottom={2}>
+                <Box marginTop={2.5}>
                     <TextField
                         id="date"
                         label="Date"
@@ -226,10 +227,11 @@ export default function AnimalEventDialog({
                             shrink: true,
                         }}
                         error={dateError}
+                        size="small"
                     />
                 </Box>
             </DialogContent>
-            <Box marginBottom={2} marginRight={2}>
+            <Box marginBottom={2} marginRight={2} marginTop={1}>
                 <DialogActions>
                     <Box flex="1" marginLeft={2}>
                         {error && (

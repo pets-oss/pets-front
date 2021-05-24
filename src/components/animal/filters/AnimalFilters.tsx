@@ -5,6 +5,7 @@ import {
     Button,
     DialogActions,
     DialogContent,
+    DialogTitle,
     Grid,
     Typography,
     useMediaQuery,
@@ -59,29 +60,35 @@ export default function AnimalFilters({ filters, onReset, onApply, count }: Anim
                 <FilterListIcon onClick={handleDialogOpen} />
             </Grid>
             <Dialog fullWidth maxWidth="sm" open={dialogOpen} fullScreen={fullScreen} onClose={handleDialogClose}>
-                <DialogContent>
+                <DialogTitle id="filter-dialog-title">
                     <Box display="flex" justifyContent="space-between" alignItems="center">
                         <Typography variant="h6">Search Filters</Typography>
                         <Button onClick={handleResetFilters}>RESET ALL</Button>
                     </Box>
-                    {filters.map(filter => (
-                        <FilterSelectInput
-                            key={filter.name}
-                            value={filter.value}
-                            label={filter.name}
-                            options={filter.options}
-                            onChange={value => handleFilterChange(filter, value)}
-                        />
-                    ))}
+                </DialogTitle>
+                <DialogContent>
+                    <Box marginTop={-2.5} marginBottom={-1.5}>
+                        {filters.map(filter => (
+                            <FilterSelectInput
+                                key={filter.name}
+                                value={filter.value}
+                                label={filter.name}
+                                options={filter.options}
+                                onChange={value => handleFilterChange(filter, value)}
+                            />
+                        ))}
+                    </Box>
                 </DialogContent>
-                <DialogActions>
-                    <Button variant="outlined" onClick={handleDialogClose}>
-                        Cancel
-                    </Button>
-                    <Button variant="contained" onClick={handleApplyFilters} color="secondary" autoFocus>
-                        Apply
-                    </Button>
-                </DialogActions>
+                <Box marginBottom={2} marginRight={2}>
+                    <DialogActions>
+                        <Button variant="outlined" onClick={handleDialogClose}>
+                            Cancel
+                        </Button>
+                        <Button variant="contained" onClick={handleApplyFilters} color="secondary" autoFocus>
+                            Apply
+                        </Button>
+                    </DialogActions>
+                </Box>
             </Dialog>
         </Grid>
     );
