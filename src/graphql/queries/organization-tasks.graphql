@@ -1,0 +1,8 @@
+query GetOrganizationTasks {
+    organizationTasks {
+        id
+        title
+        description
+        isDone
+    }
+}
