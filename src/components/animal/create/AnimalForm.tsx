@@ -66,7 +66,7 @@ export interface AnimalFormData {
     name?: string;
     organizationId?: number;
     status?: Status;
-    imageUrl?: string;
+    image?: string;
     description?: string;
     details?: Details;
     registration?: Registration;
