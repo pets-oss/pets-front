@@ -7,7 +7,6 @@ import {
     DialogContent,
     DialogTitle,
     Grid,
-    Typography,
     useMediaQuery,
     useTheme,
 } from '@material-ui/core';
@@ -59,25 +58,28 @@ export default function AnimalFilters({ filters, onReset, onApply, count }: Anim
             <Grid item>
                 <FilterListIcon onClick={handleDialogOpen} />
             </Grid>
-            <Dialog fullWidth maxWidth="sm" open={dialogOpen} fullScreen={fullScreen} onClose={handleDialogClose}>
-                <DialogTitle id="filter-dialog-title">
-                    <Box display="flex" justifyContent="space-between" alignItems="center">
-                        <Typography variant="h6">Search Filters</Typography>
-                        <Button onClick={handleResetFilters}>RESET ALL</Button>
-                    </Box>
-                </DialogTitle>
+            <Dialog
+                fullWidth
+                maxWidth="sm"
+                open={dialogOpen}
+                fullScreen={fullScreen}
+                onClose={handleDialogClose}
+                aria-labelledby="filter-dialog-title"
+            >
+                <Box display="flex" justifyContent="space-between" alignItems="center" marginRight={2.6}>
+                    <DialogTitle id="filter-dialog-title">Search Filters</DialogTitle>
+                    <Button onClick={handleResetFilters}>RESET ALL</Button>
+                </Box>
                 <DialogContent>
-                    <Box marginTop={-2.5} marginBottom={-1.5}>
-                        {filters.map(filter => (
-                            <FilterSelectInput
-                                key={filter.name}
-                                value={filter.value}
-                                label={filter.name}
-                                options={filter.options}
-                                onChange={value => handleFilterChange(filter, value)}
-                            />
-                        ))}
-                    </Box>
+                    {filters.map(filter => (
+                        <FilterSelectInput
+                            key={filter.name}
+                            value={filter.value}
+                            label={filter.name}
+                            options={filter.options}
+                            onChange={value => handleFilterChange(filter, value)}
+                        />
+                    ))}
                 </DialogContent>
                 <Box marginBottom={2} marginRight={2}>
                     <DialogActions>

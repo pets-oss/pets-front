@@ -9,12 +9,13 @@ export function FilterSelectInput({ value, label, options, onChange }: FilterSel
 
     return (
         <Box marginTop={2.5} marginBottom={2.5}>
-            <FormControl variant="outlined" fullWidth size="small">
+            <FormControl variant="outlined" fullWidth size="small" color="secondary">
                 <InputLabel id={labelId} htmlFor={selectId}>
                     {label}
                 </InputLabel>
                 <Select
                     labelId={labelId}
+                    color="secondary"
                     id={selectId}
                     label={label}
                     value={value ?? ''}

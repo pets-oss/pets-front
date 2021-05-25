@@ -148,7 +148,7 @@ export default function AnimalEventDialog({
         >
             <DialogTitle id="event-dialog-title">Create new event</DialogTitle>
             <DialogContent>
-                <Box marginBottom={2.5}>
+                <Box marginTop={2.5} marginBottom={2.5}>
                     <FormControl variant="outlined" color="secondary" fullWidth size="small">
                         <InputLabel id="type">Type</InputLabel>
                         <Select
@@ -213,7 +213,7 @@ export default function AnimalEventDialog({
                         error={commentsError}
                     />
                 </Box>
-                <Box marginTop={2.5}>
+                <Box marginTop={2.5} marginBottom={2.5}>
                     <TextField
                         id="date"
                         label="Date"
@@ -231,7 +231,7 @@ export default function AnimalEventDialog({
                     />
                 </Box>
             </DialogContent>
-            <Box marginBottom={2} marginRight={2} marginTop={1}>
+            <Box marginBottom={2} marginRight={2}>
                 <DialogActions>
                     <Box flex="1" marginLeft={2}>
                         {error && (
