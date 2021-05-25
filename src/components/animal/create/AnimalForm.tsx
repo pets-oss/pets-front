@@ -4,6 +4,7 @@ import { FormProvider, useForm } from 'react-hook-form';
 import { Grid, GridProps } from '@material-ui/core';
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import { Breed, Color, Gender, RegistrationStatus, Species, Status } from '../../../graphql/types';
+import WrapperCenterContainer from '../../layout/WrapperCenterContainer';
 import DetailsStep from './DetailsStep';
 import { MicrochipStatus } from './MicrochipStep';
 import { AnimalIncomingType } from './RegistrationStep';
@@ -32,19 +33,21 @@ export default function AnimalForm() {
     };
 
     return (
-        <FormProvider {...methods}>
-            <Grid
-                container
-                spacing={2}
-                alignItems="center"
-                component="form"
-                className={classes.form}
-                onSubmit={handleSubmit(onSubmit)}
-                ref={formRef}
-            >
-                <DetailsStep />
-            </Grid>
-        </FormProvider>
+        <WrapperCenterContainer>
+            <FormProvider {...methods}>
+                <Grid
+                    container
+                    spacing={2}
+                    alignItems="center"
+                    component="form"
+                    className={classes.form}
+                    onSubmit={handleSubmit(onSubmit)}
+                    ref={formRef}
+                >
+                    <DetailsStep />
+                </Grid>
+            </FormProvider>
+        </WrapperCenterContainer>
     );
 }
 
