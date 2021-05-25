@@ -1,3 +1,4 @@
+import { stateToHTML } from 'draft-js-export-html';
 import MUIRichTextEditor from 'mui-rte';
 import React, { useState } from 'react';
 import { Controller } from 'react-hook-form';
@@ -16,12 +17,11 @@ export default function RichTextEditor({ name, maxLength }: RichTextEditorProps)
                 render={props => (
                     <MuiThemeProvider theme={focused ? focusedTheme : defaultTheme}>
                         <MUIRichTextEditor
-                            onSave={data => props.onChange(data)}
-                            defaultValue={props.value}
+                            onChange={state => props.onChange(stateToHTML(state.getCurrentContent()))}
                             label="Type here your description"
                             inlineToolbar
                             maxLength={maxLength}
-                            controls={['bold', 'italic', 'underline', 'strikethrough', 'highlight', 'clear', 'save']}
+                            controls={['bold', 'italic', 'underline', 'strikethrough', 'highlight', 'clear']}
                             onFocus={() => setFocused(true)}
                             onBlur={() => setFocused(false)}
                         />
