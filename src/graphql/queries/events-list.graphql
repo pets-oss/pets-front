@@ -1,11 +1,11 @@
-query GetEventsList($language: String!) {
-    events(language: $language) {
-        all {
-            id
-            dateTime
-            type {
-                type
-            }
-        }
+query GetEventsList {
+    events {
+        id
+        animalId
+        group
+        type
+        dateTime
+        createTime
+        author
     }
 }
