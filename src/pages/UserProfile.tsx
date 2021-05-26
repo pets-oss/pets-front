@@ -2,7 +2,7 @@ import React from 'react';
 
 import { useAuth0 } from '@auth0/auth0-react';
 import { Fade, makeStyles, Typography } from '@material-ui/core';
-import WrapperCenterContainer from '../components/layout/WrapperCenterContainer';
+import LayoutAlignCenterBox from '../components/layout/LayoutAlignCenterBox';
 import Page from './Page';
 
 const useStyles = makeStyles(theme => ({
@@ -30,7 +30,7 @@ function UserProfile() {
     return (
         <Fade in timeout={600}>
             <Page title="User preferences">
-                <WrapperCenterContainer>
+                <LayoutAlignCenterBox>
                     <Typography>
                         <div className={classes.infoContainer}>
                             <img alt="" src={user.picture} className={classes.avatar} />
@@ -43,7 +43,7 @@ function UserProfile() {
                             <Typography variant="body1">User and Organization details</Typography>
                         </div>
                     </Typography>
-                </WrapperCenterContainer>
+                </LayoutAlignCenterBox>
             </Page>
         </Fade>
     );

@@ -4,7 +4,7 @@ import { FormProvider, useForm } from 'react-hook-form';
 import { Grid, GridProps } from '@material-ui/core';
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import { Breed, Color, Gender, RegistrationStatus, Species, Status } from '../../../graphql/types';
-import WrapperCenterContainer from '../../layout/WrapperCenterContainer';
+import LayoutAlignCenterBox from '../../layout/LayoutAlignCenterBox';
 import DetailsStep from './DetailsStep';
 import { MicrochipStatus } from './MicrochipStep';
 import { AnimalIncomingType } from './RegistrationStep';
@@ -33,7 +33,7 @@ export default function AnimalForm() {
     };
 
     return (
-        <WrapperCenterContainer>
+        <LayoutAlignCenterBox>
             <FormProvider {...methods}>
                 <Grid
                     container
@@ -47,7 +47,7 @@ export default function AnimalForm() {
                     <DetailsStep />
                 </Grid>
             </FormProvider>
-        </WrapperCenterContainer>
+        </LayoutAlignCenterBox>
     );
 }
 

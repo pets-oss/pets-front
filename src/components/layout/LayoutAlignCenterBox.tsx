@@ -6,7 +6,7 @@ interface Props {
     children: React.ReactElement;
 }
 
-export default function WrapperCenterContainer(props: Props) {
+export default function LayoutAlignCenterBox(props: Props) {
     const { children } = props;
     return (
         <Box display="flex" justifyContent="center" width="100%">
