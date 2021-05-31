@@ -13,12 +13,8 @@ export const sortEventsByDate = (event1: Event, event2: Event, descending = true
 
 export const getEventDetails = (event: Event) => [
     {
-        title: 'Expenses',
-        value: event.expenses || '-',
-    },
-    {
         title: 'Comments',
-        value: event.comments || '-',
+        value: event.details?.comments || '-',
     },
     {
         title: 'Author',

@@ -79,7 +79,7 @@ export default function AnimalEvents({ events }: AnimalEventsProps) {
 
     useEffect(() => {
         setFilteredEvents(
-            memoizedEvents.filter(event => event.category === activeFilter || activeFilter === EVENT_FILTER_ALL)
+            memoizedEvents.filter(event => event.group === activeFilter || activeFilter === EVENT_FILTER_ALL)
         );
     }, [activeFilter, memoizedEvents]);
 

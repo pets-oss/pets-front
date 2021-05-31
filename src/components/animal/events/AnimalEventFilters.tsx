@@ -1,11 +1,11 @@
 import React from 'react';
 
 import { Chip, Grid, makeStyles } from '@material-ui/core';
-import { Category } from '../../../graphql/types';
+import { EventGroup } from '../../../graphql/types';
 
 export const EVENT_FILTER_ALL = 'All';
 
-export type EventCategory = Category | 'All';
+export type EventCategory = EventGroup | 'All';
 
 const useStyles = makeStyles(() => ({
     button: {
@@ -22,12 +22,12 @@ export default function AnimalEventFilters({ activeFilter, onChange }: AnimalEve
                 active={activeFilter === EVENT_FILTER_ALL}
                 onClick={() => onChange(EVENT_FILTER_ALL)}
             />
-            {Object.keys(Category).map(category => (
+            {Object.keys(EventGroup).map(category => (
                 <Filter
                     key={category}
                     label={category}
-                    active={activeFilter === Category[category]}
-                    onClick={() => onChange(Category[category])}
+                    active={activeFilter === EventGroup[category]}
+                    onClick={() => onChange(EventGroup[category])}
                 />
             ))}
         </Grid>

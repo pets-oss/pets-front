@@ -125,14 +125,17 @@ export default function AnimalEventDialog({
         onCancel(false);
     };
 
-    const createEvent = (_type, _category, _expenses, _comment, _date): Event => {
+    const createEvent = (_type, _group, _expenses, _comment, _date): Event => {
         return {
+            author: '',
+            createTime: '',
             id: 123456,
-            animal: +animalID,
-            type: { id: typeOptions.indexOf(type), type: _type },
-            category: _category,
-            expenses: +_expenses,
-            comments: _comment,
+            animalId: +animalID,
+            group: _group,
+            type: _type,
+            details: {
+                comments: _comment,
+            },
             dateTime: Date.parse(_date).toString(),
         };
     };

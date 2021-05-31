@@ -1,24 +1,36 @@
 query GetAnimalsList {
     animals {
-        id
-        name
-        imageUrl
-        status
-        modTime
-        details {
-            gender {
+        edges {
+            node {
                 id
-                value
+                name
+                imageUrl
+                status
+                modTime
+                details {
+                    gender {
+                        id
+                        value
+                    }
+                    species {
+                        id
+                        value
+                    }
+                    birthDate
+                    weight
+                    species {
+                        value
+                    }
+                }
             }
-            species {
-                id
-                value
-            }
-            birthDate
-            weight
-            species {
-                value
-            }
+            cursor
+        }
+
+        pageInfo {
+            hasNextPage
+            hasPreviousPage
+            startCursor
+            endCursor
         }
     }
 }
