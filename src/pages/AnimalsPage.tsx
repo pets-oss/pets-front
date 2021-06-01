@@ -12,7 +12,12 @@ import Filter, { FilterOption } from '../components/animal/filters/Filter';
 import ViewSelector, { AnimalsViewType } from '../components/animal/ViewSelector';
 import Page from './Page';
 
-function AnimalsPage() {
+interface AnimalsPageProps {
+    title?: string;
+    showFavoriteAnimalsOnly: boolean;
+}
+
+function AnimalsPage({ title, showFavoriteAnimalsOnly }: AnimalsPageProps) {
     const theme = useTheme();
     // TODO: extract selectedViewType to context or localStore
     const [viewType, setViewType] = useState<AnimalsViewType>(AnimalsViewType.LIST);
@@ -63,7 +68,7 @@ function AnimalsPage() {
     return (
         <Fade in timeout={600}>
             <Page
-                title="Animals List"
+                title={title || 'Animals List'}
                 topSection={
                     <TopSection
                         viewType={viewType}
@@ -74,10 +79,15 @@ function AnimalsPage() {
                         onFiltersApply={handleApplyFilters}
                         onFilterRemove={handleRemoveFilter}
                         animalsCount={animalsCount}
+                        showFavoriteAnimalsOnly={showFavoriteAnimalsOnly}
                     />
                 }
             >
-                <AnimalsListContainer viewType={viewType} setAnimalsCount={handleAnimalsCountChange} />
+                <AnimalsListContainer
+                    viewType={viewType}
+                    setAnimalsCount={handleAnimalsCountChange}
+                    showFavoriteAnimalsOnly={showFavoriteAnimalsOnly}
+                />
             </Page>
         </Fade>
     );
@@ -92,12 +102,13 @@ function TopSection({
     onFiltersApply,
     onFilterRemove,
     animalsCount,
+    showFavoriteAnimalsOnly,
 }: TopSectionProps) {
     return (
         <Grid container spacing={2} alignItems="center">
             <Grid container item xs={10} alignItems="center" spacing={2}>
-                <CreateButton />
-                {!mobile && (
+                {!showFavoriteAnimalsOnly && <CreateButton />}
+                {!showFavoriteAnimalsOnly && !mobile && (
                     <>
                         <Grid item />
                         <Divider flexItem orientation="vertical" />
@@ -135,6 +146,7 @@ interface TopSectionProps {
     onFiltersApply: (filters: Filter[]) => void;
     onFilterRemove: (filter: Filter) => void;
     animalsCount: number;
+    showFavoriteAnimalsOnly: boolean;
 }
 
 const SPECIES: FilterOption[] = [

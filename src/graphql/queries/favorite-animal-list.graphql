@@ -1,0 +1,24 @@
+query GetFavoriteAnimalsList {
+    favoriteAnimals {
+        id
+        name
+        imageUrl
+        status
+        modTime
+        details {
+            gender {
+                id
+                value
+            }
+            species {
+                id
+                value
+            }
+            birthDate
+            weight
+            species {
+                value
+            }
+        }
+    }
+}
