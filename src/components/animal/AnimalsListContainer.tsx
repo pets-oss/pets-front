@@ -3,7 +3,7 @@ import React from 'react';
 
 import { useQuery } from '@apollo/client';
 import Skeleton from '@material-ui/lab/Skeleton';
-import { Animal } from '../../graphql/types';
+import { AnimalEdge, AnimalsConnection } from '../../graphql/types';
 import AnimalsList from './AnimalsList';
 import AnimalsTable from './AnimalsTable';
 import { AnimalsViewType } from './ViewSelector';
@@ -11,7 +11,7 @@ import { AnimalsViewType } from './ViewSelector';
 const GET_ANIMALS_QUERY = loader('../../graphql/queries/animal-list.graphql');
 
 interface Response {
-    animals: Animal[];
+    animals: AnimalsConnection;
 }
 
 interface AnimalsListContainerProps {
@@ -30,16 +30,16 @@ export default function AnimalsListContainer({ viewType, setAnimalsCount }: Anim
         return <p>Error!</p>;
     }
 
-    if (!data?.animals.length) {
+    if (!data?.animals?.edges?.length) {
         // TODO: replace with proper UI elements
         return <p>No data</p>;
     }
 
-    setAnimalsCount(data.animals.length);
+    setAnimalsCount(data.animals?.edges?.length);
 
     if (viewType === AnimalsViewType.TABLE) {
-        return <AnimalsTable animals={data.animals} />;
+        return <AnimalsTable animals={data.animals.edges! as AnimalEdge[]} />;
     }
 
-    return <AnimalsList animals={data.animals} />;
+    return <AnimalsList animals={data.animals.edges! as AnimalEdge[]} />;
 }

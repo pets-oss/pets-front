@@ -9,18 +9,18 @@ import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
-import { Animal } from '../../graphql/types';
+import { AnimalEdge } from '../../graphql/types';
 import { getAnimalAge } from '../../utils/animal';
 
 interface AnimalsTableProps {
-    animals: Animal[];
+    animals: AnimalEdge[];
 }
 
 export default function AnimalsTable({ animals }: AnimalsTableProps) {
     const history = useHistory();
     const classes = useStyles();
 
-    const onRowClick = (animalId: number) => {
+    const onRowClick = (animalId?: number) => {
         history.push(`/animal/${animalId}`);
     };
 
@@ -52,22 +52,27 @@ export default function AnimalsTable({ animals }: AnimalsTableProps) {
                 </TableHead>
                 <TableBody>
                     {animals.map(animal => (
-                        <TableRow key={animal.id} hover onClick={() => onRowClick(animal.id)} className={classes.row}>
+                        <TableRow
+                            key={animal?.node?.id}
+                            hover
+                            onClick={() => onRowClick(animal?.node?.id)}
+                            className={classes.row}
+                        >
                             <TableCell align="center">
                                 <Avatar
                                     alt="Animal picture"
                                     src={
-                                        animal.imageUrl
-                                            ? animal.imageUrl
-                                            : `https://eu.ui-avatars.com/api/?name=${animal.name}`
+                                        animal?.node?.imageUrl
+                                            ? animal?.node?.imageUrl
+                                            : `https://eu.ui-avatars.com/api/?name=${animal?.node?.name}`
                                     }
                                 />
                             </TableCell>
                             <TableCell align="center">Dog</TableCell>
-                            <TableCell align="center">{animal.name}</TableCell>
+                            <TableCell align="center">{animal?.node?.name}</TableCell>
                             <TableCell align="center">Puddle</TableCell>
-                            <TableCell align="center">{animal.details?.weight}</TableCell>
-                            <TableCell align="center">{getAnimalAge(animal.details?.birthDate)}</TableCell>
+                            <TableCell align="center">{animal?.node?.details?.weight}</TableCell>
+                            <TableCell align="center">{getAnimalAge(animal?.node?.details?.birthDate)}</TableCell>
                             <TableCell align="center">check-in date</TableCell>
                         </TableRow>
                     ))}
