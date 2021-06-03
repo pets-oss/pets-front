@@ -1,4 +1,4 @@
-query GetFavoriteAnimalsList {
+query GetFavoriteAnimals {
     favoriteAnimals {
         id
         name

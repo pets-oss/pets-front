@@ -1,18 +1,32 @@
 import clsx from 'clsx';
-import React from 'react';
+import { loader } from 'graphql.macro';
+import React, { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 
+import { gql, useMutation } from '@apollo/client';
 import { Box, Card, CardActionArea, CardHeader, CardMedia, GridSize, IconButton, Typography } from '@material-ui/core';
 import Grid from '@material-ui/core/Grid';
 import { makeStyles, Theme } from '@material-ui/core/styles';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import { Animal } from '../../graphql/types';
 import { getYMDDateFromTS } from '../../utils/dateFormatters';
+import { getFavoriteAnimalIds, isAnimalFavorite, setFavoriteAnimalIds } from '../../utils/favoriteAnimal';
 import AnimalAvatar from './AnimalAvatar';
 
-export default function AnimalCard({ animal, xs = 10, md = 6, lg = 3 }: AnimalCardProps) {
+const ADD_FAVORITE_ANIMAL_MUTATION = gql`
+    ${loader('../../graphql/mutations/add-favorite-animal.graphql')}
+`;
+const REMOVE_FAVORITE_ANIMAL_MUTATION = gql`
+    ${loader('../../graphql/mutations/remove-favorite-animal.graphql')}
+`;
+
+export default function AnimalCard({ animal, xs = 10, md = 6, lg = 3, showFavoriteAnimalsOnly }: AnimalCardProps) {
     const classes = useStyles();
-    const [favorite, setFavorite] = React.useState(false);
+
+    const [favorite, setFavorite] = useState(isAnimalFavorite(animal.id));
+    const [addFavoriteAnimal] = useMutation(ADD_FAVORITE_ANIMAL_MUTATION, { variables: { animalId: animal.id } });
+    const [removeFavoriteAnimal] = useMutation(REMOVE_FAVORITE_ANIMAL_MUTATION, { variables: { animalId: animal.id } });
+
     let formatedRegistrationDate;
     if (animal.registration?.registrationDate) {
         formatedRegistrationDate = getYMDDateFromTS(animal.registration?.registrationDate);
@@ -23,12 +37,23 @@ export default function AnimalCard({ animal, xs = 10, md = 6, lg = 3 }: AnimalCa
     const species = animal.details?.species;
     const gender = animal.details?.gender;
 
-    // just mocking toggle
     const handleFavoriteClick = () => {
+        const favoriteAnimalIds = getFavoriteAnimalIds();
+        if (!favorite) {
+            addFavoriteAnimal();
+            favoriteAnimalIds.push(animal.id);
+        } else {
+            removeFavoriteAnimal();
+            const index = favoriteAnimalIds.indexof(animal.id);
+            if (index) {
+                favoriteAnimalIds.splice(index, 1);
+            }
+        }
+        setFavoriteAnimalIds(favoriteAnimalIds);
         setFavorite(!favorite);
     };
 
-    return (
+    return showFavoriteAnimalsOnly && !favorite ? null : (
         <Grid item xs={xs} md={md} lg={lg}>
             <Card>
                 <Box className={classes.cardMediaWrapper}>
@@ -112,4 +137,5 @@ interface AnimalCardProps {
     xs?: GridSize;
     md?: GridSize;
     lg?: GridSize;
+    showFavoriteAnimalsOnly?: boolean;
 }

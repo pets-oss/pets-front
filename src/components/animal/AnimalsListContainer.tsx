@@ -9,7 +9,6 @@ import AnimalsTable from './AnimalsTable';
 import { AnimalsViewType } from './ViewSelector';
 
 const GET_ANIMALS_QUERY = loader('../../graphql/queries/animal-list.graphql');
-const GET_FAVORITE_ANIMALS_QUERY = loader('../../graphql/queries/favorite-animal-list.graphql');
 
 interface Response {
     animals: AnimalsConnection;
@@ -18,22 +17,13 @@ interface Response {
 interface AnimalsListContainerProps {
     viewType: AnimalsViewType;
     setAnimalsCount: (value: number) => void;
-    showFavoriteAnimalsOnly: boolean;
 }
 
-export default function AnimalsListContainer({
-    viewType,
-    setAnimalsCount,
-    showFavoriteAnimalsOnly,
-}: AnimalsListContainerProps) {
-    const { loading, error, data } = useQuery<Response>(
-        showFavoriteAnimalsOnly ? GET_FAVORITE_ANIMALS_QUERY : GET_ANIMALS_QUERY
-    );
-
+export default function AnimalsListContainer({ viewType, setAnimalsCount }: AnimalsListContainerProps) {
+    const { loading, error, data } = useQuery<Response>(GET_ANIMALS_QUERY);
     if (loading) {
         return <Skeleton animation="wave" variant="rect" height={500} />;
     }
-
     if (error) {
         // TODO: replace with proper UI elements
         return <p>Error!</p>;

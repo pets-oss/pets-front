@@ -1,12 +1,16 @@
 import React from 'react';
 
-import AnimalsPage from './AnimalsPage';
+import { Fade } from '@material-ui/core';
+import FavoriteAnimalsListContainer from '../components/animal/FavoriteAnimalsListContainer';
+import Page from './Page';
 
 function FavoriteAnimalsPage() {
     return (
-        <>
-            <AnimalsPage title="Favorite Animals" showFavoriteAnimalsOnly />
-        </>
+        <Fade in timeout={600}>
+            <Page title="Favorites">
+                <FavoriteAnimalsListContainer />
+            </Page>
+        </Fade>
     );
 }
 
