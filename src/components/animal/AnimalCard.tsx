@@ -1,17 +1,18 @@
 import clsx from 'clsx';
 import { loader } from 'graphql.macro';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { NavLink } from 'react-router-dom';
 
-import { gql, useMutation } from '@apollo/client';
+import { gql, useMutation, useQuery } from '@apollo/client';
 import { Box, Card, CardActionArea, CardHeader, CardMedia, GridSize, IconButton, Typography } from '@material-ui/core';
 import Grid from '@material-ui/core/Grid';
 import { makeStyles, Theme } from '@material-ui/core/styles';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import { Animal } from '../../graphql/types';
 import { getYMDDateFromTS } from '../../utils/dateFormatters';
-import { getFavoriteAnimalIds, isAnimalFavorite, setFavoriteAnimalIds } from '../../utils/favoriteAnimal';
 import AnimalAvatar from './AnimalAvatar';
+
+const GET_FAVORITE_ANIMAL_QUERY = loader('../../graphql/queries/favorite-animal.graphql');
 
 const ADD_FAVORITE_ANIMAL_MUTATION = gql`
     ${loader('../../graphql/mutations/add-favorite-animal.graphql')}
@@ -23,9 +24,16 @@ const REMOVE_FAVORITE_ANIMAL_MUTATION = gql`
 export default function AnimalCard({ animal, xs = 10, md = 6, lg = 3, showFavoriteAnimalsOnly }: AnimalCardProps) {
     const classes = useStyles();
 
-    const [favorite, setFavorite] = useState(isAnimalFavorite(animal.id));
+    const [favorite, setFavorite] = useState(false);
     const [addFavoriteAnimal] = useMutation(ADD_FAVORITE_ANIMAL_MUTATION, { variables: { animalId: animal.id } });
     const [removeFavoriteAnimal] = useMutation(REMOVE_FAVORITE_ANIMAL_MUTATION, { variables: { animalId: animal.id } });
+    const { data } = useQuery(GET_FAVORITE_ANIMAL_QUERY, { variables: { animalId: animal.id } });
+
+    useEffect(() => {
+        if (data) {
+            setFavorite(true);
+        }
+    }, [data]);
 
     let formatedRegistrationDate;
     if (animal.registration?.registrationDate) {
@@ -38,18 +46,11 @@ export default function AnimalCard({ animal, xs = 10, md = 6, lg = 3, showFavori
     const gender = animal.details?.gender;
 
     const handleFavoriteClick = () => {
-        const favoriteAnimalIds = getFavoriteAnimalIds();
         if (!favorite) {
             addFavoriteAnimal();
-            favoriteAnimalIds.push(animal.id);
         } else {
             removeFavoriteAnimal();
-            const index = favoriteAnimalIds.indexof(animal.id);
-            if (index) {
-                favoriteAnimalIds.splice(index, 1);
-            }
         }
-        setFavoriteAnimalIds(favoriteAnimalIds);
         setFavorite(!favorite);
     };
 

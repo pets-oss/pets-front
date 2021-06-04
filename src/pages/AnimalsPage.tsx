@@ -6,7 +6,6 @@ import useTheme from '@material-ui/core/styles/useTheme';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import AnimalsListContainer from '../components/animal/AnimalsListContainer';
 import CreateButton from '../components/animal/create/CreateButton';
-import FavoriteAnimalsContainer from '../components/animal/FavoriteAnimalsContainer';
 import AnimalFiltersChips from '../components/animal/filters/AnimalFilterChips';
 import AnimalFilters from '../components/animal/filters/AnimalFilters';
 import Filter, { FilterOption } from '../components/animal/filters/Filter';
@@ -78,7 +77,6 @@ function AnimalsPage() {
                     />
                 }
             >
-                <FavoriteAnimalsContainer dataLoadOnly />
                 <AnimalsListContainer viewType={viewType} setAnimalsCount={handleAnimalsCountChange} />
             </Page>
         </Fade>

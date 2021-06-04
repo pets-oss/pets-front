@@ -1,0 +1,5 @@
+query GetFavoriteAnimal($animalId: Int!) {
+    favoriteAnimal(animalId: $animalId) {
+        id
+    }
+}
