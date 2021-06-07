@@ -127,7 +127,9 @@ export default function AnimalEventDialog({
 
     const createEvent = (_type, _group, _expenses, _comment, _date): Event => {
         return {
-            author: '',
+            author: {
+                id: '1',
+            },
             createTime: '',
             id: 123456,
             animalId: +animalID,

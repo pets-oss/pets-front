@@ -214,7 +214,18 @@ export type AnimalsConnection = {
     /** Information for pagination. */
     pageInfo: PageInfo;
     /** A list of animal edges. */
-    edges?: Maybe<Array<Maybe<AnimalEdge>>>;
+    edges: Array<AnimalEdge>;
+};
+
+/** Represents an app user */
+export type Author = {
+    __typename?: 'Author';
+    /** id */
+    id: Scalars['String'];
+    /** User name */
+    name?: Maybe<Scalars['String']>;
+    /** User surname */
+    surname?: Maybe<Scalars['String']>;
 };
 
 /** Represents a breed. */
@@ -236,7 +247,7 @@ export type CheckIn = Event & {
     type: EventType;
     dateTime: Scalars['String'];
     createTime: Scalars['String'];
-    author: Scalars['String'];
+    author: Author;
     details: CheckInDetails;
 };
 
@@ -254,7 +265,7 @@ export type CheckOut = Event & {
     type: EventType;
     dateTime: Scalars['String'];
     createTime: Scalars['String'];
-    author: Scalars['String'];
+    author: Author;
     details: CheckOutDetails;
 };
 
@@ -379,7 +390,7 @@ export type Event = {
     type: EventType;
     dateTime: Scalars['String'];
     createTime: Scalars['String'];
-    author: Scalars['String'];
+    author: Author;
     details: EventDetails;
 };
 
@@ -427,7 +438,7 @@ export type Found = Event & {
     type: EventType;
     dateTime: Scalars['String'];
     createTime: Scalars['String'];
-    author: Scalars['String'];
+    author: Author;
     details: FoundDetails;
 };
 
@@ -447,7 +458,7 @@ export type FoundEvent = {
     municipalityId: Scalars['Int'];
     date?: Maybe<Scalars['Date']>;
     animalId: Scalars['Int'];
-    author: Scalars['String'];
+    author: Author;
     comments?: Maybe<Scalars['String']>;
 };
 
@@ -478,7 +489,7 @@ export type GivenAway = Event & {
     type: EventType;
     dateTime: Scalars['String'];
     createTime: Scalars['String'];
-    author: Scalars['String'];
+    author: Author;
     details: GivenAwayDetails;
 };
 
@@ -503,7 +514,7 @@ export type GivenAwayEvent = {
     /** Event reason */
     reason?: Maybe<Scalars['String']>;
     /** Author */
-    author: Scalars['String'];
+    author: Author;
 };
 
 export type LocationChange = Event & {
@@ -514,7 +525,7 @@ export type LocationChange = Event & {
     type: EventType;
     dateTime: Scalars['String'];
     createTime: Scalars['String'];
-    author: Scalars['String'];
+    author: Author;
     details: LocationChangeDetails;
 };
 
@@ -532,7 +543,7 @@ export type Medication = Event & {
     type: EventType;
     dateTime: Scalars['String'];
     createTime: Scalars['String'];
-    author: Scalars['String'];
+    author: Author;
     details: MedicationDetails;
 };
 
@@ -556,7 +567,7 @@ export type Microchipping = Event & {
     type: EventType;
     dateTime: Scalars['String'];
     createTime: Scalars['String'];
-    author: Scalars['String'];
+    author: Author;
     details: MicrochippingDetails;
 };
 
@@ -724,6 +735,7 @@ export type PageInfo = {
     startCursor?: Maybe<Scalars['String']>;
     /** When paginating forwards, the cursor to continue. */
     endCursor?: Maybe<Scalars['String']>;
+    totalCount: Scalars['Int'];
 };
 
 export type Query = {
@@ -764,6 +776,7 @@ export type Query = {
      * animalOwner(id: 1)
      */
     animalOwner?: Maybe<AnimalOwner>;
+    registration?: Maybe<AnimalRegistration>;
     /**
      * Get all breeds.
      *
@@ -890,6 +903,10 @@ export type QueryAnimalsArgs = {
 };
 
 export type QueryAnimalOwnerArgs = {
+    id: Scalars['Int'];
+};
+
+export type QueryRegistrationArgs = {
     id: Scalars['Int'];
 };
 
