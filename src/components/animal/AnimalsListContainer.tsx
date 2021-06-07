@@ -35,7 +35,7 @@ export default function AnimalsListContainer({ viewType, setAnimalsCount }: Anim
         return <p>No data</p>;
     }
 
-    setAnimalsCount(data.animals.edges.length);
+    setAnimalsCount(data?.animals.pageInfo.totalCount);
 
     if (viewType === AnimalsViewType.TABLE) {
         return <AnimalsTable animals={data.animals.edges} />;
