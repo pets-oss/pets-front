@@ -54,7 +54,7 @@ function AnimalDetails({ onLoad }: AnimalDetailsProps) {
         return <p>No data!</p>;
     }
 
-    const { animal, events } = data;
+    const { animal, events = [] } = data;
     const animalDetails = getAnimalDetails(animal);
 
     return (
