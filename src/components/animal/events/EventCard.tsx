@@ -13,7 +13,7 @@ import ParamTable from '../ParamTable';
 export default function EventCard({ event }: AnimalCardProps) {
     const classes = useStyles();
     const [expanded, setExpanded] = useState(false);
-    const eventName = event.type?.type || '';
+    const eventName = event.type || '';
     const header = `Event type - ${eventName}`;
     const subHeader = `${event.dateTime ? getFormattedDate(event.dateTime) : '-'} / Author`;
     const eventDetails = getEventDetails(event);

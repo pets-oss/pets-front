@@ -22,7 +22,7 @@ interface RouterParams {
 
 interface Response {
     animal: Animal;
-    events: { animalAll: Event[] }[];
+    events: Event[];
 }
 
 interface AnimalDetailsProps {
@@ -54,8 +54,7 @@ function AnimalDetails({ onLoad }: AnimalDetailsProps) {
         return <p>No data!</p>;
     }
 
-    const { animal, events } = data;
-    const animalEvents = events?.[0]?.animalAll ?? [];
+    const { animal, events = [] } = data;
     const animalDetails = getAnimalDetails(animal);
 
     return (
@@ -95,7 +94,7 @@ function AnimalDetails({ onLoad }: AnimalDetailsProps) {
                     </Box>
                 </>
                 <Box className={classes.eventsContainer} py={3} px={2}>
-                    <AnimalEvents events={animalEvents} />
+                    <AnimalEvents events={events} />
                 </Box>
             </LayoutMultiColRow>
         </div>

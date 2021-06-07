@@ -25,12 +25,14 @@ query GetAnimal($id: Int!) {
         }
         imageUrl
     }
-    events {
+    events(animalId: $id) {
         id
         group
         type
         dateTime
         createTime
-        author
+        author {
+            name
+        }
     }
 }

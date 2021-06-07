@@ -6,6 +6,8 @@ query GetEventsList {
         type
         dateTime
         createTime
-        author
+        author {
+            name
+        }
     }
 }
