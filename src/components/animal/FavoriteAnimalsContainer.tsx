@@ -10,11 +10,12 @@ import AnimalCard from './AnimalCard';
 const GET_FAVORITE_ANIMALS_QUERY = loader('../../graphql/queries/favorite-animals.graphql');
 
 interface Response {
-    animals: Animal[];
+    favoriteAnimals: Animal[];
 }
 
 export default function FavoriteAnimalsContainer() {
     const { loading, error, data } = useQuery<Response>(GET_FAVORITE_ANIMALS_QUERY);
+
     if (loading) {
         return <Skeleton animation="wave" variant="rect" height={500} />;
     }
@@ -22,14 +23,14 @@ export default function FavoriteAnimalsContainer() {
         // TODO: replace with proper UI elements
         return <p>Error!</p>;
     }
-    if (!data?.animals.length) {
+    if (!data?.favoriteAnimals.length) {
         // TODO: replace with proper UI elements
         return <p>No data</p>;
     }
 
     return (
         <Grid container component="ul" spacing={2} justify="center">
-            {data.animals.map(animal => (
+            {data.favoriteAnimals.map(animal => (
                 <AnimalCard key={animal.id} animal={animal} showFavoriteAnimalsOnly />
             ))}
         </Grid>

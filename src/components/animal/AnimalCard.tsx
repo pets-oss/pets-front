@@ -21,19 +21,31 @@ const REMOVE_FAVORITE_ANIMAL_MUTATION = gql`
     ${loader('../../graphql/mutations/remove-favorite-animal.graphql')}
 `;
 
+interface Response {
+    favoriteAnimal: Animal;
+}
+
 export default function AnimalCard({ animal, xs = 10, md = 6, lg = 3, showFavoriteAnimalsOnly }: AnimalCardProps) {
     const classes = useStyles();
 
     const [favorite, setFavorite] = useState(false);
     const [addFavoriteAnimal] = useMutation(ADD_FAVORITE_ANIMAL_MUTATION, { variables: { animalId: animal.id } });
     const [removeFavoriteAnimal] = useMutation(REMOVE_FAVORITE_ANIMAL_MUTATION, { variables: { animalId: animal.id } });
-    const { data } = useQuery(GET_FAVORITE_ANIMAL_QUERY, { variables: { animalId: animal.id } });
+
+    const { loading, error, data } = useQuery<Response>(GET_FAVORITE_ANIMAL_QUERY, {
+        variables: { animalId: animal.id },
+    });
 
     useEffect(() => {
-        if (data) {
+        if (!loading && data?.favoriteAnimal) {
             setFavorite(true);
         }
-    }, [data]);
+    }, [loading, data]);
+
+    if (error) {
+        // TODO: replace with proper UI elements
+        return <p>Error while checking if animal is favorite!</p>;
+    }
 
     let formatedRegistrationDate;
     if (animal.registration?.registrationDate) {
