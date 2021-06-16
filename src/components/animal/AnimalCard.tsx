@@ -1,18 +1,39 @@
 import clsx from 'clsx';
-import React from 'react';
+import { loader } from 'graphql.macro';
+import React, { useContext, useState } from 'react';
 import { NavLink } from 'react-router-dom';
 
+import { gql, useMutation } from '@apollo/client';
 import { Box, Card, CardActionArea, CardHeader, CardMedia, GridSize, IconButton, Typography } from '@material-ui/core';
 import Grid from '@material-ui/core/Grid';
 import { makeStyles, Theme } from '@material-ui/core/styles';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import { Animal } from '../../graphql/types';
 import { getYMDDateFromTS } from '../../utils/dateFormatters';
+import { OutdatedPageContext } from '../../utils/OutdatedPageContextProvider';
 import AnimalAvatar from './AnimalAvatar';
 
-export default function AnimalCard({ animal, xs = 10, md = 6, lg = 3 }: AnimalCardProps) {
+const ADD_FAVORITE_ANIMAL_MUTATION = gql`
+    ${loader('../../graphql/mutations/add-favorite-animal.graphql')}
+`;
+const REMOVE_FAVORITE_ANIMAL_MUTATION = gql`
+    ${loader('../../graphql/mutations/remove-favorite-animal.graphql')}
+`;
+
+export default function AnimalCard({ animal, xs = 10, md = 6, lg = 3, updateFavoritesPage }: AnimalCardProps) {
     const classes = useStyles();
-    const [favorite, setFavorite] = React.useState(false);
+
+    // const [favorite, setFavorite] = useState(animal.isFavorite);
+    const [favorite, setFavorite] = useState(false);
+    const [addFavoriteAnimal] = useMutation(ADD_FAVORITE_ANIMAL_MUTATION, {
+        variables: { animalId: animal.id },
+    });
+    const [removeFavoriteAnimal] = useMutation(REMOVE_FAVORITE_ANIMAL_MUTATION, {
+        variables: { animalId: animal.id },
+    });
+
+    const { setIsPageOutdated } = useContext(OutdatedPageContext);
+
     let formatedRegistrationDate;
     if (animal.registration?.registrationDate) {
         formatedRegistrationDate = getYMDDateFromTS(animal.registration?.registrationDate);
@@ -23,8 +44,25 @@ export default function AnimalCard({ animal, xs = 10, md = 6, lg = 3 }: AnimalCa
     const species = animal.details?.species;
     const gender = animal.details?.gender;
 
-    // just mocking toggle
     const handleFavoriteClick = () => {
+        if (!favorite) {
+            // update database
+            addFavoriteAnimal();
+            // update data in Favorites page, as a new animal has been marked as favorite
+            setIsPageOutdated({ animalsPage: false, favoritesPage: true });
+        } else {
+            // update database
+            removeFavoriteAnimal();
+            if (updateFavoritesPage) {
+                // remove animal from the view in Favorites page
+                updateFavoritesPage(animal);
+                // a call from Favorites page: update Animals page
+                setIsPageOutdated({ animalsPage: true, favoritesPage: false });
+            } else {
+                // a call from Animals page: update Favorites page
+                setIsPageOutdated({ animalsPage: false, favoritesPage: true });
+            }
+        }
         setFavorite(!favorite);
     };
 
@@ -112,4 +150,5 @@ interface AnimalCardProps {
     xs?: GridSize;
     md?: GridSize;
     lg?: GridSize;
+    updateFavoritesPage?: (animal: Animal) => void;
 }

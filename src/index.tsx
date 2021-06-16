@@ -8,13 +8,16 @@ import reportWebVitals from './reportWebVitals';
 import * as serviceWorkerRegistration from './serviceWorkerRegistration';
 import Auth0ProviderWithHistory from './utils/auth/Auth0ProviderWithHistory';
 import AuthorizedApolloProvider from './utils/AuthorizedApolloProvider';
+import { OutdatedPageContextProvider } from './utils/OutdatedPageContextProvider';
 
 ReactDOM.render(
     <React.StrictMode>
         <BrowserRouter>
             <Auth0ProviderWithHistory>
                 <AuthorizedApolloProvider>
-                    <App />
+                    <OutdatedPageContextProvider>
+                        <App />
+                    </OutdatedPageContextProvider>
                 </AuthorizedApolloProvider>
             </Auth0ProviderWithHistory>
         </BrowserRouter>

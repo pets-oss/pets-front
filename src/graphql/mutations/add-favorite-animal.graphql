@@ -1,0 +1,7 @@
+mutation AddFavoriteAnimal($animalId: Int!) {
+    createFavoriteAnimal(animalId: $animalId) {
+        animalId
+        userId
+        modTime
+    }
+}
