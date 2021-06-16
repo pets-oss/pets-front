@@ -20,5 +20,6 @@ query GetFavoriteAnimals {
                 value
             }
         }
+        isFavorite
     }
 }

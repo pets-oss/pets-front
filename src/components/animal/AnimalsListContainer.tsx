@@ -1,9 +1,10 @@
 import { loader } from 'graphql.macro';
-import React from 'react';
+import React, { useContext, useEffect } from 'react';
 
 import { useQuery } from '@apollo/client';
 import Skeleton from '@material-ui/lab/Skeleton';
 import { AnimalsConnection } from '../../graphql/types';
+import { OutdatedPageContext } from '../../utils/OutdatedPageContextProvider';
 import AnimalsList from './AnimalsList';
 import AnimalsTable from './AnimalsTable';
 import { AnimalsViewType } from './ViewSelector';
@@ -20,7 +21,16 @@ interface AnimalsListContainerProps {
 }
 
 export default function AnimalsListContainer({ viewType, setAnimalsCount }: AnimalsListContainerProps) {
-    const { loading, error, data } = useQuery<Response>(GET_ANIMALS_QUERY);
+    const { loading, error, data, refetch } = useQuery<Response>(GET_ANIMALS_QUERY, { fetchPolicy: 'no-cache' });
+    const { isPageOutdated, setIsPageOutdated } = useContext(OutdatedPageContext);
+
+    useEffect(() => {
+        if (isPageOutdated.animalsPage) {
+            refetch();
+            setIsPageOutdated({ animalsPage: false, favoritesPage: false });
+        }
+    }, [isPageOutdated, setIsPageOutdated, refetch]);
+
     if (loading) {
         return <Skeleton animation="wave" variant="rect" height={500} />;
     }
