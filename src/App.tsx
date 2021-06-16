@@ -27,15 +27,11 @@ const useStyles = makeStyles({
 export default function App() {
     const classes = useStyles();
 
-    // const [isFavoritesPageUpToDate, setIsFavoritesPageUpToDate] = useState(true);
-    // const value = { isFavoritesPageUpToDate, setIsFavoritesPageUpToDate };
-
     return (
         <ThemeProvider theme={MuiTheme}>
             <CssBaseline />
             <div className={classes.root}>
                 <ResponsiveAppTop />
-                {/* <IsFavoritesPageUpToDateContext.Provider value={value}> */}
                 <React.Suspense fallback={<Skeleton variant="rect" height="100vh" />}>
                     <Switch>
                         <Route exact path="/about" component={React.lazy(() => import('./pages/About'))} />
@@ -79,16 +75,9 @@ export default function App() {
                         <Route component={PageNotFound} />
                     </Switch>
                 </React.Suspense>
-                {/* </IsFavoritesPageUpToDateContext.Provider> */}
                 <ResponsiveAppBottom />
             </div>
             <LocationDisplay />
         </ThemeProvider>
     );
 }
-
-/* export const IsFavoritesPageUpToDateContext = React.createContext({
-    isFavoritesPageUpToDate: true,
-    // eslint-disable-next-line no-empty-function
-    setIsFavoritesPageUpToDate: (newIsFavoritesPageUpToDate: boolean) => {},
-}); */
