@@ -82,7 +82,7 @@ const useStyles = makeStyles(theme => ({
     content: {
         display: 'flex',
         justifyContent: 'center',
-        alignItems: 'flex-start',
+        alignItems: 'center',
         flexDirection: 'column',
     },
 }));
