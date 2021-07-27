@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import { Grid } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
@@ -6,46 +6,52 @@ import TablePagination from '@material-ui/core/TablePagination';
 
 interface PaginationRoundedProps {
     count: number;
-    page: number;
-    onPageChange: (page: number) => void;
+    nextPage: () => void;
+    prevPage: () => void;
+    firstPage: (size: number) => void;
     pageSize: number;
     onPageSizeChange: (pageSize: number) => void;
 }
 
 export default function PaginationRounded({
     count,
-    page,
-    onPageChange,
+    nextPage,
+    prevPage,
+    firstPage,
     pageSize,
     onPageSizeChange,
 }: PaginationRoundedProps) {
     const classes = useStyles();
 
-    function handlePageChange(event, newPage) {
-        onPageChange(newPage);
+    const [page, setPage] = useState(0);
+
+    function handleChangePage(event, newPage) {
+        if (newPage > page) {
+            nextPage();
+        } else {
+            prevPage();
+        }
+
+        setPage(newPage);
     }
 
     function handleChangeRowsPerPage(event) {
         const size = parseInt(event.target.value, 10);
         onPageSizeChange(size);
+        setPage(0);
+        firstPage(size);
     }
 
     return (
-        <Grid container justifyContent="flex-end">
+        <Grid container justify="flex-end">
             <div className={classes.root}>
                 <TablePagination
-                    component="div"
                     count={count}
                     page={page}
-                    onPageChange={handlePageChange}
+                    onChangePage={handleChangePage}
                     rowsPerPage={pageSize}
                     rowsPerPageOptions={[4, 12, 48, 192]}
-                    onRowsPerPageChange={handleChangeRowsPerPage}
-                    classes={{
-                        toolbar: classes.toolbar,
-                        actions: classes.actions,
-                    }}
-                    labelRowsPerPage="Items per page"
+                    onChangeRowsPerPage={handleChangeRowsPerPage}
                 />
             </div>
         </Grid>
@@ -55,13 +61,5 @@ export default function PaginationRounded({
 const useStyles = makeStyles(theme => ({
     root: {
         marginTop: theme.spacing(2),
-    },
-    toolbar: {
-        flexWrap: 'wrap',
-    },
-    actions: {
-        [theme.breakpoints.down('sm')]: {
-            margin: '0 auto',
-        },
     },
 }));
