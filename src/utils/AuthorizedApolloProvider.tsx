@@ -23,7 +23,20 @@ const AuthorizedApolloProvider = ({ children }: { children: ReactChild }) => {
 
     const apolloClient = new ApolloClient({
         link: authLink.concat(httpLink),
-        cache: new InMemoryCache(),
+        cache: new InMemoryCache({
+            typePolicies: {
+                Query: {
+                    fields: {
+                        animals: {
+                            keyArgs: [],
+                            merge(existing, incoming) {
+                                return incoming;
+                            },
+                        },
+                    },
+                },
+            },
+        }),
         connectToDevTools: true,
     });
 
