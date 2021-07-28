@@ -10,6 +10,7 @@ import PaginationRounded from './PaginationRounded';
 import { AnimalsViewType } from './ViewSelector';
 
 const GET_ANIMALS_QUERY = loader('../../graphql/queries/animal-list.graphql');
+const DEFAULT_PAGE_SIZE = 12;
 
 interface Response {
     animals: AnimalsConnection;
@@ -21,7 +22,7 @@ interface AnimalsListContainerProps {
 }
 
 export default function AnimalsListContainer({ viewType, setAnimalsCount }: AnimalsListContainerProps) {
-    const [pageSize, setPageSize] = useState(12);
+    const [pageSize, setPageSize] = useState(DEFAULT_PAGE_SIZE);
 
     const { loading, error, data, fetchMore } = useQuery<Response>(GET_ANIMALS_QUERY, {
         variables: {
