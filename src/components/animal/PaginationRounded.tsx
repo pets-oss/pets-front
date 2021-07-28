@@ -52,6 +52,9 @@ export default function PaginationRounded({
                     rowsPerPage={pageSize}
                     rowsPerPageOptions={[4, 12, 48, 192]}
                     onChangeRowsPerPage={handleChangeRowsPerPage}
+                    classes={{
+                        toolbar: classes.toolbar,
+                    }}
                 />
             </div>
         </Grid>
@@ -61,5 +64,8 @@ export default function PaginationRounded({
 const useStyles = makeStyles(theme => ({
     root: {
         marginTop: theme.spacing(2),
+    },
+    toolbar: {
+        flexWrap: 'wrap',
     },
 }));
