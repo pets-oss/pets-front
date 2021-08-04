@@ -54,6 +54,7 @@ export default function PaginationRounded({
                     onChangeRowsPerPage={handleChangeRowsPerPage}
                     classes={{
                         toolbar: classes.toolbar,
+                        actions: classes.actions,
                     }}
                 />
             </div>
@@ -67,5 +68,10 @@ const useStyles = makeStyles(theme => ({
     },
     toolbar: {
         flexWrap: 'wrap',
+    },
+    actions: {
+        [theme.breakpoints.down('sm')]: {
+            margin: '0 auto',
+        },
     },
 }));
