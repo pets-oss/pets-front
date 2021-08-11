@@ -56,6 +56,7 @@ export default function PaginationRounded({
                         toolbar: classes.toolbar,
                         actions: classes.actions,
                     }}
+                    labelRowsPerPage="Items per page"
                 />
             </div>
         </Grid>
