@@ -1,14 +1,16 @@
 import { loader } from 'graphql.macro';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { useQuery } from '@apollo/client';
 import Skeleton from '@material-ui/lab/Skeleton';
 import { AnimalsConnection } from '../../graphql/types';
 import AnimalsList from './AnimalsList';
 import AnimalsTable from './AnimalsTable';
+import PaginationRounded from './PaginationRounded';
 import { AnimalsViewType } from './ViewSelector';
 
 const GET_ANIMALS_QUERY = loader('../../graphql/queries/animal-list.graphql');
+const DEFAULT_PAGE_SIZE = 12;
 
 interface Response {
     animals: AnimalsConnection;
@@ -20,7 +22,18 @@ interface AnimalsListContainerProps {
 }
 
 export default function AnimalsListContainer({ viewType, setAnimalsCount }: AnimalsListContainerProps) {
-    const { loading, error, data } = useQuery<Response>(GET_ANIMALS_QUERY);
+    const [pageSize, setPageSize] = useState(DEFAULT_PAGE_SIZE);
+
+    const { loading, error, data, fetchMore } = useQuery<Response>(GET_ANIMALS_QUERY, {
+        variables: {
+            first: pageSize,
+        },
+    });
+
+    useEffect(() => {
+        setAnimalsCount(data?.animals.pageInfo.totalCount ?? 0);
+    }, [setAnimalsCount, data?.animals.pageInfo.totalCount]);
+
     if (loading) {
         return <Skeleton animation="wave" variant="rect" height={500} />;
     }
@@ -35,11 +48,50 @@ export default function AnimalsListContainer({ viewType, setAnimalsCount }: Anim
         return <p>No data</p>;
     }
 
-    setAnimalsCount(data?.animals.pageInfo.totalCount);
-
-    if (viewType === AnimalsViewType.TABLE) {
-        return <AnimalsTable animals={data.animals.edges} />;
+    function loadNextPage() {
+        fetchMore({
+            variables: {
+                first: pageSize,
+                after: data?.animals.pageInfo.endCursor,
+            },
+        });
     }
 
-    return <AnimalsList animals={data.animals.edges} />;
+    function loadFirstPage(first: number) {
+        fetchMore({
+            variables: {
+                first,
+                after: '',
+            },
+        });
+    }
+
+    function loadPreviousPage() {
+        fetchMore({
+            variables: {
+                first: undefined,
+                after: undefined,
+                last: pageSize,
+                before: data?.animals.pageInfo.startCursor,
+            },
+        });
+    }
+
+    return (
+        <>
+            {viewType === AnimalsViewType.TABLE ? (
+                <AnimalsTable animals={data.animals.edges} />
+            ) : (
+                <AnimalsList animals={data.animals.edges} />
+            )}
+            <PaginationRounded
+                count={data?.animals.pageInfo.totalCount ?? 0}
+                nextPage={loadNextPage}
+                prevPage={loadPreviousPage}
+                firstPage={loadFirstPage}
+                pageSize={pageSize}
+                onPageSizeChange={setPageSize}
+            />
+        </>
+    );
 }
