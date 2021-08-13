@@ -25,7 +25,7 @@ export default function PaginationRounded({
 
     const [page, setPage] = useState(0);
 
-    function handleChangePage(event, newPage) {
+    function handlePageChange(event, newPage) {
         if (newPage > page) {
             nextPage();
         } else {
@@ -48,7 +48,7 @@ export default function PaginationRounded({
                 <TablePagination
                     count={count}
                     page={page}
-                    onChangePage={handleChangePage}
+                    onPageChange={handlePageChange}
                     rowsPerPage={pageSize}
                     rowsPerPageOptions={[4, 12, 48, 192]}
                     onChangeRowsPerPage={handleChangeRowsPerPage}
