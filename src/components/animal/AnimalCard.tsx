@@ -1,18 +1,28 @@
 import clsx from 'clsx';
 import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { NavLink } from 'react-router-dom';
 
 import { Box, Card, CardActionArea, CardHeader, CardMedia, GridSize, IconButton, Typography } from '@material-ui/core';
 import Grid from '@material-ui/core/Grid';
 import { makeStyles, Theme } from '@material-ui/core/styles';
 import FavoriteIcon from '@material-ui/icons/Favorite';
+import addToFavourites from '../../actions/addToFavourites';
+import removeFromFavourites from '../../actions/removeFromFavourites';
 import { Animal } from '../../graphql/types';
+import { FavouriteAnimalsState } from '../../reducers/favouriteAnimalsReducer';
 import { getYMDDateFromTS } from '../../utils/dateFormatters';
 import AnimalAvatar from './AnimalAvatar';
 
 export default function AnimalCard({ animal, xs = 10, md = 6, lg = 3 }: AnimalCardProps) {
     const classes = useStyles();
-    const [favorite, setFavorite] = React.useState(false);
+
+    const favouriteAnimals = useSelector<FavouriteAnimalsState, FavouriteAnimalsState['animals']>(
+        state => state.animals
+    );
+    const isFavourite = favouriteAnimals.includes(animal.id);
+    const dispatch = useDispatch();
+
     let formatedRegistrationDate;
     if (animal.registration?.registrationDate) {
         formatedRegistrationDate = getYMDDateFromTS(animal.registration?.registrationDate);
@@ -23,9 +33,12 @@ export default function AnimalCard({ animal, xs = 10, md = 6, lg = 3 }: AnimalCa
     const species = animal.details?.species;
     const gender = animal.details?.gender;
 
-    // just mocking toggle
-    const handleFavoriteClick = () => {
-        setFavorite(!favorite);
+    const toggleFavorite = () => {
+        if (isFavourite) {
+            dispatch(removeFromFavourites(animal.id));
+        } else {
+            dispatch(addToFavourites(animal.id));
+        }
     };
 
     return (
@@ -41,10 +54,10 @@ export default function AnimalCard({ animal, xs = 10, md = 6, lg = 3 }: AnimalCa
                     </CardActionArea>
                     <IconButton
                         className={clsx(classes.favoriteButton, {
-                            [classes.isFavorite]: favorite,
+                            [classes.isFavorite]: isFavourite,
                         })}
-                        onClick={handleFavoriteClick}
-                        aria-label="add to favorites"
+                        onClick={toggleFavorite}
+                        aria-label="add/remove favorite"
                     >
                         <FavoriteIcon />
                     </IconButton>
