@@ -1,0 +1,6 @@
+mutation UpdateAnimalImage($id: Int!, $image: Upload!) {
+    updateAnimal(input: { id: $id, image: $image }) {
+        id
+        imageUrl
+    }
+}

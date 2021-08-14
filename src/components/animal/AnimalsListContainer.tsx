@@ -1,5 +1,5 @@
 import { loader } from 'graphql.macro';
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 
 import { useQuery } from '@apollo/client';
 import Skeleton from '@material-ui/lab/Skeleton';
@@ -7,9 +7,11 @@ import { AnimalsConnection } from '../../graphql/types';
 import { OutdatedPageContext } from '../../utils/OutdatedPageContextProvider';
 import AnimalsList from './AnimalsList';
 import AnimalsTable from './AnimalsTable';
+import PaginationRounded from './PaginationRounded';
 import { AnimalsViewType } from './ViewSelector';
 
 const GET_ANIMALS_QUERY = loader('../../graphql/queries/animal-list.graphql');
+const DEFAULT_PAGE_SIZE = 12;
 
 interface Response {
     animals: AnimalsConnection;
@@ -21,7 +23,15 @@ interface AnimalsListContainerProps {
 }
 
 export default function AnimalsListContainer({ viewType, setAnimalsCount }: AnimalsListContainerProps) {
-    const { loading, error, data, refetch } = useQuery<Response>(GET_ANIMALS_QUERY, { fetchPolicy: 'no-cache' });
+    const [pageSize, setPageSize] = useState(DEFAULT_PAGE_SIZE);
+
+    const { loading, error, data, refetch, fetchMore } = useQuery<Response>(GET_ANIMALS_QUERY, {
+        fetchPolicy: 'no-cache',
+        variables: {
+            first: pageSize,
+        },
+    });
+
     const { isPageOutdated, setIsPageOutdated } = useContext(OutdatedPageContext);
 
     useEffect(() => {
@@ -30,6 +40,10 @@ export default function AnimalsListContainer({ viewType, setAnimalsCount }: Anim
             setIsPageOutdated({ animalsPage: false, favoritesPage: false });
         }
     }, [isPageOutdated, setIsPageOutdated, refetch]);
+
+    useEffect(() => {
+        setAnimalsCount(data?.animals.pageInfo.totalCount ?? 0);
+    }, [setAnimalsCount, data?.animals.pageInfo.totalCount]);
 
     if (loading) {
         return <Skeleton animation="wave" variant="rect" height={500} />;
@@ -44,11 +58,50 @@ export default function AnimalsListContainer({ viewType, setAnimalsCount }: Anim
         return <p>No data</p>;
     }
 
-    setAnimalsCount(data?.animals.pageInfo.totalCount);
-
-    if (viewType === AnimalsViewType.TABLE) {
-        return <AnimalsTable animals={data.animals.edges} />;
+    function loadNextPage() {
+        fetchMore({
+            variables: {
+                first: pageSize,
+                after: data?.animals.pageInfo.endCursor,
+            },
+        });
     }
 
-    return <AnimalsList animals={data.animals.edges} />;
+    function loadFirstPage(first: number) {
+        fetchMore({
+            variables: {
+                first,
+                after: '',
+            },
+        });
+    }
+
+    function loadPreviousPage() {
+        fetchMore({
+            variables: {
+                first: undefined,
+                after: undefined,
+                last: pageSize,
+                before: data?.animals.pageInfo.startCursor,
+            },
+        });
+    }
+
+    return (
+        <>
+            {viewType === AnimalsViewType.TABLE ? (
+                <AnimalsTable animals={data.animals.edges} />
+            ) : (
+                <AnimalsList animals={data.animals.edges} />
+            )}
+            <PaginationRounded
+                count={data?.animals.pageInfo.totalCount ?? 0}
+                nextPage={loadNextPage}
+                prevPage={loadPreviousPage}
+                firstPage={loadFirstPage}
+                pageSize={pageSize}
+                onPageSizeChange={setPageSize}
+            />
+        </>
+    );
 }

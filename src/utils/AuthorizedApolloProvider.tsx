@@ -1,6 +1,7 @@
+import { createUploadLink } from 'apollo-upload-client';
 import React, { ReactChild } from 'react';
 
-import { ApolloClient, ApolloProvider, createHttpLink, InMemoryCache } from '@apollo/client';
+import { ApolloClient, ApolloProvider, InMemoryCache } from '@apollo/client';
 import { setContext } from '@apollo/client/link/context';
 import { useAuth0 } from '@auth0/auth0-react';
 import config from '../config';
@@ -8,7 +9,7 @@ import config from '../config';
 const AuthorizedApolloProvider = ({ children }: { children: ReactChild }) => {
     const { getAccessTokenSilently } = useAuth0();
 
-    const httpLink = createHttpLink({
+    const httpLink = createUploadLink({
         uri: config.GRAPHQL_URL, // your URI here...
     });
 
@@ -23,7 +24,20 @@ const AuthorizedApolloProvider = ({ children }: { children: ReactChild }) => {
 
     const apolloClient = new ApolloClient({
         link: authLink.concat(httpLink),
-        cache: new InMemoryCache(),
+        cache: new InMemoryCache({
+            typePolicies: {
+                Query: {
+                    fields: {
+                        animals: {
+                            keyArgs: [],
+                            merge(existing, incoming) {
+                                return incoming;
+                            },
+                        },
+                    },
+                },
+            },
+        }),
         connectToDevTools: true,
     });
 

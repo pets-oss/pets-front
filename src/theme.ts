@@ -1,7 +1,7 @@
-import { createMuiTheme } from '@material-ui/core/styles';
-import { ThemeOptions } from '@material-ui/core/styles/createMuiTheme';
+import { createTheme } from '@material-ui/core/styles';
+import { ThemeOptions } from '@material-ui/core/styles/createTheme';
 
-const defaultTheme = createMuiTheme({
+const defaultTheme = createTheme({
     palette: {
         primary: {
             light: '#e8cdb8',
