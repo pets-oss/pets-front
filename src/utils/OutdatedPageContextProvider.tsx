@@ -7,8 +7,10 @@ interface OutdatedPageProps {
 
 export const OutdatedPageContext = React.createContext({
     isPageOutdated: { animalsPage: false, favoritesPage: false },
-    // eslint-disable-next-line no-empty-function
-    setIsPageOutdated: (isPageOutdated: OutdatedPageProps) => {},
+    // eslint-disable-next-line unused-imports/no-unused-vars-ts
+    setIsPageOutdated: (isPageOutdated: OutdatedPageProps) => {
+        // later used with useState
+    },
 });
 
 export const OutdatedPageContextProvider = ({ children }: { children: ReactChild }) => {
