@@ -13,22 +13,21 @@ import { getYMDDateFromTS } from '../../utils/dateFormatters';
 import { OutdatedPageContext } from '../../utils/OutdatedPageContextProvider';
 import AnimalAvatar from './AnimalAvatar';
 
-const ADD_FAVORITE_ANIMAL_MUTATION = gql`
-    ${loader('../../graphql/mutations/add-favorite-animal.graphql')}
+const ADD_ANIMAL_TO_FAVORITES_MUTATION = gql`
+    ${loader('../../graphql/mutations/add-animal-to-favorites.graphql')}
 `;
-const REMOVE_FAVORITE_ANIMAL_MUTATION = gql`
-    ${loader('../../graphql/mutations/remove-favorite-animal.graphql')}
+const REMOVE_ANIMAL_FROM_FAVORITES_MUTATION = gql`
+    ${loader('../../graphql/mutations/remove-animal-from-favorites.graphql')}
 `;
 
 export default function AnimalCard({ animal, xs = 10, md = 6, lg = 3, updateFavoritesPage }: AnimalCardProps) {
     const classes = useStyles();
 
-    // const [favorite, setFavorite] = useState(animal.isFavorite);
-    const [favorite, setFavorite] = useState(false);
-    const [addFavoriteAnimal] = useMutation(ADD_FAVORITE_ANIMAL_MUTATION, {
+    const [favorite, setFavorite] = useState(animal.isFavorite);
+    const [addAnimalToFavorites] = useMutation(ADD_ANIMAL_TO_FAVORITES_MUTATION, {
         variables: { animalId: animal.id },
     });
-    const [removeFavoriteAnimal] = useMutation(REMOVE_FAVORITE_ANIMAL_MUTATION, {
+    const [removeAnimalFromFavorites] = useMutation(REMOVE_ANIMAL_FROM_FAVORITES_MUTATION, {
         variables: { animalId: animal.id },
     });
 
@@ -47,12 +46,12 @@ export default function AnimalCard({ animal, xs = 10, md = 6, lg = 3, updateFavo
     const handleFavoriteClick = () => {
         if (!favorite) {
             // update database
-            addFavoriteAnimal();
+            addAnimalToFavorites();
             // update data in Favorites page, as a new animal has been marked as favorite
             setIsPageOutdated({ animalsPage: false, favoritesPage: true });
         } else {
             // update database
-            removeFavoriteAnimal();
+            removeAnimalFromFavorites();
             if (updateFavoritesPage) {
                 // remove animal from the view in Favorites page
                 updateFavoritesPage(animal);

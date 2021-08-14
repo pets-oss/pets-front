@@ -48,9 +48,11 @@ export default function FavoriteAnimalsContainer() {
 
     // in Favorites page, animals can only be removed from the view
     const updateFavoriteAnimals = (animal: Animal) => {
-        const index = favoriteAnimals.indexOf(animal);
+        const newFavoriteAnimals = [...favoriteAnimals];
+        const index = newFavoriteAnimals.indexOf(animal);
         if (index > -1) {
-            setFavoriteAnimals([...favoriteAnimals].splice(index, 1));
+            newFavoriteAnimals.splice(index, 1);
+            setFavoriteAnimals(newFavoriteAnimals);
         } else {
             // eslint-disable-next-line no-console
             console.log('Could not find animal to remove from Favorites page.');
