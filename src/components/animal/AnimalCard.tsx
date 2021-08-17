@@ -1,27 +1,24 @@
 import clsx from 'clsx';
 import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { RootStateOrAny, useDispatch, useSelector } from 'react-redux';
 import { NavLink } from 'react-router-dom';
 
 import { Box, Card, CardActionArea, CardHeader, CardMedia, GridSize, IconButton, Typography } from '@material-ui/core';
 import Grid from '@material-ui/core/Grid';
 import { makeStyles, Theme } from '@material-ui/core/styles';
 import FavoriteIcon from '@material-ui/icons/Favorite';
-import addToFavourites from '../../actions/addToFavourites';
-import removeFromFavourites from '../../actions/removeFromFavourites';
 import { Animal } from '../../graphql/types';
-import { FavouriteAnimalsState } from '../../reducers/favouriteAnimalsReducer';
+import { addToFavourites, removeFromFavourites } from '../../store/favourites';
 import { getYMDDateFromTS } from '../../utils/dateFormatters';
 import AnimalAvatar from './AnimalAvatar';
 
 export default function AnimalCard({ animal, xs = 10, md = 6, lg = 3 }: AnimalCardProps) {
     const classes = useStyles();
-
-    const favouriteAnimals = useSelector<FavouriteAnimalsState, FavouriteAnimalsState['animals']>(
-        state => state.animals
-    );
-    const isFavourite = favouriteAnimals.includes(animal.id);
     const dispatch = useDispatch();
+
+    const { favouriteAnimalsIds, isLoading, error } = useSelector((state: RootStateOrAny) => state.favourites);
+
+    const isFavourite = favouriteAnimalsIds.indexOf(animal.id) !== -1;
 
     let formatedRegistrationDate;
     if (animal.registration?.registrationDate) {

@@ -8,8 +8,11 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import * as serviceWorkerRegistration from './serviceWorkerRegistration';
 import store from './store';
+import { fetchFavourites } from './store/favourites';
 import Auth0ProviderWithHistory from './utils/auth/Auth0ProviderWithHistory';
 import AuthorizedApolloProvider from './utils/AuthorizedApolloProvider';
+
+store.dispatch(fetchFavourites());
 
 ReactDOM.render(
     <React.StrictMode>

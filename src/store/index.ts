@@ -1,7 +1,22 @@
-import { createStore } from 'redux';
+import { combineReducers } from 'redux';
 
-import { favouriteAnimalsReducer } from '../reducers/favouriteAnimalsReducer';
+import { configureStore } from '@reduxjs/toolkit';
+import authorizedApolloClient from '../utils/authorizedApolloClient';
+import favourites from './favourites';
 
-const store = createStore(favouriteAnimalsReducer);
+const reducer = combineReducers({
+    favourites,
+});
+
+const store = configureStore({
+    reducer,
+    middleware: getDefaultMiddleware =>
+        getDefaultMiddleware({
+            thunk: {
+                extraArgument: { apolloClient: authorizedApolloClient },
+            },
+            serializableCheck: false,
+        }),
+});
 
 export default store;
