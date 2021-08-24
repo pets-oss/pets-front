@@ -8,7 +8,7 @@ import Grid from '@material-ui/core/Grid';
 import { makeStyles, Theme } from '@material-ui/core/styles';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import { Animal } from '../../graphql/types';
-import { addToFavourites, removeFromFavourites } from '../../store/favourites';
+import { addToFavourites, FavouritesState, removeFromFavourites } from '../../store/favourites';
 import { getYMDDateFromTS } from '../../utils/dateFormatters';
 import AnimalAvatar from './AnimalAvatar';
 
@@ -16,9 +16,9 @@ export default function AnimalCard({ animal, xs = 10, md = 6, lg = 3 }: AnimalCa
     const classes = useStyles();
     const dispatch = useDispatch();
 
-    const { favouriteAnimalsIds, isLoading, error } = useSelector((state: RootStateOrAny) => state.favourites);
+    const favouriteAnimals: FavouritesState = useSelector((state: RootStateOrAny) => state.favourites);
 
-    const isFavourite = favouriteAnimalsIds.indexOf(animal.id) !== -1;
+    const isFavourite = favouriteAnimals.ids.indexOf(animal.id) !== -1;
 
     let formatedRegistrationDate;
     if (animal.registration?.registrationDate) {

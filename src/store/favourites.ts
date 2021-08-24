@@ -9,13 +9,13 @@ const ADD_TO_FAVOURITE_ANIMALS_MUTATION = loader('../graphql/mutations/add-to-fa
 const REMOVE_FROM_FAVOURITE_ANIMALS_MUTATION = loader('../graphql/mutations/remove-from-favourite-animals.graphql');
 
 export type FavouritesState = {
-    favouriteAnimalsIds: [];
+    ids: number[];
     isLoading: boolean;
     error: boolean;
 };
 
 const initialState: FavouritesState = {
-    favouriteAnimalsIds: [],
+    ids: [],
     isLoading: false,
     error: false,
 };
@@ -34,7 +34,7 @@ const slice = createSlice({
             state.isLoading = false;
         },
         favouritesSuccess: (state, action) => {
-            state.favouriteAnimalsIds = action.payload;
+            state.ids = action.payload;
             state.isLoading = false;
         },
     },
