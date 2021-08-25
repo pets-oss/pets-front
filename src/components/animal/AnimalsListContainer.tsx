@@ -64,7 +64,7 @@ export default function AnimalsListContainer({ viewType, setAnimalsCount }: Anim
     function loadNextPage() {
         dispatch(
             fetchAnimals({
-                first: pageSize + 1,
+                first: pageSize,
                 after: page.info.endCursor,
             })
         );
