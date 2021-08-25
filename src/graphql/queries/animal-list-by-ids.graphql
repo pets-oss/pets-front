@@ -1,0 +1,37 @@
+query GetAnimalsListByIds($ids: [Int], $first: Int) {
+    animals(ids: $ids, first: $first) {
+        edges {
+            node {
+                id
+                name
+                imageUrl
+                status
+                modTime
+                details {
+                    gender {
+                        id
+                        value
+                    }
+                    species {
+                        id
+                        value
+                    }
+                    birthDate
+                    weight
+                    species {
+                        value
+                    }
+                }
+            }
+            cursor
+        }
+
+        pageInfo {
+            hasNextPage
+            hasPreviousPage
+            startCursor
+            endCursor
+            totalCount
+        }
+    }
+}

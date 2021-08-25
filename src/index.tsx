@@ -8,12 +8,10 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import * as serviceWorkerRegistration from './serviceWorkerRegistration';
 import store from './store';
-import { fetchAnimals } from './store/animals';
 import { fetchFavourites } from './store/favourites';
 import Auth0ProviderWithHistory from './utils/auth/Auth0ProviderWithHistory';
 import AuthorizedApolloProvider from './utils/AuthorizedApolloProvider';
 
-store.dispatch(fetchAnimals(4));
 store.dispatch(fetchFavourites());
 
 ReactDOM.render(

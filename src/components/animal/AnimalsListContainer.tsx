@@ -1,20 +1,14 @@
-import { loader } from 'graphql.macro';
 import React, { useEffect, useState } from 'react';
+import { RootStateOrAny, useDispatch, useSelector } from 'react-redux';
 
-import { useQuery } from '@apollo/client';
+import { Typography } from '@material-ui/core';
 import Skeleton from '@material-ui/lab/Skeleton';
-import { AnimalsConnection } from '../../graphql/types';
+import { fetchAnimals } from '../../store/animals';
 import AnimalsList from './AnimalsList';
-import AnimalsTable from './AnimalsTable';
 import PaginationRounded from './PaginationRounded';
 import { AnimalsViewType } from './ViewSelector';
 
-const GET_ANIMALS_QUERY = loader('../../graphql/queries/animal-list.graphql');
 const DEFAULT_PAGE_SIZE = 12;
-
-interface Response {
-    animals: AnimalsConnection;
-}
 
 interface AnimalsListContainerProps {
     viewType: AnimalsViewType;
@@ -23,18 +17,22 @@ interface AnimalsListContainerProps {
 
 export default function AnimalsListContainer({ viewType, setAnimalsCount }: AnimalsListContainerProps) {
     const [pageSize, setPageSize] = useState(DEFAULT_PAGE_SIZE);
+    const dispatch = useDispatch();
 
-    const { loading, error, data, fetchMore } = useQuery<Response>(GET_ANIMALS_QUERY, {
-        variables: {
-            first: pageSize,
-        },
-    });
+    const { page, isLoading, error } = useSelector((state: RootStateOrAny) => state.animals.all);
+    const animalIds: number[] = page.ids;
 
     useEffect(() => {
-        setAnimalsCount(data?.animals.pageInfo.totalCount ?? 0);
-    }, [setAnimalsCount, data?.animals.pageInfo.totalCount]);
+        dispatch(
+            fetchAnimals({
+                first: pageSize,
+                after: '',
+            })
+        );
+        setAnimalsCount(page.info.totalCount ?? 0);
+    }, [setAnimalsCount, page.info.totalCount, dispatch, pageSize]);
 
-    if (loading) {
+    if (isLoading) {
         return <Skeleton animation="wave" variant="rect" height={500} />;
     }
 
@@ -43,49 +41,50 @@ export default function AnimalsListContainer({ viewType, setAnimalsCount }: Anim
         return <p>Error!</p>;
     }
 
-    if (!data?.animals?.edges.length) {
+    if (page.info.totalCount === 0) {
         // TODO: replace with proper UI elements
         return <p>No data</p>;
     }
 
-    function loadNextPage() {
-        fetchMore({
-            variables: {
-                first: pageSize,
-                after: data?.animals.pageInfo.endCursor,
-            },
-        });
-    }
-
     function loadFirstPage(first: number) {
-        fetchMore({
-            variables: {
+        dispatch(
+            fetchAnimals({
                 first,
                 after: '',
-            },
-        });
+            })
+        );
+    }
+
+    function loadNextPage() {
+        dispatch(
+            fetchAnimals({
+                first: pageSize,
+                after: page.info.endCursor,
+            })
+        );
     }
 
     function loadPreviousPage() {
-        fetchMore({
-            variables: {
+        dispatch(
+            fetchAnimals({
                 first: undefined,
                 after: undefined,
                 last: pageSize,
-                before: data?.animals.pageInfo.startCursor,
-            },
-        });
+                before: page.info.startCursor,
+            })
+        );
     }
 
     return (
         <>
-            {viewType === AnimalsViewType.TABLE ? (
-                <AnimalsTable animals={data.animals.edges} />
-            ) : (
-                <AnimalsList animals={data.animals.edges} />
-            )}
+            {animalIds.map((item: number) => (
+                <Typography key={item}>animal id:{item}</Typography>
+            ))}
+            <hr />
+
+            {viewType === AnimalsViewType.TABLE ? <div>AnimalsTable</div> : <AnimalsList ids={animalIds} />}
             <PaginationRounded
-                count={data?.animals.pageInfo.totalCount ?? 0}
+                count={page.info.totalCount ?? 0}
                 nextPage={loadNextPage}
                 prevPage={loadPreviousPage}
                 firstPage={loadFirstPage}
