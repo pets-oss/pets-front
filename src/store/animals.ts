@@ -3,7 +3,7 @@
 import { loader } from 'graphql.macro';
 
 import { createSlice } from '@reduxjs/toolkit';
-import { PageInfo } from '../graphql/types';
+import { PageInfo, QueryAnimalsArgs } from '../graphql/types';
 
 const GET_ANIMALS_QUERY = loader('../graphql/queries/animal-list.graphql');
 
@@ -23,7 +23,7 @@ export type AnimalsState = {
 const initialSubState: AnimalsPaginatedSubState = {
     page: {
         ids: [],
-        info: {
+        info: <PageInfo>{
             hasNextPage: false,
             hasPreviousPage: false,
             totalCount: 0,
@@ -66,14 +66,14 @@ export default slice.reducer;
 
 const { allAnimalsSuccess, startLoadingAll, hasErrorAll } = slice.actions;
 
-export const fetchAnimals = (first: number) => async (dispatch, getState, { apolloClient }) => {
+export const fetchAnimals = (queryArgs: QueryAnimalsArgs) => async (dispatch, getState, { apolloClient }) => {
     dispatch(startLoadingAll());
 
     try {
         const { data } = await apolloClient.query({
             query: GET_ANIMALS_QUERY,
             fetchPolicy: 'no-cache',
-            variables: { first },
+            variables: queryArgs,
         });
         if (data.animals) {
             let ids;
