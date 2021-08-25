@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { RootStateOrAny, useDispatch, useSelector } from 'react-redux';
 
-import { Typography } from '@material-ui/core';
 import Skeleton from '@material-ui/lab/Skeleton';
+import { Animal } from '../../graphql/types';
 import { fetchAnimals } from '../../store/animals';
 import AnimalsList from './AnimalsList';
+import AnimalsTable from './AnimalsTable';
 import PaginationRounded from './PaginationRounded';
 import { AnimalsViewType } from './ViewSelector';
 
@@ -20,7 +21,7 @@ export default function AnimalsListContainer({ viewType, setAnimalsCount }: Anim
     const dispatch = useDispatch();
 
     const { page, isLoading, error } = useSelector((state: RootStateOrAny) => state.animals.all);
-    const animalIds: number[] = page.ids;
+    const animalObjs: Animal[] = page.objs;
 
     useEffect(() => {
         dispatch(
@@ -77,12 +78,11 @@ export default function AnimalsListContainer({ viewType, setAnimalsCount }: Anim
 
     return (
         <>
-            {animalIds.map((item: number) => (
-                <Typography key={item}>animal id:{item}</Typography>
-            ))}
-            <hr />
-
-            {viewType === AnimalsViewType.TABLE ? <div>AnimalsTable</div> : <AnimalsList ids={animalIds} />}
+            {viewType === AnimalsViewType.TABLE ? (
+                <AnimalsTable animals={animalObjs} />
+            ) : (
+                <AnimalsList animals={animalObjs} />
+            )}
             <PaginationRounded
                 count={page.info.totalCount ?? 0}
                 nextPage={loadNextPage}

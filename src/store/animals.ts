@@ -3,13 +3,14 @@
 import { loader } from 'graphql.macro';
 
 import { createSlice } from '@reduxjs/toolkit';
-import { PageInfo, QueryAnimalsArgs } from '../graphql/types';
+import { Animal, PageInfo, QueryAnimalsArgs } from '../graphql/types';
 
 const GET_ANIMALS_QUERY = loader('../graphql/queries/animal-list.graphql');
 
 export type AnimalsPaginatedSubState = {
     page: {
         ids: number[];
+        objs: Animal[];
         info: PageInfo;
     };
     isLoading: boolean;
@@ -23,6 +24,7 @@ export type AnimalsState = {
 const initialSubState: AnimalsPaginatedSubState = {
     page: {
         ids: [],
+        objs: [],
         info: <PageInfo>{
             hasNextPage: false,
             hasPreviousPage: false,
@@ -54,6 +56,7 @@ const slice = createSlice({
         },
         allAnimalsSuccess: (state, action) => {
             state.all.page.ids = action.payload.ids;
+            state.all.page.objs = action.payload.objs;
             state.all.page.info = action.payload.info;
             state.all.isLoading = false;
         },
@@ -77,14 +80,16 @@ export const fetchAnimals = (queryArgs: QueryAnimalsArgs) => async (dispatch, ge
         });
         if (data.animals) {
             let ids;
+            let objs;
             let info;
             if (data.animals.edges) {
                 ids = data.animals.edges.map(item => item.node.id);
+                objs = data.animals.edges.map(item => item.node);
             }
             if (data.animals.pageInfo) {
                 info = data.animals.pageInfo;
             }
-            dispatch(allAnimalsSuccess({ ids, info }));
+            dispatch(allAnimalsSuccess({ ids, objs, info }));
         }
     } catch (error) {
         dispatch(hasErrorAll(error.message));
