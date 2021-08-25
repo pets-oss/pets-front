@@ -4,6 +4,7 @@ import { RootStateOrAny, useDispatch, useSelector } from 'react-redux';
 import Skeleton from '@material-ui/lab/Skeleton';
 import { Animal } from '../../graphql/types';
 import { fetchAnimals } from '../../store/animals';
+import { fetchFavourites } from '../../store/favourites';
 import AnimalsList from './AnimalsList';
 import AnimalsTable from './AnimalsTable';
 import PaginationRounded from './PaginationRounded';
@@ -33,6 +34,10 @@ export default function AnimalsListContainer({ viewType, setAnimalsCount }: Anim
         );
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [pageSize]);
+
+    useEffect(() => {
+        dispatch(fetchFavourites());
+    });
 
     useEffect(() => {
         setAnimalsCount(page.info.totalCount ?? 0);
