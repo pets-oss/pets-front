@@ -18,6 +18,7 @@ interface AnimalsListContainerProps {
 
 export default function AnimalsListContainer({ viewType, setAnimalsCount }: AnimalsListContainerProps) {
     const [pageSize, setPageSize] = useState(DEFAULT_PAGE_SIZE);
+    const [currentPage, setCurrentPage] = useState(0);
     const dispatch = useDispatch();
 
     const { page, isLoading, error } = useSelector((state: RootStateOrAny) => state.animals.all);
@@ -30,8 +31,12 @@ export default function AnimalsListContainer({ viewType, setAnimalsCount }: Anim
                 after: '',
             })
         );
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [pageSize]);
+
+    useEffect(() => {
         setAnimalsCount(page.info.totalCount ?? 0);
-    }, [setAnimalsCount, page.info.totalCount, dispatch, pageSize]);
+    }, [setAnimalsCount, page.info.totalCount]);
 
     if (isLoading) {
         return <Skeleton animation="wave" variant="rect" height={500} />;
@@ -59,7 +64,7 @@ export default function AnimalsListContainer({ viewType, setAnimalsCount }: Anim
     function loadNextPage() {
         dispatch(
             fetchAnimals({
-                first: pageSize,
+                first: pageSize + 1,
                 after: page.info.endCursor,
             })
         );
@@ -76,6 +81,21 @@ export default function AnimalsListContainer({ viewType, setAnimalsCount }: Anim
         );
     }
 
+    function handlePageSizeChange(size) {
+        setCurrentPage(0);
+        setPageSize(size);
+        loadFirstPage(size);
+    }
+
+    function handlePageChange(newPage) {
+        if (newPage > currentPage) {
+            loadNextPage();
+        } else {
+            loadPreviousPage();
+        }
+        setCurrentPage(newPage);
+    }
+
     return (
         <>
             {viewType === AnimalsViewType.TABLE ? (
@@ -85,11 +105,10 @@ export default function AnimalsListContainer({ viewType, setAnimalsCount }: Anim
             )}
             <PaginationRounded
                 count={page.info.totalCount ?? 0}
-                nextPage={loadNextPage}
-                prevPage={loadPreviousPage}
-                firstPage={loadFirstPage}
+                page={currentPage}
+                onPageChange={handlePageChange}
                 pageSize={pageSize}
-                onPageSizeChange={setPageSize}
+                onPageSizeChange={handlePageSizeChange}
             />
         </>
     );
