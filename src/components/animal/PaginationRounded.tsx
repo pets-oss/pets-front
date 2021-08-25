@@ -31,15 +31,16 @@ export default function PaginationRounded({
     }
 
     return (
-        <Grid container justify="flex-end">
+        <Grid container justifyContent="flex-end">
             <div className={classes.root}>
                 <TablePagination
+                    component="div"
                     count={count}
                     page={page}
                     onPageChange={handlePageChange}
                     rowsPerPage={pageSize}
                     rowsPerPageOptions={[4, 12, 48, 192]}
-                    onChangeRowsPerPage={handleChangeRowsPerPage}
+                    onRowsPerPageChange={handleChangeRowsPerPage}
                     classes={{
                         toolbar: classes.toolbar,
                         actions: classes.actions,

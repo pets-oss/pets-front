@@ -10,7 +10,7 @@ interface AnimalsListProps {
 
 export default function AnimalsList({ animals }: AnimalsListProps) {
     return (
-        <Grid container component="ul" spacing={2} justify="center">
+        <Grid container component="ul" spacing={2} justifyContent="center">
             {animals.map(animal => (
                 <AnimalCard key={animal.id} animal={animal} />
             ))}

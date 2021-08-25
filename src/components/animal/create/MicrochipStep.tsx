@@ -70,7 +70,7 @@ function MicrochipStep({ onPrev, onNext }: MicrochipStepProps) {
             <Grid item container>
                 <Divider style={{ width: '100%' }} />
             </Grid>
-            <Grid item xs={12} container spacing={2} justify="center">
+            <Grid item xs={12} container spacing={2} justifyContent="center">
                 <Grid item>
                     <Button color="secondary" variant="outlined" onClick={onPrev}>
                         Back

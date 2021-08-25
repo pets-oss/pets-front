@@ -7,6 +7,7 @@ import { renderWithMockProvider } from '../../test-utils/render-mock-provider';
 import AnimalDetails from './AnimalDetails';
 
 jest.mock('@material-ui/lab/Skeleton', () => () => <div>Loading...</div>);
+jest.mock('../form/SelectFilesDialog', () => () => <div>SelectFilesDialog</div>);
 
 const GET_ANIMAL_DETAILS = loader('../../graphql/queries/animal-details.graphql');
 

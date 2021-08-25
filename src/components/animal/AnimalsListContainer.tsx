@@ -37,7 +37,8 @@ export default function AnimalsListContainer({ viewType, setAnimalsCount }: Anim
 
     useEffect(() => {
         dispatch(fetchFavourites());
-    });
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     useEffect(() => {
         setAnimalsCount(page.info.totalCount ?? 0);

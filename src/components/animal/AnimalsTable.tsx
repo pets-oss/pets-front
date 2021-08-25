@@ -1,7 +1,7 @@
 import React from 'react';
 import { useHistory } from 'react-router-dom';
 
-import { fade, TableContainer, Theme } from '@material-ui/core';
+import { alpha, TableContainer, Theme } from '@material-ui/core';
 import Avatar from '@material-ui/core/Avatar';
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import Table from '@material-ui/core/Table';
@@ -79,14 +79,14 @@ export default function AnimalsTable({ animals }: AnimalsTableProps) {
 
 const useStyles = makeStyles((theme: Theme) => ({
     headRow: {
-        backgroundColor: fade(theme.palette.primary.dark, 0.75),
+        backgroundColor: alpha(theme.palette.primary.dark, 0.75),
     },
     head: {
         color: theme.palette.text.secondary,
     },
     table: {
         width: '100%',
-        backgroundColor: fade(theme.palette.background.paper, 0.4),
+        backgroundColor: alpha(theme.palette.background.paper, 0.4),
     },
     row: {
         cursor: 'pointer',
