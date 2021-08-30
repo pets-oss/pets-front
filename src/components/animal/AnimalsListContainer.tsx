@@ -45,7 +45,7 @@ export default function AnimalsListContainer({ viewType, setAnimalsCount }: Anim
     }, [setAnimalsCount, page.info.totalCount]);
 
     if (isLoading) {
-        return <Skeleton animation="wave" variant="rect" height={500} />;
+        return <Skeleton animation="wave" variant="rect" height={500} width="100%" />;
     }
 
     if (error) {

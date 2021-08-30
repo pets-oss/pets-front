@@ -7,7 +7,7 @@ function FavouritesListContainer() {
     const { ids, isLoading, error } = useSelector((state: RootStateOrAny) => state.favourites);
 
     if (isLoading) {
-        return <Skeleton animation="wave" variant="rect" height={500} />;
+        return <Skeleton animation="wave" variant="rect" height={500} width="100%" />;
     }
 
     if (error) {
