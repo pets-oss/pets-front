@@ -3,8 +3,8 @@ import { RootStateOrAny, useDispatch, useSelector } from 'react-redux';
 
 import Skeleton from '@material-ui/lab/Skeleton';
 import { Animal } from '../../graphql/types';
-import { fetchAnimals } from '../../store/animals';
-import { fetchFavourites } from '../../store/favourites';
+import { fetchAnimals as fetchAllAnimals } from '../../store/animalsAll';
+import { fetchAnimals as fetchFavouriteAnimals } from '../../store/animalsFav';
 import AnimalsList from './AnimalsList';
 import AnimalsTable from './AnimalsTable';
 import PaginationRounded from './PaginationRounded';
@@ -22,12 +22,12 @@ export default function AnimalsListContainer({ viewType, setAnimalsCount }: Anim
     const [currentPage, setCurrentPage] = useState(0);
     const dispatch = useDispatch();
 
-    const { page, isLoading, error } = useSelector((state: RootStateOrAny) => state.animals.all);
+    const { page, isLoading, error } = useSelector((state: RootStateOrAny) => state.animalsAll.all);
     const animalObjs: Animal[] = page.objs;
 
     useEffect(() => {
         dispatch(
-            fetchAnimals({
+            fetchAllAnimals({
                 first: pageSize,
                 after: '',
             })
@@ -36,7 +36,7 @@ export default function AnimalsListContainer({ viewType, setAnimalsCount }: Anim
     }, [pageSize]);
 
     useEffect(() => {
-        dispatch(fetchFavourites());
+        dispatch(fetchFavouriteAnimals({}));
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
@@ -60,7 +60,7 @@ export default function AnimalsListContainer({ viewType, setAnimalsCount }: Anim
 
     function loadFirstPage(first: number) {
         dispatch(
-            fetchAnimals({
+            fetchAllAnimals({
                 first,
                 after: '',
             })
@@ -69,7 +69,7 @@ export default function AnimalsListContainer({ viewType, setAnimalsCount }: Anim
 
     function loadNextPage() {
         dispatch(
-            fetchAnimals({
+            fetchAllAnimals({
                 first: pageSize,
                 after: page.info.endCursor,
             })
@@ -78,7 +78,7 @@ export default function AnimalsListContainer({ viewType, setAnimalsCount }: Anim
 
     function loadPreviousPage() {
         dispatch(
-            fetchAnimals({
+            fetchAllAnimals({
                 first: undefined,
                 after: undefined,
                 last: pageSize,

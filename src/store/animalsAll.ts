@@ -3,39 +3,10 @@
 import { loader } from 'graphql.macro';
 
 import { createSlice } from '@reduxjs/toolkit';
-import { Animal, PageInfo, QueryAnimalsArgs } from '../graphql/types';
+import { QueryAnimalsArgs } from '../graphql/types';
+import { AnimalsState, initialSubState } from './types-definitions';
 
 const GET_ANIMALS_QUERY = loader('../graphql/queries/animal-list.graphql');
-
-export type AnimalsPaginatedSubState = {
-    page: {
-        ids: number[];
-        objs: Animal[];
-        info: PageInfo;
-    };
-    isLoading: boolean;
-    error: boolean;
-};
-
-export type AnimalsState = {
-    all: AnimalsPaginatedSubState;
-};
-
-const initialSubState: AnimalsPaginatedSubState = {
-    page: {
-        ids: [],
-        objs: [],
-        info: <PageInfo>{
-            hasNextPage: false,
-            hasPreviousPage: false,
-            totalCount: 0,
-            startCursor: '',
-            endCursor: '',
-        },
-    },
-    isLoading: false,
-    error: false,
-};
 
 const initialState: AnimalsState = {
     all: initialSubState,
@@ -44,7 +15,7 @@ const initialState: AnimalsState = {
 // Slice
 
 const slice = createSlice({
-    name: 'animals',
+    name: 'animalsAll',
     initialState,
     reducers: {
         startLoadingAll: state => {
@@ -54,11 +25,14 @@ const slice = createSlice({
             state.all.error = action.payload;
             state.all.isLoading = false;
         },
-        allAnimalsSuccess: (state, action) => {
+        animalsSuccessAll: (state, action) => {
             state.all.page.ids = action.payload.ids;
             state.all.page.objs = action.payload.objs;
             state.all.page.info = action.payload.info;
             state.all.isLoading = false;
+        },
+        lastQueryVarsAll: (state, action) => {
+            state.all.queryVars = action.payload;
         },
     },
 });
@@ -67,7 +41,7 @@ export default slice.reducer;
 
 // Actions
 
-const { allAnimalsSuccess, startLoadingAll, hasErrorAll } = slice.actions;
+const { animalsSuccessAll, startLoadingAll, hasErrorAll, lastQueryVarsAll } = slice.actions;
 
 export const fetchAnimals = (queryArgs: QueryAnimalsArgs) => async (dispatch, getState, { apolloClient }) => {
     dispatch(startLoadingAll());
@@ -89,7 +63,8 @@ export const fetchAnimals = (queryArgs: QueryAnimalsArgs) => async (dispatch, ge
             if (data.animals.pageInfo) {
                 info = data.animals.pageInfo;
             }
-            dispatch(allAnimalsSuccess({ ids, objs, info }));
+            dispatch(animalsSuccessAll({ ids, objs, info }));
+            dispatch(lastQueryVarsAll(queryArgs));
         }
     } catch (error) {
         dispatch(hasErrorAll(error.message));

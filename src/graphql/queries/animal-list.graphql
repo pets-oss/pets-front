@@ -1,5 +1,5 @@
-query GetAnimalsList($first: Int, $after: String, $last: Int, $before: String) {
-    animals(first: $first, after: $after, last: $last, before: $before) {
+query GetAnimalsList($first: Int, $after: String, $last: Int, $before: String, $isFavoriteOnly: Boolean) {
+    animals(first: $first, after: $after, last: $last, before: $before, isFavoriteOnly: $isFavoriteOnly) {
         edges {
             node {
                 id

@@ -8,7 +8,7 @@ import Grid from '@material-ui/core/Grid';
 import { makeStyles, Theme } from '@material-ui/core/styles';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import { Animal } from '../../graphql/types';
-import { addToFavourites, FavouritesState, removeFromFavourites } from '../../store/favourites';
+import { addToFavourites, removeFromFavourites } from '../../store/animalsFav';
 import { getYMDDateFromTS } from '../../utils/dateFormatters';
 import AnimalAvatar from './AnimalAvatar';
 
@@ -16,9 +16,10 @@ export default function AnimalCard({ animal, xs = 10, md = 6, lg = 3 }: AnimalCa
     const classes = useStyles();
     const dispatch = useDispatch();
 
-    const favouriteAnimals: FavouritesState = useSelector((state: RootStateOrAny) => state.favourites);
+    const { page } = useSelector((state: RootStateOrAny) => state.animalsFav.all);
 
-    const isFavourite = favouriteAnimals.ids.indexOf(animal.id) !== -1;
+    const isFavourite = page.ids.indexOf(animal.id) !== -1;
+    console.log(page);
 
     let formatedRegistrationDate;
     if (animal.registration?.registrationDate) {
@@ -37,6 +38,8 @@ export default function AnimalCard({ animal, xs = 10, md = 6, lg = 3 }: AnimalCa
             dispatch(addToFavourites(animal.id));
         }
     };
+
+    // todo - should handle error state via UI "toast" elements
 
     return (
         <Grid item xs={xs} md={md} lg={lg}>

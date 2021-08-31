@@ -4,7 +4,7 @@ import { RootStateOrAny, useSelector } from 'react-redux';
 import Skeleton from '@material-ui/lab/Skeleton';
 
 function FavouritesListContainer() {
-    const { ids, isLoading, error } = useSelector((state: RootStateOrAny) => state.favourites);
+    const { page, isLoading, error } = useSelector((state: RootStateOrAny) => state.animalsFav.all);
 
     if (isLoading) {
         return <Skeleton animation="wave" variant="rect" height={500} width="100%" />;
@@ -18,9 +18,8 @@ function FavouritesListContainer() {
 
     let info;
 
-    if (ids) {
-        info = `with ${ids.length} favourite animals`;
-        console.log('FavouritesListContainer', ids);
+    if (page.ids) {
+        info = `with ${page.ids.length} favourite animals`;
     }
 
     return <div>FavouritesListContainer {info}</div>;

@@ -2,12 +2,12 @@ import { combineReducers } from 'redux';
 
 import { configureStore } from '@reduxjs/toolkit';
 import authorizedApolloClient from '../utils/authorizedApolloClient';
-import animals from './animals';
-import favourites from './favourites';
+import animalsAll from './animalsAll';
+import animalsFav from './animalsFav';
 
 const reducer = combineReducers({
-    animals,
-    favourites,
+    animalsAll,
+    animalsFav,
 });
 
 const store = configureStore({
