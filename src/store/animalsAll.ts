@@ -4,13 +4,9 @@ import { loader } from 'graphql.macro';
 
 import { createSlice } from '@reduxjs/toolkit';
 import { QueryAnimalsArgs } from '../graphql/types';
-import { AnimalsState, initialSubState } from './types-definitions';
+import { initialState } from './types-definitions';
 
 const GET_ANIMALS_QUERY = loader('../graphql/queries/animal-list.graphql');
-
-const initialState: AnimalsState = {
-    all: initialSubState,
-};
 
 // Slice
 
@@ -19,20 +15,20 @@ const slice = createSlice({
     initialState,
     reducers: {
         startLoadingAll: state => {
-            state.all.isLoading = true;
+            state.isLoading = true;
         },
         hasErrorAll: (state, action) => {
-            state.all.error = action.payload;
-            state.all.isLoading = false;
+            state.error = action.payload;
+            state.isLoading = false;
         },
         animalsSuccessAll: (state, action) => {
-            state.all.page.ids = action.payload.ids;
-            state.all.page.objs = action.payload.objs;
-            state.all.page.info = action.payload.info;
-            state.all.isLoading = false;
+            state.page.ids = action.payload.ids;
+            state.page.objs = action.payload.objs;
+            state.page.info = action.payload.info;
+            state.isLoading = false;
         },
         lastQueryVarsAll: (state, action) => {
-            state.all.queryVars = action.payload;
+            state.queryVars = action.payload;
         },
     },
 });

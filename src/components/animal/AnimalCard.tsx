@@ -1,6 +1,5 @@
 import clsx from 'clsx';
 import React from 'react';
-import { RootStateOrAny, useDispatch, useSelector } from 'react-redux';
 import { NavLink } from 'react-router-dom';
 
 import { Box, Card, CardActionArea, CardHeader, CardMedia, GridSize, IconButton, Typography } from '@material-ui/core';
@@ -8,18 +7,28 @@ import Grid from '@material-ui/core/Grid';
 import { makeStyles, Theme } from '@material-ui/core/styles';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import { Animal } from '../../graphql/types';
-import { addToFavourites, removeFromFavourites } from '../../store/animalsFav';
 import { getYMDDateFromTS } from '../../utils/dateFormatters';
 import AnimalAvatar from './AnimalAvatar';
 
-export default function AnimalCard({ animal, xs = 10, md = 6, lg = 3 }: AnimalCardProps) {
+interface AnimalCardProps {
+    animal: Animal;
+    isFavorite?: boolean;
+    toggleFavorite?: (id: number) => void;
+    xs?: GridSize;
+    md?: GridSize;
+    lg?: GridSize;
+}
+
+export default function AnimalCard({ animal, isFavorite, toggleFavorite, xs = 10, md = 6, lg = 3 }: AnimalCardProps) {
     const classes = useStyles();
-    const dispatch = useDispatch();
 
-    const { page } = useSelector((state: RootStateOrAny) => state.animalsFav.all);
+    const favouriteFeatureEnabled = isFavorite !== null && toggleFavorite !== null;
 
-    const isFavourite = page.ids.indexOf(animal.id) !== -1;
-    console.log(page);
+    const handleToggleFavorite = () => {
+        if (toggleFavorite) {
+            toggleFavorite(animal.id);
+        }
+    };
 
     let formatedRegistrationDate;
     if (animal.registration?.registrationDate) {
@@ -30,14 +39,6 @@ export default function AnimalCard({ animal, xs = 10, md = 6, lg = 3 }: AnimalCa
 
     const species = animal.details?.species;
     const gender = animal.details?.gender;
-
-    const toggleFavorite = () => {
-        if (isFavourite) {
-            dispatch(removeFromFavourites(animal.id));
-        } else {
-            dispatch(addToFavourites(animal.id));
-        }
-    };
 
     // todo - should handle error state via UI "toast" elements
 
@@ -52,15 +53,17 @@ export default function AnimalCard({ animal, xs = 10, md = 6, lg = 3 }: AnimalCa
                             title="Animal picture"
                         />
                     </CardActionArea>
-                    <IconButton
-                        className={clsx(classes.favoriteButton, {
-                            [classes.isFavorite]: isFavourite,
-                        })}
-                        onClick={toggleFavorite}
-                        aria-label="add/remove favorite"
-                    >
-                        <FavoriteIcon />
-                    </IconButton>
+                    {favouriteFeatureEnabled && (
+                        <IconButton
+                            className={clsx(classes.favoriteButton, {
+                                [classes.isFavorite]: isFavorite,
+                            })}
+                            onClick={handleToggleFavorite}
+                            aria-label="add/remove favorite"
+                        >
+                            <FavoriteIcon />
+                        </IconButton>
+                    )}
                 </Box>
                 <CardHeader
                     avatar={<AnimalAvatar species={species} gender={gender} />}
@@ -119,10 +122,3 @@ const useStyles = makeStyles((theme: Theme) => ({
         color: theme.palette.grey['600'],
     },
 }));
-
-interface AnimalCardProps {
-    animal: Animal;
-    xs?: GridSize;
-    md?: GridSize;
-    lg?: GridSize;
-}

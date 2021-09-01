@@ -1,6 +1,6 @@
 import { Animal, PageInfo, QueryAnimalsArgs } from '../graphql/types';
 
-export type AnimalsPagedSubState = {
+export type AnimalsState = {
     page: {
         ids: number[];
         objs: Animal[];
@@ -11,11 +11,7 @@ export type AnimalsPagedSubState = {
     queryVars: QueryAnimalsArgs;
 };
 
-export type AnimalsState = {
-    all: AnimalsPagedSubState;
-};
-
-export const initialSubState: AnimalsPagedSubState = {
+export const initialState: AnimalsState = {
     page: {
         ids: [],
         objs: [],

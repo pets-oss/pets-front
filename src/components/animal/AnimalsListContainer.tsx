@@ -4,13 +4,12 @@ import { RootStateOrAny, useDispatch, useSelector } from 'react-redux';
 import Skeleton from '@material-ui/lab/Skeleton';
 import { Animal } from '../../graphql/types';
 import { fetchAnimals as fetchAllAnimals } from '../../store/animalsAll';
-import { fetchAnimals as fetchFavouriteAnimals } from '../../store/animalsFav';
-import AnimalsList from './AnimalsList';
+import AnimalCardList from './AnimalCardList';
 import AnimalsTable from './AnimalsTable';
 import PaginationRounded from './PaginationRounded';
 import { AnimalsViewType } from './ViewSelector';
 
-const DEFAULT_PAGE_SIZE = 12;
+const DEFAULT_PAGE_SIZE = 4;
 
 interface AnimalsListContainerProps {
     viewType: AnimalsViewType;
@@ -22,7 +21,7 @@ export default function AnimalsListContainer({ viewType, setAnimalsCount }: Anim
     const [currentPage, setCurrentPage] = useState(0);
     const dispatch = useDispatch();
 
-    const { page, isLoading, error } = useSelector((state: RootStateOrAny) => state.animalsAll.all);
+    const { page, isLoading, error } = useSelector((state: RootStateOrAny) => state.animalsAll);
     const animalObjs: Animal[] = page.objs;
 
     useEffect(() => {
@@ -34,11 +33,6 @@ export default function AnimalsListContainer({ viewType, setAnimalsCount }: Anim
         );
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [pageSize]);
-
-    useEffect(() => {
-        dispatch(fetchFavouriteAnimals({}));
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
 
     useEffect(() => {
         setAnimalsCount(page.info.totalCount ?? 0);
@@ -107,7 +101,7 @@ export default function AnimalsListContainer({ viewType, setAnimalsCount }: Anim
             {viewType === AnimalsViewType.TABLE ? (
                 <AnimalsTable animals={animalObjs} />
             ) : (
-                <AnimalsList animals={animalObjs} />
+                <AnimalCardList animals={animalObjs} />
             )}
             <PaginationRounded
                 count={page.info.totalCount ?? 0}

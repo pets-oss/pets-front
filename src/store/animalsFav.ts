@@ -4,15 +4,11 @@ import { loader } from 'graphql.macro';
 
 import { createSlice } from '@reduxjs/toolkit';
 import { QueryAnimalsArgs } from '../graphql/types';
-import { AnimalsState, initialSubState } from './types-definitions';
+import { initialState } from './types-definitions';
 
 const GET_ANIMALS_QUERY = loader('../graphql/queries/animal-list.graphql');
 const ADD_TO_FAVOURITE_ANIMALS_MUTATION = loader('../graphql/mutations/add-to-favourite-animals.graphql');
 const REMOVE_FROM_FAVOURITE_ANIMALS_MUTATION = loader('../graphql/mutations/remove-from-favourite-animals.graphql');
-
-const initialState: AnimalsState = {
-    all: initialSubState,
-};
 
 // Slice
 
@@ -21,20 +17,20 @@ const slice = createSlice({
     initialState,
     reducers: {
         startLoadingFav: state => {
-            state.all.isLoading = true;
+            state.isLoading = true;
         },
         hasErrorFav: (state, action) => {
-            state.all.error = action.payload;
-            state.all.isLoading = false;
+            state.error = action.payload;
+            state.isLoading = false;
         },
         animalsSuccessFav: (state, action) => {
-            state.all.page.ids = action.payload.ids;
-            state.all.page.objs = action.payload.objs;
-            state.all.page.info = action.payload.info;
-            state.all.isLoading = false;
+            state.page.ids = action.payload.ids;
+            state.page.objs = action.payload.objs;
+            state.page.info = action.payload.info;
+            state.isLoading = false;
         },
         lastQueryVarsFav: (state, action) => {
-            state.all.queryVars = action.payload;
+            state.queryVars = action.payload;
         },
     },
 });
@@ -48,7 +44,7 @@ const { animalsSuccessFav, startLoadingFav, hasErrorFav, lastQueryVarsFav } = sl
 export const fetchAnimals = (incomingQueryArgs: QueryAnimalsArgs) => async (dispatch, getState, { apolloClient }) => {
     dispatch(startLoadingFav());
 
-    const queryArgs = { isFavouriteOnly: true, ...incomingQueryArgs };
+    const queryArgs = { isFavoriteOnly: true, ...incomingQueryArgs };
 
     try {
         const { data } = await apolloClient.query({
@@ -84,8 +80,7 @@ export const addToFavourites = (id: number) => async (dispatch, getState, { apol
             variables: { animalId: id },
         });
         if (result) {
-            const { all } = getState();
-            const { queryVars } = all;
+            const { queryVars } = getState();
             dispatch(fetchAnimals(queryVars));
         }
     } catch (error) {
@@ -102,8 +97,7 @@ export const removeFromFavourites = (id: number) => async (dispatch, getState, {
             variables: { animalId: id },
         });
         if (result) {
-            const { all } = getState();
-            const { queryVars } = all;
+            const { queryVars } = getState();
             dispatch(fetchAnimals(queryVars));
         }
     } catch (error) {
