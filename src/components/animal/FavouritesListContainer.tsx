@@ -12,6 +12,7 @@ function FavouritesListContainer() {
 
     if (error) {
         // TODO: replace with proper UI elements
+        // eslint-disable-next-line no-console
         console.warn(error);
         return <p>Error!</p>;
     }
