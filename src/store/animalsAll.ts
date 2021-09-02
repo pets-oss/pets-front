@@ -3,12 +3,30 @@
 import { loader } from 'graphql.macro';
 
 import { createSlice } from '@reduxjs/toolkit';
-import { QueryAnimalsArgs } from '../graphql/types';
-import { initialState } from './types-definitions';
+import { PageInfo, QueryAnimalsArgs } from '../graphql/types';
+import { PagedAnimalsState } from './types-definitions';
 
 const GET_ANIMALS_QUERY = loader('../graphql/queries/animal-list.graphql');
 
 // Slice
+
+const initialState: PagedAnimalsState = {
+    page: {
+        ids: [],
+        objs: [],
+        info: <PageInfo>{
+            hasNextPage: false,
+            hasPreviousPage: false,
+            totalCount: 0,
+            startCursor: '',
+            endCursor: '',
+        },
+    },
+    isLoading: false,
+    error: false,
+    queryVars: {},
+    pageContext: '',
+};
 
 const slice = createSlice({
     name: 'animalsAll',

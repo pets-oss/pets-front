@@ -3,14 +3,30 @@
 import { loader } from 'graphql.macro';
 
 import { createSlice } from '@reduxjs/toolkit';
-import { QueryAnimalsArgs } from '../graphql/types';
-import { initialState } from './types-definitions';
+import { PageInfo, QueryAnimalsArgs } from '../graphql/types';
+import { PagedAnimalsState } from './types-definitions';
 
 const GET_ANIMALS_QUERY = loader('../graphql/queries/animal-list.graphql');
 const ADD_TO_FAVOURITE_ANIMALS_MUTATION = loader('../graphql/mutations/add-to-favourite-animals.graphql');
 const REMOVE_FROM_FAVOURITE_ANIMALS_MUTATION = loader('../graphql/mutations/remove-from-favourite-animals.graphql');
 
 // Slice
+
+const initialState: PagedAnimalsState = {
+    page: {
+        ids: [],
+        info: <PageInfo>{
+            hasNextPage: false,
+            hasPreviousPage: false,
+            totalCount: 0,
+            startCursor: '',
+            endCursor: '',
+        },
+    },
+    isLoading: false,
+    error: false,
+    queryVars: {},
+};
 
 const slice = createSlice({
     name: 'animalsFav',
@@ -25,7 +41,6 @@ const slice = createSlice({
         },
         animalsSuccessFav: (state, action) => {
             state.page.ids = action.payload.ids;
-            state.page.objs = action.payload.objs;
             state.page.info = action.payload.info;
             state.isLoading = false;
         },
@@ -54,16 +69,14 @@ export const fetchAnimals = (incomingQueryArgs: QueryAnimalsArgs) => async (disp
         });
         if (data.animals) {
             let ids;
-            let objs;
             let info;
             if (data.animals.edges) {
                 ids = data.animals.edges.map(item => item.node.id);
-                objs = data.animals.edges.map(item => item.node);
             }
             if (data.animals.pageInfo) {
                 info = data.animals.pageInfo;
             }
-            dispatch(animalsSuccessFav({ ids, objs, info }));
+            dispatch(animalsSuccessFav({ ids, info }));
             dispatch(lastQueryVarsFav(queryArgs));
         }
     } catch (error) {
@@ -104,3 +117,5 @@ export const removeFromFavourites = (id: number) => async (dispatch, getState, {
         dispatch(hasErrorFav(error.message));
     }
 };
+
+// todo - toggle action
