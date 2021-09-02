@@ -57,8 +57,8 @@ export default function App() {
                         />
                         <PrivateRoute
                             exact
-                            path="/favourites/"
-                            component={React.lazy(() => import('./pages/FavouritesPage'))}
+                            path="/favorites/"
+                            component={React.lazy(() => import('./pages/FavoritesPage'))}
                         />
                         <Route
                             exact

@@ -48,6 +48,9 @@ const slice = createSlice({
         lastQueryVarsAll: (state, action) => {
             state.queryVars = action.payload;
         },
+        animalsContextAll: (state, action) => {
+            state.pageContext = action.payload;
+        },
     },
 });
 
@@ -55,7 +58,15 @@ export default slice.reducer;
 
 // Actions
 
-const { animalsSuccessAll, startLoadingAll, hasErrorAll, lastQueryVarsAll } = slice.actions;
+const { animalsSuccessAll, startLoadingAll, hasErrorAll, lastQueryVarsAll, animalsContextAll } = slice.actions;
+
+export const maybeFetchAnimalsInContext = (queryArgs: QueryAnimalsArgs, context?: string) => (dispatch, getState) => {
+    dispatch(animalsContextAll(context));
+    const { pageContext } = getState();
+    if (context !== pageContext) {
+        dispatch(fetchAnimals(queryArgs));
+    }
+};
 
 export const fetchAnimals = (queryArgs: QueryAnimalsArgs) => async (dispatch, getState, { apolloClient }) => {
     dispatch(startLoadingAll());

@@ -1,22 +1,24 @@
 import React, { useEffect, useState } from 'react';
 import { RootStateOrAny, useDispatch, useSelector } from 'react-redux';
+import { useLocation } from 'react-router-dom';
 
 import Skeleton from '@material-ui/lab/Skeleton';
-import { Animal } from '../../graphql/types';
-import { fetchAnimals as fetchAllAnimals } from '../../store/animalsAll';
+import { Animal, QueryAnimalsArgs } from '../../graphql/types';
+import { fetchAnimals, maybeFetchAnimalsInContext } from '../../store/animalsAll';
 import AnimalCardList from './AnimalCardList';
 import AnimalsTable from './AnimalsTable';
 import PaginationRounded from './PaginationRounded';
 import { AnimalsViewType } from './ViewSelector';
 
 const DEFAULT_PAGE_SIZE = 4;
-
 interface AnimalsListContainerProps {
     viewType: AnimalsViewType;
     setAnimalsCount: (value: number) => void;
 }
 
 export default function AnimalsListContainer({ viewType, setAnimalsCount }: AnimalsListContainerProps) {
+    const { pathname } = useLocation();
+
     const [pageSize, setPageSize] = useState(DEFAULT_PAGE_SIZE);
     const [currentPage, setCurrentPage] = useState(0);
     const dispatch = useDispatch();
@@ -24,12 +26,22 @@ export default function AnimalsListContainer({ viewType, setAnimalsCount }: Anim
     const { page, isLoading, error } = useSelector((state: RootStateOrAny) => state.animalsAll);
     const animalObjs: Animal[] = page.objs;
 
+    function filterArgs(args: QueryAnimalsArgs): QueryAnimalsArgs {
+        if (pathname === '/favorites') {
+            return { isFavoriteOnly: true, ...args };
+        }
+        return args;
+    }
+
     useEffect(() => {
         dispatch(
-            fetchAllAnimals({
-                first: pageSize,
-                after: '',
-            })
+            maybeFetchAnimalsInContext(
+                filterArgs({
+                    first: pageSize,
+                    after: '',
+                }),
+                pathname
+            )
         );
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [pageSize]);
@@ -54,30 +66,36 @@ export default function AnimalsListContainer({ viewType, setAnimalsCount }: Anim
 
     function loadFirstPage(first: number) {
         dispatch(
-            fetchAllAnimals({
-                first,
-                after: '',
-            })
+            fetchAnimals(
+                filterArgs({
+                    first,
+                    after: '',
+                })
+            )
         );
     }
 
     function loadNextPage() {
         dispatch(
-            fetchAllAnimals({
-                first: pageSize,
-                after: page.info.endCursor,
-            })
+            fetchAnimals(
+                filterArgs({
+                    first: pageSize,
+                    after: page.info.endCursor,
+                })
+            )
         );
     }
 
     function loadPreviousPage() {
         dispatch(
-            fetchAllAnimals({
-                first: undefined,
-                after: undefined,
-                last: pageSize,
-                before: page.info.startCursor,
-            })
+            fetchAnimals(
+                filterArgs({
+                    first: undefined,
+                    after: undefined,
+                    last: pageSize,
+                    before: page.info.startCursor,
+                })
+            )
         );
     }
 
