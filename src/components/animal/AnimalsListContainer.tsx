@@ -4,7 +4,7 @@ import { useLocation } from 'react-router-dom';
 
 import Skeleton from '@material-ui/lab/Skeleton';
 import { Animal, QueryAnimalsArgs } from '../../graphql/types';
-import { fetchAnimals, maybeFetchAnimalsInContext } from '../../store/animalsAll';
+import { fetchAnimals, fetchAnimalsIfNewContext } from '../../store/animalsAll';
 import AnimalCardList from './AnimalCardList';
 import AnimalsTable from './AnimalsTable';
 import PaginationRounded from './PaginationRounded';
@@ -35,7 +35,7 @@ export default function AnimalsListContainer({ viewType, setAnimalsCount }: Anim
 
     useEffect(() => {
         dispatch(
-            maybeFetchAnimalsInContext(
+            fetchAnimalsIfNewContext(
                 filterArgs({
                     first: pageSize,
                     after: '',

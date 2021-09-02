@@ -4,6 +4,7 @@ import { loader } from 'graphql.macro';
 
 import { createSlice } from '@reduxjs/toolkit';
 import { PageInfo, QueryAnimalsArgs } from '../graphql/types';
+import { forceReFetchAnimalsForSameContext } from './animalsAll';
 import { PagedAnimalsState } from './types-definitions';
 
 const GET_ANIMALS_QUERY = loader('../graphql/queries/animal-list.graphql');
@@ -44,6 +45,13 @@ const slice = createSlice({
             state.page.info = action.payload.info;
             state.isLoading = false;
         },
+        animalRemoveFav: (state, action) => {
+            const pos = state.page.ids.indexOf(action.payload);
+            state.page.ids = [...state.page.ids.slice(0, pos), ...state.page.ids.slice(pos + 1)];
+        },
+        animalAddFav: (state, action) => {
+            state.page.ids = [...state.page.ids, action.payload];
+        },
         lastQueryVarsFav: (state, action) => {
             state.queryVars = action.payload;
         },
@@ -54,7 +62,14 @@ export default slice.reducer;
 
 // Actions
 
-const { animalsSuccessFav, startLoadingFav, hasErrorFav, lastQueryVarsFav } = slice.actions;
+const {
+    animalsSuccessFav,
+    startLoadingFav,
+    hasErrorFav,
+    lastQueryVarsFav,
+    animalRemoveFav,
+    animalAddFav,
+} = slice.actions;
 
 export const fetchAnimals = (incomingQueryArgs: QueryAnimalsArgs) => async (dispatch, getState, { apolloClient }) => {
     dispatch(startLoadingFav());
@@ -93,8 +108,8 @@ export const addToFavourites = (id: number) => async (dispatch, getState, { apol
             variables: { animalId: id },
         });
         if (result) {
-            const { queryVars } = getState();
-            dispatch(fetchAnimals(queryVars));
+            dispatch(forceReFetchAnimalsForSameContext('/favorites'));
+            dispatch(animalAddFav(id));
         }
     } catch (error) {
         dispatch(hasErrorFav(error.message));
@@ -110,8 +125,8 @@ export const removeFromFavourites = (id: number) => async (dispatch, getState, {
             variables: { animalId: id },
         });
         if (result) {
-            const { queryVars } = getState();
-            dispatch(fetchAnimals(queryVars));
+            dispatch(animalRemoveFav(id));
+            dispatch(forceReFetchAnimalsForSameContext('/favorites'));
         }
     } catch (error) {
         dispatch(hasErrorFav(error.message));
