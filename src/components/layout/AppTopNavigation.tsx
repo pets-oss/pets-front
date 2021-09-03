@@ -25,8 +25,10 @@ const useStyles = makeStyles((theme: Theme) =>
             fontWeight: 'bold',
             textTransform: 'uppercase',
             color: theme.palette.text.secondary,
+            '&.active': {
+                color: theme.palette.text.primary,
+            },
         },
-        // todo: NavLink active class is not working
     })
 );
 
