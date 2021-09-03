@@ -47,7 +47,7 @@ function AnimalDetails({ onLoad }: AnimalDetailsProps) {
     });
 
     if (loading) {
-        return <Skeleton animation="wave" variant="rect" height="70vh" />;
+        return <Skeleton animation="wave" variant="rect" height="70vh" width="100%" />;
     }
 
     if (error) {

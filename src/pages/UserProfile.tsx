@@ -31,7 +31,7 @@ function UserProfile() {
         <Fade in timeout={600}>
             <Page title="User preferences">
                 <LayoutAlignCenterBox>
-                    <Typography>
+                    <Typography component="div">
                         <div className={classes.infoContainer}>
                             <img alt="" src={user.picture} className={classes.avatar} />
                             <Typography variant="h4" component="p">

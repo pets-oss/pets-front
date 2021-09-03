@@ -16,7 +16,7 @@ interface Response {
 export default function RecentAnimalsContainer() {
     const { loading, error, data } = useQuery<Response>(GET_ANIMALS_QUERY);
     if (loading) {
-        return <Skeleton animation="wave" height="70vh" />;
+        return <Skeleton animation="wave" height="70vh" width="100%" />;
     }
     if (error) {
         // TODO: replace with proper UI elements
