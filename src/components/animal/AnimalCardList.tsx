@@ -3,7 +3,7 @@ import { RootStateOrAny, useDispatch, useSelector } from 'react-redux';
 
 import Grid from '@material-ui/core/Grid';
 import { Animal } from '../../graphql/types';
-import { addToFavourites, fetchAnimals, removeFromFavourites } from '../../store/animalsFav';
+import { fetchAnimals, toggleFavoriteAnimal } from '../../store/animalsFav';
 import AnimalCard from './AnimalCard';
 
 interface AnimalCardListProps {
@@ -25,12 +25,8 @@ export default function AnimalCardList({ animals }: AnimalCardListProps) {
         return result;
     };
 
-    const toggleFavorite = (id: number) => {
-        if (isFavourite(id)) {
-            dispatch(removeFromFavourites(id));
-        } else {
-            dispatch(addToFavourites(id));
-        }
+    const toggleFavoriteCb = (id: number) => {
+        dispatch(toggleFavoriteAnimal(id));
     };
 
     return (
@@ -40,7 +36,7 @@ export default function AnimalCardList({ animals }: AnimalCardListProps) {
                     key={animal.id}
                     animal={animal}
                     isFavorite={isFavourite(animal.id)}
-                    toggleFavorite={toggleFavorite}
+                    toggleFavoriteCb={toggleFavoriteCb}
                 />
             ))}
         </Grid>

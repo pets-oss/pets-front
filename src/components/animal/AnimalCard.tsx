@@ -13,13 +13,20 @@ import AnimalAvatar from './AnimalAvatar';
 interface AnimalCardProps {
     animal: Animal;
     isFavorite?: boolean;
-    toggleFavorite?: (id: number) => void;
+    toggleFavoriteCb?: (id: number) => void;
     xs?: GridSize;
     md?: GridSize;
     lg?: GridSize;
 }
 
-export default function AnimalCard({ animal, isFavorite, toggleFavorite, xs = 10, md = 6, lg = 3 }: AnimalCardProps) {
+export default function AnimalCard({
+    animal,
+    isFavorite,
+    toggleFavoriteCb: toggleFavorite,
+    xs = 10,
+    md = 6,
+    lg = 3,
+}: AnimalCardProps) {
     const classes = useStyles();
 
     const favouriteFeatureEnabled = isFavorite !== null && toggleFavorite !== null;

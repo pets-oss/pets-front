@@ -8,8 +8,8 @@ import { forceReFetchAnimalsForSameContext } from './animalsAll';
 import { PagedAnimalsState } from './types-definitions';
 
 const GET_ANIMALS_QUERY = loader('../graphql/queries/animal-list.graphql');
-const ADD_TO_FAVOURITE_ANIMALS_MUTATION = loader('../graphql/mutations/add-to-favourite-animals.graphql');
-const REMOVE_FROM_FAVOURITE_ANIMALS_MUTATION = loader('../graphql/mutations/remove-from-favourite-animals.graphql');
+const ADD_TO_FAVORITE_ANIMALS_MUTATION = loader('../graphql/mutations/add-to-favorite-animals.graphql');
+const REMOVE_FROM_FAVORITE_ANIMALS_MUTATION = loader('../graphql/mutations/remove-from-favorite-animals.graphql');
 
 // Slice
 
@@ -99,12 +99,12 @@ export const fetchAnimals = (incomingQueryArgs: QueryAnimalsArgs) => async (disp
     }
 };
 
-export const addToFavourites = (id: number) => async (dispatch, getState, { apolloClient }) => {
+export const addToFavorites = (id: number) => async (dispatch, getState, { apolloClient }) => {
     dispatch(startLoadingFav());
 
     try {
         const result = await apolloClient.mutate({
-            mutation: ADD_TO_FAVOURITE_ANIMALS_MUTATION,
+            mutation: ADD_TO_FAVORITE_ANIMALS_MUTATION,
             variables: { animalId: id },
         });
         if (result) {
@@ -116,12 +116,12 @@ export const addToFavourites = (id: number) => async (dispatch, getState, { apol
     }
 };
 
-export const removeFromFavourites = (id: number) => async (dispatch, getState, { apolloClient }) => {
+export const removeFromFavorites = (id: number) => async (dispatch, getState, { apolloClient }) => {
     dispatch(startLoadingFav());
 
     try {
         const result = await apolloClient.mutate({
-            mutation: REMOVE_FROM_FAVOURITE_ANIMALS_MUTATION,
+            mutation: REMOVE_FROM_FAVORITE_ANIMALS_MUTATION,
             variables: { animalId: id },
         });
         if (result) {
@@ -133,4 +133,12 @@ export const removeFromFavourites = (id: number) => async (dispatch, getState, {
     }
 };
 
-// todo - toggle action
+export const toggleFavoriteAnimal = (id: number) => async (dispatch, getState) => {
+    const { animalsFav } = getState();
+    const isFavorite = animalsFav.page.ids.indexOf(id) !== -1;
+    if (isFavorite) {
+        dispatch(removeFromFavorites(id));
+    } else {
+        dispatch(addToFavorites(id));
+    }
+};
