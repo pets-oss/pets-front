@@ -61,11 +61,12 @@ export default slice.reducer;
 const { animalsSuccessAll, startLoadingAll, hasErrorAll, lastQueryVarsAll, animalsContextAll } = slice.actions;
 
 export const fetchAnimalsIfNewContext = (queryArgs: QueryAnimalsArgs, context: string) => (dispatch, getState) => {
-    dispatch(animalsContextAll(context));
-    const { pageContext } = getState();
+    const { animalsAll } = getState();
+    const { pageContext } = animalsAll;
     if (context !== pageContext) {
         dispatch(fetchAnimals(queryArgs));
     }
+    dispatch(animalsContextAll(context));
 };
 
 export const forceReFetchAnimalsForSameContext = (context: string) => (dispatch, getState) => {
