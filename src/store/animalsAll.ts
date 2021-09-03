@@ -102,7 +102,7 @@ export const fetchAnimals = (queryArgs: QueryAnimalsArgs) => async (dispatch, ge
             dispatch(animalsSuccessAll({ ids, objs, info }));
             dispatch(lastQueryVarsAll(queryArgs));
         }
-    } catch (error) {
+    } catch (error: any) {
         dispatch(hasErrorAll(error.message));
     }
 };
