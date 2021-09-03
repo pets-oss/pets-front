@@ -94,7 +94,7 @@ export const fetchAnimals = (incomingQueryArgs: QueryAnimalsArgs) => async (disp
             dispatch(animalsSuccessFav({ ids, info }));
             dispatch(lastQueryVarsFav(queryArgs));
         }
-    } catch (error) {
+    } catch (error: any) {
         dispatch(hasErrorFav(error.message));
     }
 };
@@ -111,7 +111,7 @@ export const addToFavorites = (id: number) => async (dispatch, getState, { apoll
             dispatch(forceReFetchAnimalsForSameContext('/favorites'));
             dispatch(animalAddFav(id));
         }
-    } catch (error) {
+    } catch (error: any) {
         dispatch(hasErrorFav(error.message));
     }
 };
@@ -128,7 +128,7 @@ export const removeFromFavorites = (id: number) => async (dispatch, getState, { 
             dispatch(animalRemoveFav(id));
             dispatch(forceReFetchAnimalsForSameContext('/favorites'));
         }
-    } catch (error) {
+    } catch (error: any) {
         dispatch(hasErrorFav(error.message));
     }
 };

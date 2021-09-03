@@ -74,8 +74,8 @@ function AnimalDetails({ onLoad }: AnimalDetailsProps) {
                 variables: { id: Number(id), image: images[0] },
             });
             dialogRef.setVisible(false);
-        } catch ({ message }) {
-            dialogRef.setError(message);
+        } catch (updateError: any) {
+            dialogRef.setError(updateError.message);
         } finally {
             dialogRef.setLoading(false);
         }
