@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { RootStateOrAny, useDispatch, useSelector } from 'react-redux';
 
 import Grid from '@material-ui/core/Grid';
@@ -15,6 +15,8 @@ export default function AnimalCardList({ animals }: AnimalCardListProps) {
     const { page } = useSelector((state: RootStateOrAny) => state.animalsFav);
     const favoriteAnimals = page.ids;
 
+    const toggleFavoriteCb = useCallback((id: number) => dispatch(toggleFavoriteAnimal(id)), [dispatch]);
+
     useEffect(() => {
         dispatch(fetchAnimals({}));
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -23,10 +25,6 @@ export default function AnimalCardList({ animals }: AnimalCardListProps) {
     const isFavourite = (id: number) => {
         const result = favoriteAnimals.indexOf(id) !== -1;
         return result;
-    };
-
-    const toggleFavoriteCb = (id: number) => {
-        dispatch(toggleFavoriteAnimal(id));
     };
 
     return (

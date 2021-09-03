@@ -35,6 +35,9 @@ const slice = createSlice({
         startLoadingAll: state => {
             state.isLoading = true;
         },
+        stopLoadingAll: state => {
+            state.isLoading = false;
+        },
         hasErrorAll: (state, action) => {
             state.error = action.payload;
             state.isLoading = false;
@@ -64,6 +67,7 @@ export const fetchAnimalsIfNewContext = (queryArgs: QueryAnimalsArgs, context: s
     const { animalsAll } = getState();
     const { pageContext } = animalsAll;
     if (context !== pageContext) {
+        dispatch(startLoadingAll());
         dispatch(fetchAnimals(queryArgs));
     }
     dispatch(animalsContextAll(context));
@@ -78,8 +82,6 @@ export const forceReFetchAnimalsForSameContext = (context: string) => (dispatch,
 };
 
 export const fetchAnimals = (queryArgs: QueryAnimalsArgs) => async (dispatch, getState, { apolloClient }) => {
-    dispatch(startLoadingAll());
-
     try {
         const { data } = await apolloClient.query({
             query: GET_ANIMALS_QUERY,

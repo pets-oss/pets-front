@@ -19,7 +19,7 @@ interface AnimalCardProps {
     lg?: GridSize;
 }
 
-export default function AnimalCard({
+function AnimalCard({
     animal,
     isFavorite,
     toggleFavoriteCb: toggleFavorite,
@@ -89,6 +89,8 @@ export default function AnimalCard({
         </Grid>
     );
 }
+
+export default React.memo(AnimalCard);
 
 const isFavoriteColor = '#D10C0C';
 
