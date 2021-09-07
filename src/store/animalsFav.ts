@@ -62,76 +62,76 @@ export default slice.reducer;
 
 // Actions
 
-const {
-    animalsSuccessFav,
-    startLoadingFav,
-    hasErrorFav,
-    lastQueryVarsFav,
-    animalRemoveFav,
-    animalAddFav,
-} = slice.actions;
+const { animalsSuccessFav, startLoadingFav, hasErrorFav, lastQueryVarsFav, animalRemoveFav, animalAddFav } =
+    slice.actions;
 
-export const fetchAnimals = (incomingQueryArgs: QueryAnimalsArgs) => async (dispatch, getState, { apolloClient }) => {
-    dispatch(startLoadingFav());
+export const fetchAnimals =
+    (incomingQueryArgs: QueryAnimalsArgs) =>
+    async (dispatch, getState, { apolloClient }) => {
+        dispatch(startLoadingFav());
 
-    const queryArgs = { isFavoriteOnly: true, ...incomingQueryArgs };
+        const queryArgs = { isFavoriteOnly: true, ...incomingQueryArgs };
 
-    try {
-        const { data } = await apolloClient.query({
-            query: GET_ANIMALS_QUERY,
-            fetchPolicy: 'no-cache',
-            variables: queryArgs,
-        });
-        if (data.animals) {
-            let ids;
-            let info;
-            if (data.animals.edges) {
-                ids = data.animals.edges.map(item => item.node.id);
+        try {
+            const { data } = await apolloClient.query({
+                query: GET_ANIMALS_QUERY,
+                fetchPolicy: 'no-cache',
+                variables: queryArgs,
+            });
+            if (data.animals) {
+                let ids;
+                let info;
+                if (data.animals.edges) {
+                    ids = data.animals.edges.map(item => item.node.id);
+                }
+                if (data.animals.pageInfo) {
+                    info = data.animals.pageInfo;
+                }
+                dispatch(animalsSuccessFav({ ids, info }));
+                dispatch(lastQueryVarsFav(queryArgs));
             }
-            if (data.animals.pageInfo) {
-                info = data.animals.pageInfo;
+        } catch (error: any) {
+            dispatch(hasErrorFav(error.message));
+        }
+    };
+
+export const addToFavorites =
+    (id: number) =>
+    async (dispatch, getState, { apolloClient }) => {
+        dispatch(startLoadingFav());
+
+        try {
+            const result = await apolloClient.mutate({
+                mutation: ADD_TO_FAVORITE_ANIMALS_MUTATION,
+                variables: { animalId: id },
+            });
+            if (result) {
+                dispatch(forceReFetchAnimalsForSameContext('/favorites'));
+                dispatch(animalAddFav(id));
             }
-            dispatch(animalsSuccessFav({ ids, info }));
-            dispatch(lastQueryVarsFav(queryArgs));
+        } catch (error: any) {
+            dispatch(hasErrorFav(error.message));
         }
-    } catch (error: any) {
-        dispatch(hasErrorFav(error.message));
-    }
-};
+    };
 
-export const addToFavorites = (id: number) => async (dispatch, getState, { apolloClient }) => {
-    dispatch(startLoadingFav());
+export const removeFromFavorites =
+    (id: number) =>
+    async (dispatch, getState, { apolloClient }) => {
+        dispatch(startLoadingFav());
 
-    try {
-        const result = await apolloClient.mutate({
-            mutation: ADD_TO_FAVORITE_ANIMALS_MUTATION,
-            variables: { animalId: id },
-        });
-        if (result) {
-            dispatch(forceReFetchAnimalsForSameContext('/favorites'));
-            dispatch(animalAddFav(id));
+        try {
+            const result = await apolloClient.mutate({
+                mutation: REMOVE_FROM_FAVORITE_ANIMALS_MUTATION,
+                variables: { animalId: id },
+            });
+            if (result) {
+                dispatch(animalRemoveFav(id));
+                dispatch(forceReFetchAnimalsForSameContext('/favorites'));
+            }
+        } catch (error: any) {
+            dispatch(hasErrorFav(error.message));
         }
-    } catch (error: any) {
-        dispatch(hasErrorFav(error.message));
-    }
-};
-
-export const removeFromFavorites = (id: number) => async (dispatch, getState, { apolloClient }) => {
-    dispatch(startLoadingFav());
-
-    try {
-        const result = await apolloClient.mutate({
-            mutation: REMOVE_FROM_FAVORITE_ANIMALS_MUTATION,
-            variables: { animalId: id },
-        });
-        if (result) {
-            dispatch(animalRemoveFav(id));
-            dispatch(forceReFetchAnimalsForSameContext('/favorites'));
-        }
-    } catch (error: any) {
-        dispatch(hasErrorFav(error.message));
-    }
-};
+    };
 
 export const toggleFavoriteAnimal = (id: number) => async (dispatch, getState) => {
     const { animalsFav } = getState();
