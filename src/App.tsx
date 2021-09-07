@@ -32,7 +32,7 @@ export default function App() {
             <CssBaseline />
             <div className={classes.root}>
                 <ResponsiveAppTop />
-                <React.Suspense fallback={<Skeleton variant="rect" height="100vh" />}>
+                <React.Suspense fallback={<Skeleton variant="rect" height="100vh" width="100%" />}>
                     <Switch>
                         <Route exact path="/about" component={React.lazy(() => import('./pages/About'))} />
                         <PrivateRoute
@@ -54,6 +54,11 @@ export default function App() {
                             exact
                             path="/animal/:id"
                             component={React.lazy(() => import('./pages/AnimalDetailsPage'))}
+                        />
+                        <PrivateRoute
+                            exact
+                            path="/favorites/"
+                            component={React.lazy(() => import('./pages/FavoritesPage'))}
                         />
                         <Route
                             exact

@@ -137,7 +137,9 @@ function SelectFilesDialog(props: SelectFilesDialogProps, ref: Ref<unknown> | un
             fullWidth
             maxWidth="sm"
             open={dialogState.visible}
-            onExited={cleanup}
+            TransitionProps={{
+                onExited: cleanup,
+            }}
             onClose={onCancel}
             aria-labelledby="file-upload-dialog-title"
         >

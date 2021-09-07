@@ -1,11 +1,13 @@
 import './index.css';
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
 
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import * as serviceWorkerRegistration from './serviceWorkerRegistration';
+import store from './store';
 import Auth0ProviderWithHistory from './utils/auth/Auth0ProviderWithHistory';
 import AuthorizedApolloProvider from './utils/AuthorizedApolloProvider';
 
@@ -14,7 +16,9 @@ ReactDOM.render(
         <BrowserRouter>
             <Auth0ProviderWithHistory>
                 <AuthorizedApolloProvider>
-                    <App />
+                    <Provider store={store}>
+                        <App />
+                    </Provider>
                 </AuthorizedApolloProvider>
             </Auth0ProviderWithHistory>
         </BrowserRouter>

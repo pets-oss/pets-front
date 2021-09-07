@@ -40,7 +40,7 @@ function DetailsStep() {
 
     return (
         <Grid container spacing={2}>
-            <Grid item xs={12} container spacing={2} justify="center">
+            <Grid item xs={12} container spacing={2} justifyContent="center">
                 <Grid item xs={12} sm={4} className={clsx(classes.name, classes.relative)}>
                     <TextInput name="name" label="Name" id="name" fullWidth showLettersCount />
                 </Grid>
@@ -110,7 +110,7 @@ function DetailsStep() {
             <Grid item container>
                 <Divider style={{ width: '100%' }} />
             </Grid>
-            <Grid item xs={12} container spacing={2} justify="center">
+            <Grid item xs={12} container spacing={2} justifyContent="center">
                 <Grid item>
                     <Button color="secondary" variant="outlined" onClick={handleCancel}>
                         Cancel

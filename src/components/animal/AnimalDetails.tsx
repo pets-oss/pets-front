@@ -47,7 +47,7 @@ function AnimalDetails({ onLoad }: AnimalDetailsProps) {
     });
 
     if (loading) {
-        return <Skeleton animation="wave" variant="rect" height="70vh" />;
+        return <Skeleton animation="wave" variant="rect" height="70vh" width="100%" />;
     }
 
     if (error) {
@@ -74,8 +74,8 @@ function AnimalDetails({ onLoad }: AnimalDetailsProps) {
                 variables: { id: Number(id), image: images[0] },
             });
             dialogRef.setVisible(false);
-        } catch ({ message }) {
-            dialogRef.setError(message);
+        } catch (updateError: any) {
+            dialogRef.setError(updateError.message);
         } finally {
             dialogRef.setLoading(false);
         }

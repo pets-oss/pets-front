@@ -1,7 +1,7 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 
-import { fade, Theme } from '@material-ui/core';
+import { alpha, Theme } from '@material-ui/core';
 import Avatar from '@material-ui/core/Avatar';
 import Box from '@material-ui/core/Box';
 import Grid from '@material-ui/core/Grid';
@@ -54,7 +54,7 @@ export default function AnimalsListItem({ animal }: AnimalsListItemProps) {
 const useStyles = makeStyles((theme: Theme) => ({
     item: {
         alignItems: 'flex-start',
-        backgroundColor: fade(theme.palette.background.paper, 0.4),
+        backgroundColor: alpha(theme.palette.background.paper, 0.4),
         borderRadius: 4,
         transition: theme.transitions.create(['box-shadow', 'transform'], {
             easing: theme.transitions.easing.easeIn,

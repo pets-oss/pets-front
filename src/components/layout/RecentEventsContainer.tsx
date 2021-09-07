@@ -24,7 +24,7 @@ export default function RecentEventsContainer() {
     const classes = useStyles();
     const { loading, error, data } = useQuery<Response>(GET_EVENTS_QUERY);
     if (loading) {
-        return <Skeleton animation="wave" height="70vh" />;
+        return <Skeleton animation="wave" height="70vh" width="100%" />;
     }
     if (error) {
         // TODO: replace with proper UI elements

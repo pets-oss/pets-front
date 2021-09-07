@@ -25,8 +25,10 @@ const useStyles = makeStyles((theme: Theme) =>
             fontWeight: 'bold',
             textTransform: 'uppercase',
             color: theme.palette.text.secondary,
+            '&.active': {
+                color: theme.palette.text.primary,
+            },
         },
-        // todo: NavLink active class is not working
     })
 );
 
@@ -46,7 +48,7 @@ export default function AppTopNavigation() {
                             return item.authRequired ? isAuthenticated : true;
                         })
                         .map((item: NavigationItem) => (
-                            <Link component={NavLink} className={classes.link} key={item.title} to={item.to}>
+                            <Link component={NavLink} className={classes.link} key={item.title} to={item.to} exact>
                                 {item.title}
                             </Link>
                         ))}

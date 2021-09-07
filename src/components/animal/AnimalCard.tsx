@@ -10,9 +10,33 @@ import { Animal } from '../../graphql/types';
 import { getYMDDateFromTS } from '../../utils/dateFormatters';
 import AnimalAvatar from './AnimalAvatar';
 
-export default function AnimalCard({ animal, xs = 10, md = 6, lg = 3 }: AnimalCardProps) {
+interface AnimalCardProps {
+    animal: Animal;
+    isFavorite?: boolean;
+    toggleFavoriteCb?: (id: number) => void;
+    xs?: GridSize;
+    md?: GridSize;
+    lg?: GridSize;
+}
+
+function AnimalCard({
+    animal,
+    isFavorite,
+    toggleFavoriteCb: toggleFavorite,
+    xs = 10,
+    md = 6,
+    lg = 3,
+}: AnimalCardProps) {
     const classes = useStyles();
-    const [favorite, setFavorite] = React.useState(false);
+
+    const favouriteFeatureEnabled = isFavorite !== null && toggleFavorite !== null;
+
+    const handleToggleFavorite = () => {
+        if (toggleFavorite) {
+            toggleFavorite(animal.id);
+        }
+    };
+
     let formatedRegistrationDate;
     if (animal.registration?.registrationDate) {
         formatedRegistrationDate = getYMDDateFromTS(animal.registration?.registrationDate);
@@ -23,10 +47,7 @@ export default function AnimalCard({ animal, xs = 10, md = 6, lg = 3 }: AnimalCa
     const species = animal.details?.species;
     const gender = animal.details?.gender;
 
-    // just mocking toggle
-    const handleFavoriteClick = () => {
-        setFavorite(!favorite);
-    };
+    // todo - should handle error state via UI "toast" elements
 
     return (
         <Grid item xs={xs} md={md} lg={lg}>
@@ -39,15 +60,17 @@ export default function AnimalCard({ animal, xs = 10, md = 6, lg = 3 }: AnimalCa
                             title="Animal picture"
                         />
                     </CardActionArea>
-                    <IconButton
-                        className={clsx(classes.favoriteButton, {
-                            [classes.isFavorite]: favorite,
-                        })}
-                        onClick={handleFavoriteClick}
-                        aria-label="add to favorites"
-                    >
-                        <FavoriteIcon />
-                    </IconButton>
+                    {favouriteFeatureEnabled && (
+                        <IconButton
+                            className={clsx(classes.favoriteButton, {
+                                [classes.isFavorite]: isFavorite,
+                            })}
+                            onClick={handleToggleFavorite}
+                            aria-label="add/remove favorite"
+                        >
+                            <FavoriteIcon />
+                        </IconButton>
+                    )}
                 </Box>
                 <CardHeader
                     avatar={<AnimalAvatar species={species} gender={gender} />}
@@ -66,6 +89,8 @@ export default function AnimalCard({ animal, xs = 10, md = 6, lg = 3 }: AnimalCa
         </Grid>
     );
 }
+
+export default React.memo(AnimalCard);
 
 const isFavoriteColor = '#D10C0C';
 
@@ -106,10 +131,3 @@ const useStyles = makeStyles((theme: Theme) => ({
         color: theme.palette.grey['600'],
     },
 }));
-
-interface AnimalCardProps {
-    animal: Animal;
-    xs?: GridSize;
-    md?: GridSize;
-    lg?: GridSize;
-}

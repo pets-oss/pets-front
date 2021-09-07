@@ -1,0 +1,7 @@
+mutation RemoveFromFavoriteAnimals($animalId: Int!) {
+    deleteFavoriteAnimal(animalId: $animalId) {
+        animalId
+        userId
+        modTime
+    }
+}
