@@ -81,30 +81,28 @@ export const forceReFetchAnimalsForSameContext = (context: string) => (dispatch,
     }
 };
 
-export const fetchAnimals =
-    (queryArgs: QueryAnimalsArgs) =>
-    async (dispatch, getState, { apolloClient }) => {
-        try {
-            const { data } = await apolloClient.query({
-                query: GET_ANIMALS_QUERY,
-                fetchPolicy: 'no-cache',
-                variables: queryArgs,
-            });
-            if (data.animals) {
-                let ids;
-                let objs;
-                let info;
-                if (data.animals.edges) {
-                    ids = data.animals.edges.map(item => item.node.id);
-                    objs = data.animals.edges.map(item => item.node);
-                }
-                if (data.animals.pageInfo) {
-                    info = data.animals.pageInfo;
-                }
-                dispatch(animalsSuccessAll({ ids, objs, info }));
-                dispatch(lastQueryVarsAll(queryArgs));
+export const fetchAnimals = (queryArgs: QueryAnimalsArgs) => async (dispatch, getState, { apolloClient }) => {
+    try {
+        const { data } = await apolloClient.query({
+            query: GET_ANIMALS_QUERY,
+            fetchPolicy: 'no-cache',
+            variables: queryArgs,
+        });
+        if (data.animals) {
+            let ids;
+            let objs;
+            let info;
+            if (data.animals.edges) {
+                ids = data.animals.edges.map(item => item.node.id);
+                objs = data.animals.edges.map(item => item.node);
             }
-        } catch (error: any) {
-            dispatch(hasErrorAll(error.message));
+            if (data.animals.pageInfo) {
+                info = data.animals.pageInfo;
+            }
+            dispatch(animalsSuccessAll({ ids, objs, info }));
+            dispatch(lastQueryVarsAll(queryArgs));
         }
-    };
+    } catch (error: any) {
+        dispatch(hasErrorAll(error.message));
+    }
+};
