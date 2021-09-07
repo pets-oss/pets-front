@@ -1,8 +1,7 @@
 /* eslint no-console: ["error", { allow: ["warn", "error"] }] */
 
-import { loader } from 'graphql.macro';
-
 import { createSlice } from '@reduxjs/toolkit';
+import { loader } from 'graphql.macro';
 import { PageInfo, QueryAnimalsArgs } from '../graphql/types';
 import { forceReFetchAnimalsForSameContext } from './animalsAll';
 import { PagedAnimalsState } from './types-definitions';
