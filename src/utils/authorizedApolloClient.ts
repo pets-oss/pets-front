@@ -25,11 +25,10 @@ const authLink = setContext(async () => {
             },
         };
     } catch (error: any) {
-        if (error.error !== 'login_required') {
-            throw error;
-        }
-        return;
+        // eslint-disable-next-line no-console
+        console.error('auth0.getTokenSilently error', error);
     }
+    return {};
 });
 
 const apolloClient = new ApolloClient({
