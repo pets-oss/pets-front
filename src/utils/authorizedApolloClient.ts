@@ -17,12 +17,18 @@ const httpLink = createUploadLink({
 });
 
 const authLink = setContext(async () => {
-    const token = await auth0.getTokenSilently();
-    return {
-        headers: {
-            Authorization: `Bearer ${token}`,
-        },
-    };
+    try {
+        const token = await auth0.getTokenSilently();
+        return {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        };
+    } catch (error: any) {
+        // eslint-disable-next-line no-console
+        console.error('auth0.getTokenSilently error', error);
+    }
+    return {};
 });
 
 const apolloClient = new ApolloClient({
