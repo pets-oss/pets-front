@@ -16,8 +16,10 @@ export default function Selector({
     label,
     required = false,
 }: SelectorProps) {
-    const { control, formState } = useFormContext();
-    const { errors } = formState;
+    const {
+        control,
+        formState: { errors },
+    } = useFormContext();
 
     const limitOptions = (opts, state) =>
         createFilterOptions<DynamicSelectorOption | string>()(opts, state).slice(0, optionsLimit);
