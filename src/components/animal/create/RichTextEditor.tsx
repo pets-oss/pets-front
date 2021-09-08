@@ -17,7 +17,7 @@ export default function RichTextEditor({ name, maxLength }: RichTextEditorProps)
                 render={props => (
                     <MuiThemeProvider theme={focused ? focusedTheme : defaultTheme}>
                         <MUIRichTextEditor
-                            onChange={state => props.onChange(stateToHTML(state.getCurrentContent()))}
+                            onChange={state => props.field.onChange(stateToHTML(state.getCurrentContent()))}
                             label="Type here your description"
                             inlineToolbar
                             maxLength={maxLength}

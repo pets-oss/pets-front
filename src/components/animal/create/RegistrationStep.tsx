@@ -30,7 +30,7 @@ function RegistrationStep({ onPrev }: RegistrationStepProps) {
                         control={control}
                         name="registration.incomingType"
                         render={props => (
-                            <RadioGroup value={props.value} onChange={(e, val) => props.onChange(val)}>
+                            <RadioGroup value={props.field.value} onChange={(e, val) => props.field.onChange(val)}>
                                 <FormControlLabel
                                     value={AnimalIncomingType.RESCUED}
                                     control={<Radio size="small" />}
@@ -73,7 +73,7 @@ function RegistrationStep({ onPrev }: RegistrationStepProps) {
                         control={control}
                         name="registration.status"
                         render={props => (
-                            <RadioGroup value={props.value} onChange={(e, val) => props.onChange(val)}>
+                            <RadioGroup value={props.field.value} onChange={(e, val) => props.field.onChange(val)}>
                                 <FormControlLabel
                                     value={RegistrationStatus.Active}
                                     control={<Radio size="small" />}

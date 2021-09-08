@@ -51,7 +51,7 @@ function MicrochipStep({ onPrev, onNext }: MicrochipStepProps) {
                         control={control}
                         name="chip.status"
                         render={props => (
-                            <RadioGroup value={props.value} onChange={(e, val) => props.onChange(val)}>
+                            <RadioGroup value={props.field.value} onChange={(e, val) => props.field.onChange(val)}>
                                 <FormControlLabel
                                     value={MicrochipStatus.Implanted}
                                     control={<Radio size="small" />}
