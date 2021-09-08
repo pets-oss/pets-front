@@ -16,7 +16,10 @@ export default function Selector({
     label,
     required = false,
 }: SelectorProps) {
-    const { control, errors } = useFormContext();
+    const {
+        control,
+        formState: { errors },
+    } = useFormContext();
 
     const limitOptions = (opts, state) =>
         createFilterOptions<DynamicSelectorOption | string>()(opts, state).slice(0, optionsLimit);
@@ -28,7 +31,7 @@ export default function Selector({
             render={props => (
                 <Autocomplete<DynamicSelectorOption | string>
                     {...props}
-                    value={props.value ?? null}
+                    value={props.field.value ?? null}
                     options={options ?? []}
                     filterOptions={limitOptions}
                     getOptionLabel={option => (typeof option === 'string' ? option : option.value)}
@@ -38,7 +41,7 @@ export default function Selector({
                             : (option as DynamicSelectorOption)?.id === (value as DynamicSelectorOption)?.id
                     }
                     onChange={(_, option) => {
-                        props.onChange(option);
+                        props.field.onChange(option);
                     }}
                     disabled={disabled}
                     renderInput={params => (

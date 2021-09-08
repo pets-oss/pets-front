@@ -21,7 +21,11 @@ export default function TextInput({
     InputLabelProps,
 }: TextInputProps) {
     const classes = useStyles();
-    const { register, errors } = useFormContext();
+    const {
+        register,
+        formState: { errors },
+    } = useFormContext();
+
     const [value, setValue] = useState('');
     const [error, setError] = useState<FieldError | undefined>(undefined);
 
@@ -39,6 +43,8 @@ export default function TextInput({
         const [obj, property] = name.split('.');
         setError(errors[obj] ? errors[obj][property] : undefined);
     }, [errors, name]);
+
+    const fieldRegister = register(name, { required });
 
     return (
         <>
@@ -58,7 +64,7 @@ export default function TextInput({
                 value={value}
                 onChange={e => handleChange(e.target.value)}
                 defaultValue={defaultValue}
-                inputRef={register({ required: required ? 'Required' : false })}
+                inputRef={fieldRegister.ref}
             />
             {(showLettersCount || rightHelperText) && (
                 <Typography variant="caption" color="textSecondary" className={classes.rightHelper}>
