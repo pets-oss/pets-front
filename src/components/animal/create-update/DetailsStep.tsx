@@ -8,75 +8,46 @@ import { Grid } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
 import Divider from '@material-ui/core/Divider';
 import makeStyles from '@material-ui/core/styles/makeStyles';
-import Typography from '@material-ui/core/Typography';
 import { Species } from '../../../graphql/types';
-import usePrevious from '../../../hooks/usePrevious';
-import { getDateYMDFlexible } from '../../../utils/dateFormatters';
 import DynamicSelector from '../../form/DynamicSelector';
-import RichTextEditor from '../../form/RichTextEditor';
 import TextInput from '../../form/TextInput';
+import RichTextEditor from './RichTextEditor';
 
 const GET_SPECIES = loader('../../../graphql/queries/species.graphql');
 const GET_GENDERS = loader('../../../graphql/queries/genders.graphql');
 const GET_BREEDS = loader('../../../graphql/queries/breeds.graphql');
 const GET_COLORS = loader('../../../graphql/queries/colors.graphql');
 
-const EMPTY_NAME = 'New Animal';
-
 function DetailsStep() {
     const classes = useStyles();
     const { control, setValue } = useFormContext();
     const history = useHistory();
 
-    const name = useWatch({
+    const specie = useWatch({
         control,
-        name: 'name',
+        name: 'details.specie',
+        defaultValue: undefined,
     });
-
-    const species = useWatch({
-        control,
-        name: 'details.species',
-        defaultValue: null,
-    });
-
-    const prevSpecies = usePrevious({ species });
 
     useEffect(() => {
-        const speciesHasChangedInUi =
-            prevSpecies !== undefined && prevSpecies.species !== null && prevSpecies.species !== species;
-        if (!species || speciesHasChangedInUi) {
-            setValue('details.breed', null);
-            setValue('details.color', null);
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [species, setValue]);
+        setValue('breed', undefined);
+    }, [specie, setValue]);
 
     const handleCancel = () => {
         history.push('/animal-list');
     };
 
-    const dateInputValidation = (input: string) => {
-        return false !== getDateYMDFlexible(input);
-    };
-
     return (
         <Grid container spacing={2}>
             <Grid item xs={12} container spacing={2} justifyContent="center">
-                {!!name ? (
-                    <Typography variant="h5">{name}</Typography>
-                ) : (
-                    <Typography variant="h5">{EMPTY_NAME}</Typography>
-                )}
-            </Grid>
-            <Grid item xs={12} container spacing={2} justifyContent="center">
                 <Grid item xs={12} sm={4} className={clsx(classes.name, classes.relative)}>
-                    <TextInput name="name" label="Name" required helperText=" " fullWidth showLettersCount />
+                    <TextInput name="name" label="Name" id="name" fullWidth showLettersCount />
                 </Grid>
             </Grid>
             <Grid item xs={12} container spacing={2}>
                 <Grid item xs={12} sm={6}>
                     <DynamicSelector
-                        name="details.species"
+                        name="details.specie"
                         label="Specie"
                         gqlOptions={{ query: GET_SPECIES, variables: { language: 'lt' }, type: 'species' }}
                     />
@@ -92,10 +63,10 @@ function DetailsStep() {
                     <DynamicSelector
                         name="details.breed"
                         label="Breed"
-                        disabled={!species}
+                        disabled={!specie}
                         gqlOptions={{
                             query: GET_BREEDS,
-                            variables: { species: (species as Species | undefined)?.id.toString(), language: 'lt' },
+                            variables: { species: (specie as Species | undefined)?.id, language: 'lt' },
                             type: 'breeds',
                         }}
                     />
@@ -104,26 +75,23 @@ function DetailsStep() {
                     <DynamicSelector
                         name="details.color"
                         label="Color"
-                        gqlOptions={{
-                            query: GET_COLORS,
-                            variables: { language: 'lt', speciesId: (species as Species | undefined)?.id },
-                            type: 'colors',
-                        }}
+                        gqlOptions={{ query: GET_COLORS, variables: { language: 'lt' }, type: 'colors' }}
                     />
                 </Grid>
                 <Grid item xs={12} sm={6}>
                     <TextInput
+                        type="date"
                         name="details.birthDate"
                         id="birthDate"
                         label="Birth date"
-                        placeholder="yyyy-mm-dd, yyyy-mm or yyyy"
-                        helperText="Format date as a yyyy(-mm(-dd))"
-                        validate={dateInputValidation}
                         fullWidth
+                        InputLabelProps={{
+                            shrink: true,
+                        }}
                     />
                 </Grid>
                 <Grid item xs={12} className={classes.relative}>
-                    <RichTextEditor name="comments" maxLength={200} />
+                    <RichTextEditor name="description" maxLength={200} />
                 </Grid>
             </Grid>
             <Grid item container>
