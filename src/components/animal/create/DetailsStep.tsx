@@ -17,7 +17,6 @@ const GET_SPECIES = loader('../../../graphql/queries/species.graphql');
 const GET_GENDERS = loader('../../../graphql/queries/genders.graphql');
 const GET_BREEDS = loader('../../../graphql/queries/breeds.graphql');
 const GET_COLORS = loader('../../../graphql/queries/colors.graphql');
-const GET_STATUSES = loader('../../../graphql/queries/statuses.graphql');
 
 function DetailsStep() {
     const classes = useStyles();
@@ -91,20 +90,8 @@ function DetailsStep() {
                         }}
                     />
                 </Grid>
-                <Grid item xs={12} sm={6}>
-                    <TextInput type="file" name="image" id="image" fullWidth />
-                </Grid>
                 <Grid item xs={12} className={classes.relative}>
                     <RichTextEditor name="description" maxLength={200} />
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                    <DynamicSelector
-                        name="status"
-                        gqlOptions={{ query: GET_STATUSES, variables: { language: 'lt' }, type: 'statuses' }}
-                    />
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                    <TextInput name="details.weight" id="weight" label="Weight, kg" type="number" fullWidth />
                 </Grid>
             </Grid>
             <Grid item container>

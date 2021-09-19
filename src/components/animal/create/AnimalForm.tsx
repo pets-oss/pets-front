@@ -3,22 +3,13 @@ import { FormProvider, useForm } from 'react-hook-form';
 
 import { Grid, GridProps } from '@material-ui/core';
 import makeStyles from '@material-ui/core/styles/makeStyles';
-import { Breed, Color, Gender, RegistrationStatus, Species, Status } from '../../../graphql/types';
+import { Breed, Color, Gender, Species } from '../../../graphql/types';
 import LayoutAlignCenterBox from '../../layout/LayoutAlignCenterBox';
 import DetailsStep from './DetailsStep';
-import { MicrochipStatus } from './MicrochipStep';
-import { AnimalIncomingType } from './RegistrationStep';
 
 const DEFAULT_VALUES: AnimalFormData = {
     name: '',
-    registration: {
-        incomingType: AnimalIncomingType.RESCUED,
-        status: RegistrationStatus.Active,
-    },
     createEvent: false,
-    chip: {
-        status: MicrochipStatus.Implanted,
-    },
 };
 
 export default function AnimalForm() {
@@ -68,12 +59,8 @@ const useStyles = makeStyles(() => ({
 export interface AnimalFormData {
     name?: string;
     organizationId?: number;
-    status?: Status;
-    image?: string;
     description?: string;
     details?: Details;
-    registration?: Registration;
-    chip?: Chip;
     createEvent?: boolean;
 }
 
@@ -83,22 +70,4 @@ interface Details {
     gender?: Gender;
     color?: Color;
     birthDate?: string;
-    weight?: number;
-    allergy?: string;
-    food?: string;
-}
-
-interface Chip {
-    id?: string;
-    companyId?: string;
-    installDate?: string;
-    installPrice?: string;
-    status?: string;
-}
-
-interface Registration {
-    incomingType?: AnimalIncomingType;
-    nr?: string;
-    date?: string;
-    status?: RegistrationStatus;
 }
