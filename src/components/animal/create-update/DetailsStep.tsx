@@ -8,6 +8,7 @@ import { Grid } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
 import Divider from '@material-ui/core/Divider';
 import makeStyles from '@material-ui/core/styles/makeStyles';
+import Typography from '@material-ui/core/Typography';
 import { Species } from '../../../graphql/types';
 import DynamicSelector from '../../form/DynamicSelector';
 import TextInput from '../../form/TextInput';
@@ -23,15 +24,22 @@ function DetailsStep() {
     const { control, setValue } = useFormContext();
     const history = useHistory();
 
-    const specie = useWatch({
+    const name = useWatch({
         control,
-        name: 'details.specie',
+        name: 'name',
+    });
+
+    const species = useWatch({
+        control,
+        name: 'details.species',
         defaultValue: undefined,
     });
 
     useEffect(() => {
-        setValue('breed', undefined);
-    }, [specie, setValue]);
+        if (!species) {
+            setValue('details.breed', undefined);
+        }
+    }, [species, setValue]);
 
     const handleCancel = () => {
         history.push('/animal-list');
@@ -40,14 +48,17 @@ function DetailsStep() {
     return (
         <Grid container spacing={2}>
             <Grid item xs={12} container spacing={2} justifyContent="center">
+                <Typography variant="h5">{name ? name : '...'}</Typography>
+            </Grid>
+            <Grid item xs={12} container spacing={2} justifyContent="center">
                 <Grid item xs={12} sm={4} className={clsx(classes.name, classes.relative)}>
-                    <TextInput name="name" label="Name" id="name" fullWidth showLettersCount />
+                    <TextInput name="name" label="Name" fullWidth showLettersCount />
                 </Grid>
             </Grid>
             <Grid item xs={12} container spacing={2}>
                 <Grid item xs={12} sm={6}>
                     <DynamicSelector
-                        name="details.specie"
+                        name="details.species"
                         label="Specie"
                         gqlOptions={{ query: GET_SPECIES, variables: { language: 'lt' }, type: 'species' }}
                     />
@@ -63,10 +74,10 @@ function DetailsStep() {
                     <DynamicSelector
                         name="details.breed"
                         label="Breed"
-                        disabled={!specie}
+                        disabled={!species}
                         gqlOptions={{
                             query: GET_BREEDS,
-                            variables: { species: (specie as Species | undefined)?.id, language: 'lt' },
+                            variables: { species: (species as Species | undefined)?.id, language: 'lt' },
                             type: 'breeds',
                         }}
                     />
@@ -91,7 +102,7 @@ function DetailsStep() {
                     />
                 </Grid>
                 <Grid item xs={12} className={classes.relative}>
-                    <RichTextEditor name="description" maxLength={200} />
+                    <RichTextEditor name="comments" maxLength={200} />
                 </Grid>
             </Grid>
             <Grid item container>

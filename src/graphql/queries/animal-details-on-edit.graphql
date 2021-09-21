@@ -1,10 +1,9 @@
-query GetAnimalOnEdit($id: Int!) {
+query GetAnimal($id: Int!) {
     animal(id: $id) {
         id
         name
         details {
             gender {
-                id
                 value
             }
             color {
