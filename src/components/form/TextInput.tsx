@@ -7,6 +7,14 @@ import { makeStyles, Theme } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 
+interface TextInputProps extends BaseTextFieldProps {
+    name: string;
+    showLettersCount?: boolean;
+    maxLength?: number;
+    rightHelperText?: string;
+    required?: boolean;
+}
+
 export default function TextInput({
     label,
     id,
@@ -14,12 +22,10 @@ export default function TextInput({
     placeholder,
     defaultValue,
     fullWidth = false,
-    helperText,
     rightHelperText,
     showLettersCount = false,
     maxLength = 25,
     required = false,
-    validate,
     type = 'text',
     InputLabelProps,
 }: TextInputProps) {
@@ -62,7 +68,7 @@ export default function TextInput({
                 name={name}
                 control={control}
                 defaultValue={defaultValue}
-                rules={{ required: required ? 'Required' : false, maxLength, validate }}
+                rules={{ required, maxLength }}
                 render={({ field: { onChange, value } }) => (
                     <TextField
                         label={label}
@@ -75,7 +81,7 @@ export default function TextInput({
                         margin="dense"
                         name={name}
                         error={!!error}
-                        helperText={error?.message || helperText}
+                        helperText={error?.message ?? required ? 'Required' : 'Optional'}
                         InputLabelProps={InputLabelProps}
                         value={value}
                         onChange={e => {
@@ -108,12 +114,3 @@ const useStyles = makeStyles((theme: Theme) => ({
         },
     },
 }));
-
-interface TextInputProps extends BaseTextFieldProps {
-    name: string;
-    showLettersCount?: boolean;
-    maxLength?: number;
-    rightHelperText?: string;
-    required?: boolean;
-    validate?: (input: string) => string | boolean;
-}
