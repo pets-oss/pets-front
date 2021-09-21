@@ -1,17 +1,24 @@
 import React from 'react';
+import { useParams } from 'react-router-dom';
 
 import { Box, Fade } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import Typography from '@material-ui/core/Typography';
 import AnimalForm from '../components/animal/create/AnimalForm';
 import logo from '../logo.svg';
 import Page from './Page';
 
-function NewAnimalPage() {
+interface RouterParams {
+    id: string;
+}
+
+function AnimalEditPage() {
+    const params: RouterParams = useParams();
+    const { id } = params;
+
     return (
         <Fade in timeout={600}>
             <Page topSection={<TopSection />}>
-                <AnimalForm />
+                <AnimalForm id={id} />
             </Page>
         </Fade>
     );
@@ -24,7 +31,6 @@ function TopSection() {
             <Box className={classes.imageWrapper}>
                 <img src={logo} alt="paw" className={classes.image} />
             </Box>
-            <Typography variant="h5">New Animal</Typography>
         </Box>
     );
 }
@@ -50,4 +56,4 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-export default NewAnimalPage;
+export default AnimalEditPage;
