@@ -13,6 +13,7 @@ import { getAnimalDetails } from '../../utils/animal';
 import SelectFilesDialog, { DialogEventTypes } from '../form/SelectFilesDialog';
 import LayoutMultiColRow from '../layout/LayoutMultiColRow';
 import AnimalDetailsHeader from './details/AnimalDetailsHeader';
+import AnimalDetailsMenu from './details/AnimalDetailsMenu';
 import AnimalEvents from './events/AnimalEvents';
 import ParamTable from './ParamTable';
 
@@ -96,7 +97,9 @@ function AnimalDetails({ onLoad }: AnimalDetailsProps) {
                         color={animal.details?.color?.value}
                         onBack={() => history.goBack()}
                         breed={animal.details?.breed?.value}
-                    />
+                    >
+                        <AnimalDetailsMenu id={animal.id} />
+                    </AnimalDetailsHeader>
                     <Box className={classes.imageContainer}>
                         <Image src={animal.imageUrl!} aspectRatio={3 / 2} cover />
                         <IconButton className={classes.addImageButton} onClick={showUploadImageDialog}>

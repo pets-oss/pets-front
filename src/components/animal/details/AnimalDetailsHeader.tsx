@@ -1,11 +1,18 @@
-import React from 'react';
+import React, { ReactNode } from 'react';
 
 import { Box, IconButton, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
-import MoreVertIcon from '@material-ui/icons/MoreVert';
 
-function AnimalDetailsHeader({ animalName, gender, species, color, breed, onBack }: AnimalDetailsHeaderProps) {
+function AnimalDetailsHeader({
+    animalName,
+    gender,
+    species,
+    color,
+    breed,
+    onBack,
+    children,
+}: AnimalDetailsHeaderProps) {
     const classes = useStyles();
 
     return (
@@ -21,9 +28,7 @@ function AnimalDetailsHeader({ animalName, gender, species, color, breed, onBack
                         </Typography>
                     )}
                 </Box>
-                <IconButton aria-label="settings">
-                    <MoreVertIcon className={classes.moreVertIcon} />
-                </IconButton>
+                {children}
             </Box>
             <Box display="flex" flexWrap="wrap" className={classes.mainParams}>
                 {species && (
@@ -80,9 +85,6 @@ const useStyles = makeStyles(theme => ({
             maxWidth: 480,
         },
     },
-    moreVertIcon: {
-        color: '#202020',
-    },
     mainParams: {
         padding: '8px 0',
         fontSize: '12px',
@@ -120,4 +122,5 @@ interface AnimalDetailsHeaderProps {
     color?: string | null;
     breed?: string | null;
     onBack?: () => void;
+    children: ReactNode;
 }
