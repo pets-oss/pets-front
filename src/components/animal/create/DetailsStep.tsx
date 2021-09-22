@@ -10,6 +10,7 @@ import Divider from '@material-ui/core/Divider';
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import Typography from '@material-ui/core/Typography';
 import { Species } from '../../../graphql/types';
+import { getDateYMDFlexible } from '../../../utils/dateFormatters';
 import DynamicSelector from '../../form/DynamicSelector';
 import TextInput from '../../form/TextInput';
 import RichTextEditor from './RichTextEditor';
@@ -18,6 +19,8 @@ const GET_SPECIES = loader('../../../graphql/queries/species.graphql');
 const GET_GENDERS = loader('../../../graphql/queries/genders.graphql');
 const GET_BREEDS = loader('../../../graphql/queries/breeds.graphql');
 const GET_COLORS = loader('../../../graphql/queries/colors.graphql');
+
+const EMPTY_NAME = 'New Animal';
 
 function DetailsStep() {
     const classes = useStyles();
@@ -32,12 +35,12 @@ function DetailsStep() {
     const species = useWatch({
         control,
         name: 'details.species',
-        defaultValue: undefined,
+        defaultValue: null,
     });
 
     useEffect(() => {
         if (!species) {
-            setValue('details.breed', undefined);
+            setValue('details.breed', null);
         }
     }, [species, setValue]);
 
@@ -45,14 +48,22 @@ function DetailsStep() {
         history.push('/animal-list');
     };
 
+    const dateInputValidation = (input: string) => {
+        return false !== getDateYMDFlexible(input);
+    };
+
     return (
         <Grid container spacing={2}>
             <Grid item xs={12} container spacing={2} justifyContent="center">
-                <Typography variant="h5">{name ? name : '...'}</Typography>
+                {!!name ? (
+                    <Typography variant="h5">{name}</Typography>
+                ) : (
+                    <Typography variant="h5">{EMPTY_NAME}</Typography>
+                )}
             </Grid>
             <Grid item xs={12} container spacing={2} justifyContent="center">
                 <Grid item xs={12} sm={4} className={clsx(classes.name, classes.relative)}>
-                    <TextInput name="name" label="Name" fullWidth showLettersCount />
+                    <TextInput name="name" label="Name" required helperText=" " fullWidth showLettersCount />
                 </Grid>
             </Grid>
             <Grid item xs={12} container spacing={2}>
@@ -91,14 +102,13 @@ function DetailsStep() {
                 </Grid>
                 <Grid item xs={12} sm={6}>
                     <TextInput
-                        type="date"
                         name="details.birthDate"
                         id="birthDate"
                         label="Birth date"
+                        placeholder="yyyy-mm-dd or yyyy"
+                        helperText="Define the exact day or a year"
+                        validate={dateInputValidation}
                         fullWidth
-                        InputLabelProps={{
-                            shrink: true,
-                        }}
                     />
                 </Grid>
                 <Grid item xs={12} className={classes.relative}>

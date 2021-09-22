@@ -26,7 +26,7 @@ export const getTSDateFromYMDFlexible = (datestr: string | null = ''): string =>
             return '';
         }
         // incoming datestr is still a string, but adjusted/transformed to a valid date
-        const dateResult = parse(datestr, 'yyyy-MM-dd', new Date());
+        const dateResult = Date.parse(datestr);
         return getTime(dateResult).toString();
     }
 
