@@ -26,7 +26,7 @@ export const getTSDateFromYMDFlexible = (datestr: string | null = ''): string =>
             return '';
         }
         // incoming datestr is still a string, but adjusted/transformed to a valid date
-        const dateResult = Date.parse(datestr);
+        const dateResult = parse(datestr, 'yyyy-MM-dd', new Date());
         return getTime(dateResult).toString();
     }
 
@@ -37,15 +37,11 @@ export const getDateYMDFlexible = (datestr: string | null = ''): string | boolea
     if (datestr) {
         let result = parse(datestr, 'yyyy-MM-dd', new Date());
         if (isValid(result)) {
-            return format(result, 'yyyy-MM-dd');
-        }
-        result = parse(datestr, 'yyyy-MM', new Date());
-        if (isValid(result)) {
-            return format(result, 'yyyy-MM-dd');
+            return result.toString();
         }
         result = parse(datestr, 'yyyy', new Date());
         if (isValid(result)) {
-            return format(result, 'yyyy-MM-dd');
+            return result.toString();
         }
     }
     return false;
