@@ -7,13 +7,16 @@ import { Grid, GridProps } from '@material-ui/core';
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import { Skeleton } from '@material-ui/lab';
 import { Animal, Breed, Color, Gender, Species } from '../../../graphql/types';
+import { getTSDateFromYMDFlexible, getYMDDateFromTS } from '../../../utils/dateFormatters';
 import LayoutAlignCenterBox from '../../layout/LayoutAlignCenterBox';
 import DetailsStep from './DetailsStep';
 
 const GET_ANIMAL_DETAILS_ON_EDIT = loader('../../../graphql/queries/animal-details-on-edit.graphql');
 
 const DEFAULT_VALUES: AnimalFormData = {
-    name: 'New Animal Name',
+    details: {
+        birthDate: getYMDDateFromTS(Date.now().toString()),
+    },
 };
 
 export default function AnimalForm({ id }: AnimalFormProps) {
@@ -28,7 +31,11 @@ export default function AnimalForm({ id }: AnimalFormProps) {
 
     useEffect(() => {
         if (data?.animal) {
-            reset(data.animal);
+            // convert birthDate TS to string
+            const animalCopy = Object.assign({}, data.animal, {
+                details: { ...data.animal.details, birthDate: getYMDDateFromTS(data.animal.details?.birthDate) },
+            });
+            reset(animalCopy);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [data]);
@@ -43,8 +50,21 @@ export default function AnimalForm({ id }: AnimalFormProps) {
     }
 
     const onSubmit = (formData: AnimalFormData) => {
+        // filter/cleanup RichTextEditorField
+        formData.comments = filterRichTextEditorField(formData.comments);
+
+        // convert birthDate string to TS
+        if (formData.details && formData.details.birthDate) {
+            formData.details.birthDate = filterBirthDateField(formData.details?.birthDate);
+        }
         // eslint-disable-next-line no-console
-        console.log('FORM DATA: ', formData);
+        console.log('FORM DATA: ', formData, JSON.stringify(formData));
+    };
+
+    const filterRichTextEditorField = (content: string | undefined) => (content !== '<p><br></p>' ? content : '');
+
+    const filterBirthDateField = (content: string) => {
+        return getTSDateFromYMDFlexible(content);
     };
 
     return (
@@ -84,10 +104,12 @@ export interface AnimalFormData {
     id?: number;
     name?: string;
     organizationId?: number;
-    description?: string;
+    comments?: string;
     details?: Details;
     createEvent?: boolean;
 }
+
+// todo createEvent prop.
 
 interface Details {
     specie?: Species;
