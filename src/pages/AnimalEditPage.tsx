@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 
 import { Box, Fade } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import AnimalForm from '../components/animal/create/AnimalForm';
+import AnimalForm from '../components/animal/create-update/AnimalForm';
 import logo from '../logo.svg';
 import Page from './Page';
 
@@ -18,7 +18,7 @@ function AnimalEditPage() {
     return (
         <Fade in timeout={600}>
             <Page topSection={<TopSection />}>
-                <AnimalForm id={id} />
+                <AnimalForm id={Number(id)} />
             </Page>
         </Fade>
     );

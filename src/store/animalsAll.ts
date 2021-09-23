@@ -4,7 +4,7 @@ import { loader } from 'graphql.macro';
 
 import { createSlice } from '@reduxjs/toolkit';
 import { AnimalFormData } from '../components/animal/create-update/AnimalForm';
-import { CreateAnimalInput, PageInfo, QueryAnimalsArgs, UpdateAnimalInput } from '../graphql/types';
+import { PageInfo, QueryAnimalsArgs } from '../graphql/types';
 import { PagedAnimalsState } from './types-definitions';
 
 const GET_ANIMALS_QUERY = loader('../graphql/queries/animal-list.graphql');
@@ -113,48 +113,74 @@ export const fetchAnimals =
         }
     };
 
-export const createOrUpdateAnimal =
-    (formData: AnimalFormData, actionCb: (error: any) => void) =>
+export const createAnimal = (formData: AnimalFormData) => {
+    console.log('should do createAnimal mutation with', formData);
+};
+export const updateAnimal = (formData: AnimalFormData) => {
+    console.log('should do updateAnimal mutation with', formData);
+};
+/*
+export const createAnimal =
+    (formData: AnimalFormData) =>
     async (dispatch, getState, { apolloClient }) => {
         dispatch(startLoadingAll());
 
-        const mutation = formData.id ? UPDATE_ANIMAL_MUTATION : CREATE_ANIMAL_MUTATION;
-        const animalInput = makeAnimalInputFromAnimalForm(formData);
+        let animalInput: CreateAnimalInput = {};
+        animalInput = makeAnimalInputFromAnimalForm(formData, animalInput);
 
         try {
             const result = await apolloClient.mutate({
-                mutation,
+                mutation: CREATE_ANIMAL_MUTATION,
                 variables: { input: animalInput },
             });
             if (result) {
-                actionCb(null);
                 const { animalsAll } = getState();
                 const { queryVars } = animalsAll;
                 dispatch(fetchAnimals(queryVars));
             }
         } catch (error: any) {
-            actionCb(error);
             dispatch(hasErrorAll(error.message));
         }
     };
 
-const makeAnimalInputFromAnimalForm = (formData: AnimalFormData): CreateAnimalInput | UpdateAnimalInput => {
-    const result: CreateAnimalInput = {
+export const updateAnimal =
+    (formData: AnimalFormData) =>
+    async (dispatch, getState, { apolloClient }) => {
+        dispatch(startLoadingAll());
+
+        let animalInput: UpdateAnimalInput = {};
+        animalInput = makeAnimalInputFromAnimalForm(formData, animalInput);
+
+        try {
+            const result = await apolloClient.mutate({
+                mutation: CREATE_ANIMAL_MUTATION,
+                variables: { input: animalInput },
+            });
+            if (result) {
+                const { animalsAll } = getState();
+                const { queryVars } = animalsAll;
+                dispatch(fetchAnimals(queryVars));
+            }
+        } catch (error: any) {
+            dispatch(hasErrorAll(error.message));
+        }
+    };
+
+const makeAnimalInputFromAnimalForm = <T>(formData: AnimalFormData, result: T) => {
+    result = {
         name: formData.name,
         comments: formData.comments,
+        registration: {
+            registrationNo: 'no registration',
+        },
         details: {
-            // todo - should let to send speciesId without breedId being set.
-            // problem due to backend architecture solutions
-
-            //speciesId: formData.details?.species?.id,
+            speciesId: formData.details?.species?.id,
             breedId: formData.details?.breed?.id,
             genderId: formData.details?.gender?.id,
             colorId: formData.details?.color?.id,
             birthDate: formData.details?.birthDate,
         },
     };
-    if (formData.id) {
-        return { ...result, id: formData.id } as UpdateAnimalInput;
-    }
     return result;
 };
+*/

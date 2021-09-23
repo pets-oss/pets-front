@@ -1,50 +1,78 @@
+import { loader } from 'graphql.macro';
 import React, { useEffect, useRef } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
-import { useHistory } from 'react-router-dom';
 
+import { useQuery } from '@apollo/client';
 import { Grid, GridProps } from '@material-ui/core';
 import makeStyles from '@material-ui/core/styles/makeStyles';
+import { Skeleton } from '@material-ui/lab';
 import { Animal, Breed, Color, Gender, Species } from '../../../graphql/types';
-import { createOrUpdateAnimal } from '../../../store/animalsAll';
-import { getDateYMDFlexible, getYMDDateFromTS } from '../../../utils/dateFormatters';
+import { createAnimal, updateAnimal } from '../../../store/animalsAll';
+import { getTSDateFromYMDFlexible, getYMDDateFromTS } from '../../../utils/dateFormatters';
 import LayoutAlignCenterBox from '../../layout/LayoutAlignCenterBox';
 import DetailsStep from './DetailsStep';
 
-export default function AnimalForm({ animal }: AnimalFormProps) {
-    const classes = useStyles();
-    const history = useHistory();
+const GET_ANIMAL_DETAILS_ON_EDIT = loader('../../../graphql/queries/animal-details-on-edit.graphql');
 
-    const methods = useForm({ defaultValues: getDefaultFormValues(animal) });
+const DEFAULT_VALUES: AnimalFormData = {
+    details: {
+        birthDate: getYMDDateFromTS(Date.now().toString()),
+    },
+};
+
+export default function AnimalForm({ id }: AnimalFormProps) {
+    const classes = useStyles();
+    const { loading, error, data } = useQuery<Response>(GET_ANIMAL_DETAILS_ON_EDIT, {
+        variables: { id: id },
+        skip: !id,
+    });
+    const methods = useForm({ defaultValues: id ? data?.animal : DEFAULT_VALUES });
     const { handleSubmit, reset } = methods;
     const formRef = useRef<HTMLFormElement>(null);
     const dispatch = useDispatch();
 
     useEffect(() => {
-        if (animal) {
-            reset(getDefaultFormValues(animal));
+        if (data?.animal) {
+            // convert birthDate TS to string
+            const animalCopy = Object.assign({}, data.animal, {
+                details: { ...data.animal.details, birthDate: getYMDDateFromTS(data.animal.details?.birthDate) },
+            });
+            reset(animalCopy);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [animal]);
+    }, [data]);
+
+    if (loading) {
+        return <Skeleton animation="wave" variant="rect" height="70vh" width="100%" />;
+    }
+
+    if (error) {
+        // TODO: replace with proper UI elements
+        return <p>Error!</p>;
+    }
 
     const onSubmit = (formData: AnimalFormData) => {
         const normalizedFormData = normalizeFormData(formData);
         // eslint-disable-next-line no-console
         console.log('FORM DATA: ', formData, JSON.stringify(formData));
 
-        if (animal) {
-            formData.id = animal.id;
+        if (id) {
+            formData.id = id;
+            dispatch(updateAnimal(normalizedFormData));
+        } else {
+            dispatch(createAnimal(normalizedFormData));
         }
-        dispatch(createOrUpdateAnimal(normalizedFormData, submitCallback));
     };
 
-    const submitCallback = (error: any) => {
-        if (error === null) {
-            history.push('/animal-list');
-        } else {
-            // todo - should show error on UI
-            console.error('AnimalForm', error);
+    const normalizeFormData = formData => {
+        // filter/cleanup RichTextEditorField
+        formData.comments = '<p><br></p>' ? formData.comments : '';
+        // convert birthDate string to TS
+        if (formData.details?.birthDate) {
+            formData.details.birthDate = getTSDateFromYMDFlexible(formData.details?.birthDate);
         }
+        return formData;
     };
 
     return (
@@ -66,25 +94,6 @@ export default function AnimalForm({ animal }: AnimalFormProps) {
     );
 }
 
-const getDefaultFormValues = (animal?: Animal) => {
-    // adjust birthData format to form string input
-    return animal
-        ? { ...animal, details: { ...animal.details, birthDate: getYMDDateFromTS(animal.details?.birthDate) } }
-        : { details: { birthDate: getYMDDateFromTS(Date.now().toString()) } };
-};
-
-const normalizeFormData = formData => {
-    // filter/cleanup RichTextEditorField
-    if (formData.comments === '<p><br></p>') {
-        formData.comments = '';
-    }
-    // convert birthDate string to TS
-    if (formData.details?.birthDate) {
-        formData.details.birthDate = getDateYMDFlexible(formData.details?.birthDate);
-    }
-    return formData;
-};
-
 export function FormRow({ children, ...props }: GridProps) {
     return (
         <Grid item xs={12} container spacing={2} {...props}>
@@ -100,7 +109,7 @@ const useStyles = makeStyles(() => ({
 }));
 
 interface AnimalFormProps {
-    animal?: Animal;
+    id?: number;
 }
 
 export interface AnimalFormData {
@@ -121,4 +130,8 @@ interface Details {
     gender?: Gender;
     color?: Color;
     birthDate?: string;
+}
+
+interface Response {
+    animal: Animal;
 }
