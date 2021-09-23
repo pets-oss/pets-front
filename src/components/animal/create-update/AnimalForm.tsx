@@ -1,12 +1,14 @@
 import { loader } from 'graphql.macro';
 import React, { useEffect, useRef } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
+import { useDispatch } from 'react-redux';
 
 import { useQuery } from '@apollo/client';
 import { Grid, GridProps } from '@material-ui/core';
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import { Skeleton } from '@material-ui/lab';
 import { Animal, Breed, Color, Gender, Species } from '../../../graphql/types';
+import { createAnimal, updateAnimal } from '../../../store/animalsAll';
 import { getTSDateFromYMDFlexible, getYMDDateFromTS } from '../../../utils/dateFormatters';
 import LayoutAlignCenterBox from '../../layout/LayoutAlignCenterBox';
 import DetailsStep from './DetailsStep';
@@ -22,12 +24,13 @@ const DEFAULT_VALUES: AnimalFormData = {
 export default function AnimalForm({ id }: AnimalFormProps) {
     const classes = useStyles();
     const { loading, error, data } = useQuery<Response>(GET_ANIMAL_DETAILS_ON_EDIT, {
-        variables: { id: Number(id) },
+        variables: { id: id },
         skip: !id,
     });
-    const methods = useForm({ defaultValues: Number(id) ? data?.animal : DEFAULT_VALUES });
+    const methods = useForm({ defaultValues: id ? data?.animal : DEFAULT_VALUES });
     const { handleSubmit, reset } = methods;
     const formRef = useRef<HTMLFormElement>(null);
+    const dispatch = useDispatch();
 
     useEffect(() => {
         if (data?.animal) {
@@ -50,21 +53,26 @@ export default function AnimalForm({ id }: AnimalFormProps) {
     }
 
     const onSubmit = (formData: AnimalFormData) => {
-        // filter/cleanup RichTextEditorField
-        formData.comments = filterRichTextEditorField(formData.comments);
-
-        // convert birthDate string to TS
-        if (formData.details && formData.details.birthDate) {
-            formData.details.birthDate = filterBirthDateField(formData.details?.birthDate);
-        }
+        const normalizedFormData = normalizeFormData(formData);
         // eslint-disable-next-line no-console
         console.log('FORM DATA: ', formData, JSON.stringify(formData));
+
+        if (id) {
+            formData.id = id;
+            dispatch(updateAnimal(normalizedFormData));
+        } else {
+            dispatch(createAnimal(normalizedFormData));
+        }
     };
 
-    const filterRichTextEditorField = (content: string | undefined) => (content !== '<p><br></p>' ? content : '');
-
-    const filterBirthDateField = (content: string) => {
-        return getTSDateFromYMDFlexible(content);
+    const normalizeFormData = formData => {
+        // filter/cleanup RichTextEditorField
+        formData.comments = '<p><br></p>' ? formData.comments : '';
+        // convert birthDate string to TS
+        if (formData.details?.birthDate) {
+            formData.details.birthDate = getTSDateFromYMDFlexible(formData.details?.birthDate);
+        }
+        return formData;
     };
 
     return (
@@ -100,6 +108,10 @@ const useStyles = makeStyles(() => ({
     },
 }));
 
+interface AnimalFormProps {
+    id?: number;
+}
+
 export interface AnimalFormData {
     id?: number;
     name?: string;
@@ -111,16 +123,13 @@ export interface AnimalFormData {
 
 // todo createEvent prop.
 
+// Details type is declared as it differs from AnimalDetails
 interface Details {
-    specie?: Species;
+    species?: Species;
     breed?: Breed;
     gender?: Gender;
     color?: Color;
     birthDate?: string;
-}
-
-interface AnimalFormProps {
-    id?: string;
 }
 
 interface Response {

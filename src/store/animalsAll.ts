@@ -1,12 +1,16 @@
-/* eslint no-console: ["error", { allow: ["warn", "error"] }] */
+/* eslint no-console: ["error", { allow: ["log", "warn", "error"] }] */
 
 import { loader } from 'graphql.macro';
 
 import { createSlice } from '@reduxjs/toolkit';
+import { AnimalFormData } from '../components/animal/create-update/AnimalForm';
 import { PageInfo, QueryAnimalsArgs } from '../graphql/types';
 import { PagedAnimalsState } from './types-definitions';
 
 const GET_ANIMALS_QUERY = loader('../graphql/queries/animal-list.graphql');
+
+const CREATE_ANIMAL_MUTATION = loader('../graphql/mutations/create-animal.graphql');
+const UPDATE_ANIMAL_MUTATION = loader('../graphql/mutations/update-animal.graphql');
 
 // Slice
 
@@ -108,3 +112,75 @@ export const fetchAnimals =
             dispatch(hasErrorAll(error.message));
         }
     };
+
+export const createAnimal = (formData: AnimalFormData) => {
+    console.log('should do createAnimal mutation with', formData);
+};
+export const updateAnimal = (formData: AnimalFormData) => {
+    console.log('should do updateAnimal mutation with', formData);
+};
+/*
+export const createAnimal =
+    (formData: AnimalFormData) =>
+    async (dispatch, getState, { apolloClient }) => {
+        dispatch(startLoadingAll());
+
+        let animalInput: CreateAnimalInput = {};
+        animalInput = makeAnimalInputFromAnimalForm(formData, animalInput);
+
+        try {
+            const result = await apolloClient.mutate({
+                mutation: CREATE_ANIMAL_MUTATION,
+                variables: { input: animalInput },
+            });
+            if (result) {
+                const { animalsAll } = getState();
+                const { queryVars } = animalsAll;
+                dispatch(fetchAnimals(queryVars));
+            }
+        } catch (error: any) {
+            dispatch(hasErrorAll(error.message));
+        }
+    };
+
+export const updateAnimal =
+    (formData: AnimalFormData) =>
+    async (dispatch, getState, { apolloClient }) => {
+        dispatch(startLoadingAll());
+
+        let animalInput: UpdateAnimalInput = {};
+        animalInput = makeAnimalInputFromAnimalForm(formData, animalInput);
+
+        try {
+            const result = await apolloClient.mutate({
+                mutation: CREATE_ANIMAL_MUTATION,
+                variables: { input: animalInput },
+            });
+            if (result) {
+                const { animalsAll } = getState();
+                const { queryVars } = animalsAll;
+                dispatch(fetchAnimals(queryVars));
+            }
+        } catch (error: any) {
+            dispatch(hasErrorAll(error.message));
+        }
+    };
+
+const makeAnimalInputFromAnimalForm = <T>(formData: AnimalFormData, result: T) => {
+    result = {
+        name: formData.name,
+        comments: formData.comments,
+        registration: {
+            registrationNo: 'no registration',
+        },
+        details: {
+            speciesId: formData.details?.species?.id,
+            breedId: formData.details?.breed?.id,
+            genderId: formData.details?.gender?.id,
+            colorId: formData.details?.color?.id,
+            birthDate: formData.details?.birthDate,
+        },
+    };
+    return result;
+};
+*/
