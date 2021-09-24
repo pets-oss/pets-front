@@ -137,6 +137,9 @@ export const createOrUpdateAnimal =
     };
 
 const makeAnimalInputFromAnimalForm = (formData: AnimalFormData): CreateAnimalInput | UpdateAnimalInput => {
+    // NOTE: dirty obj structure is due to current Backend schema
+    // todo - change obj structure after backend has according changes
+
     const result: CreateAnimalInput = {
         name: formData.name,
         comments: formData.comments,
