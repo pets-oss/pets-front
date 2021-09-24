@@ -78,7 +78,7 @@ function DetailsStep() {
                     <DynamicSelector
                         name="details.gender"
                         label="Gender"
-                        gqlOptions={{ query: GET_GENDERS, variables: { language: 'lt' }, type: 'gender' }}
+                        gqlOptions={{ query: GET_GENDERS, variables: { language: 'lt' }, type: 'genders' }}
                     />
                 </Grid>
                 <Grid item xs={12} sm={6}>
@@ -89,7 +89,7 @@ function DetailsStep() {
                         gqlOptions={{
                             query: GET_BREEDS,
                             variables: { species: (species as Species | undefined)?.id, language: 'lt' },
-                            type: 'breed',
+                            type: 'breeds',
                         }}
                     />
                 </Grid>
@@ -97,7 +97,7 @@ function DetailsStep() {
                     <DynamicSelector
                         name="details.color"
                         label="Color"
-                        gqlOptions={{ query: GET_COLORS, variables: { language: 'lt' }, type: 'color' }}
+                        gqlOptions={{ query: GET_COLORS, variables: { language: 'lt' }, type: 'colors' }}
                     />
                 </Grid>
                 <Grid item xs={12} sm={6}>
