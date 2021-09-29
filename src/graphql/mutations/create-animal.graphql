@@ -1,5 +1,5 @@
 mutation CreateAnimal($input: CreateAnimalInput!) {
     createAnimal(input: $input) {
-        animal
+        id
     }
 }
