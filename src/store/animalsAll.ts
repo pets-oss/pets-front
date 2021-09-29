@@ -137,9 +137,6 @@ export const createOrUpdateAnimal =
     };
 
 const makeAnimalInputFromAnimalForm = (formData: AnimalFormData): CreateAnimalInput | UpdateAnimalInput => {
-    // NOTE: dirty obj structure is due to current Backend schema
-    // todo - change obj structure after backend has according changes
-
     const result: CreateAnimalInput = {
         name: formData.name,
         comments: formData.comments,
@@ -147,9 +144,12 @@ const makeAnimalInputFromAnimalForm = (formData: AnimalFormData): CreateAnimalIn
             registrationNo: 'no registration',
         },
         details: {
-            // speciesId: Number(formData.details?.species?.id),
+            // todo - should let to send speciesId without breedId being set.
+            // problem due to backend architecture solutions
+
+            //speciesId: formData.details?.species?.id,
             breedId: formData.details?.breed?.id,
-            genderId: Number(formData.details?.gender?.id),
+            genderId: formData.details?.gender?.id,
             colorId: formData.details?.color?.id,
             birthDate: formData.details?.birthDate,
         },
