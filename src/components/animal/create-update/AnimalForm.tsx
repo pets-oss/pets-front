@@ -64,7 +64,9 @@ const getDefaultFormValues = (animal?: Animal) => {
 
 const normalizeFormData = formData => {
     // filter/cleanup RichTextEditorField
-    formData.comments = '<p><br></p>' ? formData.comments : '';
+    if (formData.comments === '<p><br></p>') {
+        formData.comments = '';
+    }
     // convert birthDate string to TS
     if (formData.details?.birthDate) {
         formData.details.birthDate = getTSDateFromYMDFlexible(formData.details?.birthDate);
