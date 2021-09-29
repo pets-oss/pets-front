@@ -1,4 +1,4 @@
-query GetAnimal($id: Int!) {
+query GetAnimalOnEdit($id: Int!) {
     animal(id: $id) {
         id
         name
