@@ -88,7 +88,7 @@ function DetailsStep() {
                         disabled={!species}
                         gqlOptions={{
                             query: GET_BREEDS,
-                            variables: { species: (species as Species | undefined)?.id, language: 'lt' },
+                            variables: { species: (species as Species | undefined)?.id.toString(), language: 'lt' },
                             type: 'breeds',
                         }}
                     />
