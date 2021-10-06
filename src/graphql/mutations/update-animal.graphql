@@ -1,4 +1,4 @@
-mutation UpdateAnimal($input: CreateAnimalInput!) {
+mutation UpdateAnimal($input: UpdateAnimalInput!) {
     updateAnimal(input: $input) {
         id
     }

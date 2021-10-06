@@ -4,6 +4,7 @@ query GetAnimalOnEdit($id: Int!) {
         name
         details {
             gender {
+                id
                 value
             }
             color {
