@@ -105,8 +105,8 @@ function DetailsStep() {
                         name="details.birthDate"
                         id="birthDate"
                         label="Birth date"
-                        placeholder="yyyy-mm-dd or yyyy"
-                        helperText="Define the exact day or a year"
+                        placeholder="yyyy-mm-dd, yyyy-mm or yyyy"
+                        helperText="Format date as a yyyy(-mm(-dd))"
                         validate={dateInputValidation}
                         fullWidth
                     />

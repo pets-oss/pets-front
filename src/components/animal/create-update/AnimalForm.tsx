@@ -6,7 +6,7 @@ import { Grid, GridProps } from '@material-ui/core';
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import { Animal, Breed, Color, Gender, Species } from '../../../graphql/types';
 import { createOrUpdateAnimal } from '../../../store/animalsAll';
-import { getTSDateFromYMDFlexible, getYMDDateFromTS } from '../../../utils/dateFormatters';
+import { getDateYMDFlexible, getYMDDateFromTS } from '../../../utils/dateFormatters';
 import LayoutAlignCenterBox from '../../layout/LayoutAlignCenterBox';
 import DetailsStep from './DetailsStep';
 
@@ -69,7 +69,7 @@ const normalizeFormData = formData => {
     }
     // convert birthDate string to TS
     if (formData.details?.birthDate) {
-        formData.details.birthDate = getTSDateFromYMDFlexible(formData.details?.birthDate);
+        formData.details.birthDate = getDateYMDFlexible(formData.details?.birthDate);
     }
     return formData;
 };

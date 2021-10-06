@@ -37,11 +37,15 @@ export const getDateYMDFlexible = (datestr: string | null = ''): string | boolea
     if (datestr) {
         let result = parse(datestr, 'yyyy-MM-dd', new Date());
         if (isValid(result)) {
-            return result.toString();
+            return format(result, 'yyyy-MM-dd');
+        }
+        result = parse(datestr, 'yyyy-MM', new Date());
+        if (isValid(result)) {
+            return format(result, 'yyyy-MM-dd');
         }
         result = parse(datestr, 'yyyy', new Date());
         if (isValid(result)) {
-            return result.toString();
+            return format(result, 'yyyy-MM-dd');
         }
     }
     return false;
