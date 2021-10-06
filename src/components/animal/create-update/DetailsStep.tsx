@@ -8,7 +8,9 @@ import { Grid } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
 import Divider from '@material-ui/core/Divider';
 import makeStyles from '@material-ui/core/styles/makeStyles';
+import Typography from '@material-ui/core/Typography';
 import { Species } from '../../../graphql/types';
+import { getDateYMDFlexible } from '../../../utils/dateFormatters';
 import DynamicSelector from '../../form/DynamicSelector';
 import TextInput from '../../form/TextInput';
 import RichTextEditor from './RichTextEditor';
@@ -17,38 +19,57 @@ const GET_SPECIES = loader('../../../graphql/queries/species.graphql');
 const GET_GENDERS = loader('../../../graphql/queries/genders.graphql');
 const GET_BREEDS = loader('../../../graphql/queries/breeds.graphql');
 const GET_COLORS = loader('../../../graphql/queries/colors.graphql');
-const GET_STATUSES = loader('../../../graphql/queries/statuses.graphql');
+
+const EMPTY_NAME = 'New Animal';
 
 function DetailsStep() {
     const classes = useStyles();
     const { control, setValue } = useFormContext();
     const history = useHistory();
 
-    const specie = useWatch({
+    const name = useWatch({
         control,
-        name: 'details.specie',
-        defaultValue: undefined,
+        name: 'name',
+    });
+
+    const species = useWatch({
+        control,
+        name: 'details.species',
+        defaultValue: null,
     });
 
     useEffect(() => {
-        setValue('breed', undefined);
-    }, [specie, setValue]);
+        if (!species) {
+            setValue('details.breed', null);
+        }
+    }, [species, setValue]);
 
     const handleCancel = () => {
         history.push('/animal-list');
     };
 
+    const dateInputValidation = (input: string) => {
+        return false !== getDateYMDFlexible(input);
+    };
+
     return (
         <Grid container spacing={2}>
             <Grid item xs={12} container spacing={2} justifyContent="center">
+                {!!name ? (
+                    <Typography variant="h5">{name}</Typography>
+                ) : (
+                    <Typography variant="h5">{EMPTY_NAME}</Typography>
+                )}
+            </Grid>
+            <Grid item xs={12} container spacing={2} justifyContent="center">
                 <Grid item xs={12} sm={4} className={clsx(classes.name, classes.relative)}>
-                    <TextInput name="name" label="Name" id="name" fullWidth showLettersCount />
+                    <TextInput name="name" label="Name" required helperText=" " fullWidth showLettersCount />
                 </Grid>
             </Grid>
             <Grid item xs={12} container spacing={2}>
                 <Grid item xs={12} sm={6}>
                     <DynamicSelector
-                        name="details.specie"
+                        name="details.species"
                         label="Specie"
                         gqlOptions={{ query: GET_SPECIES, variables: { language: 'lt' }, type: 'species' }}
                     />
@@ -64,10 +85,10 @@ function DetailsStep() {
                     <DynamicSelector
                         name="details.breed"
                         label="Breed"
-                        disabled={!specie}
+                        disabled={!species}
                         gqlOptions={{
                             query: GET_BREEDS,
-                            variables: { species: (specie as Species | undefined)?.id, language: 'lt' },
+                            variables: { species: (species as Species | undefined)?.id.toString(), language: 'lt' },
                             type: 'breeds',
                         }}
                     />
@@ -81,30 +102,17 @@ function DetailsStep() {
                 </Grid>
                 <Grid item xs={12} sm={6}>
                     <TextInput
-                        type="date"
                         name="details.birthDate"
                         id="birthDate"
                         label="Birth date"
+                        placeholder="yyyy-mm-dd, yyyy-mm or yyyy"
+                        helperText="Format date as a yyyy(-mm(-dd))"
+                        validate={dateInputValidation}
                         fullWidth
-                        InputLabelProps={{
-                            shrink: true,
-                        }}
                     />
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                    <TextInput type="file" name="image" id="image" fullWidth />
                 </Grid>
                 <Grid item xs={12} className={classes.relative}>
-                    <RichTextEditor name="description" maxLength={200} />
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                    <DynamicSelector
-                        name="status"
-                        gqlOptions={{ query: GET_STATUSES, variables: { language: 'lt' }, type: 'statuses' }}
-                    />
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                    <TextInput name="details.weight" id="weight" label="Weight, kg" type="number" fullWidth />
+                    <RichTextEditor name="comments" maxLength={200} />
                 </Grid>
             </Grid>
             <Grid item container>

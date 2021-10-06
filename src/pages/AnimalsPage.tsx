@@ -5,7 +5,7 @@ import Divider from '@material-ui/core/Divider';
 import useTheme from '@material-ui/core/styles/useTheme';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import AnimalsListContainer from '../components/animal/AnimalsListContainer';
-import CreateButton from '../components/animal/create/CreateButton';
+import CreateButton from '../components/animal/create-update/CreateButton';
 import AnimalFiltersChips from '../components/animal/filters/AnimalFilterChips';
 import AnimalFilters from '../components/animal/filters/AnimalFilters';
 import Filter, { FilterOption } from '../components/animal/filters/Filter';

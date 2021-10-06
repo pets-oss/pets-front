@@ -1,17 +1,37 @@
+import { loader } from 'graphql.macro';
 import React from 'react';
+import { useParams } from 'react-router-dom';
 
+import { useQuery } from '@apollo/client';
 import { Box, Fade } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import Typography from '@material-ui/core/Typography';
-import AnimalForm from '../components/animal/create/AnimalForm';
+import { Skeleton } from '@material-ui/lab';
+import AnimalForm from '../components/animal/create-update/AnimalForm';
+import { Animal } from '../graphql/types';
 import logo from '../logo.svg';
 import Page from './Page';
 
-function NewAnimalPage() {
+const GET_ANIMAL_DETAILS_ON_EDIT = loader('../graphql/queries/animal-details-on-edit.graphql');
+
+function AnimalEditPage() {
+    const params: RouterParams = useParams();
+    const { id } = params;
+
+    const { loading, error, data } = useQuery<Response>(GET_ANIMAL_DETAILS_ON_EDIT, {
+        variables: { id: Number(id) },
+        skip: !id,
+    });
+
     return (
         <Fade in timeout={600}>
             <Page topSection={<TopSection />}>
-                <AnimalForm />
+                {error ? (
+                    <p>Error!</p>
+                ) : loading ? (
+                    <Skeleton animation="wave" variant="rect" height="70vh" width="100%" />
+                ) : (
+                    <AnimalForm animal={data?.animal} />
+                )}
             </Page>
         </Fade>
     );
@@ -24,7 +44,6 @@ function TopSection() {
             <Box className={classes.imageWrapper}>
                 <img src={logo} alt="paw" className={classes.image} />
             </Box>
-            <Typography variant="h5">New Animal</Typography>
         </Box>
     );
 }
@@ -50,4 +69,12 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-export default NewAnimalPage;
+export default AnimalEditPage;
+
+interface RouterParams {
+    id: string;
+}
+
+interface Response {
+    animal: Animal;
+}

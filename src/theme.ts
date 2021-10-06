@@ -18,6 +18,9 @@ const defaultTheme = createTheme({
             main: '#faf5f1',
             dark: '#c7c2be',
         },
+        error: {
+            main: '#f44336',
+        },
     },
     breakpoints: {
         // due to Material UI breakpoints implementation

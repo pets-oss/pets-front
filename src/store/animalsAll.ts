@@ -1,12 +1,16 @@
-/* eslint no-console: ["error", { allow: ["warn", "error"] }] */
+/* eslint no-console: ["error", { allow: ["log", "warn", "error"] }] */
 
 import { loader } from 'graphql.macro';
 
 import { createSlice } from '@reduxjs/toolkit';
-import { PageInfo, QueryAnimalsArgs } from '../graphql/types';
+import { AnimalFormData } from '../components/animal/create-update/AnimalForm';
+import { CreateAnimalInput, PageInfo, QueryAnimalsArgs, UpdateAnimalInput } from '../graphql/types';
 import { PagedAnimalsState } from './types-definitions';
 
 const GET_ANIMALS_QUERY = loader('../graphql/queries/animal-list.graphql');
+
+const CREATE_ANIMAL_MUTATION = loader('../graphql/mutations/create-animal.graphql');
+const UPDATE_ANIMAL_MUTATION = loader('../graphql/mutations/update-animal.graphql');
 
 // Slice
 
@@ -108,3 +112,50 @@ export const fetchAnimals =
             dispatch(hasErrorAll(error.message));
         }
     };
+
+export const createOrUpdateAnimal =
+    (formData: AnimalFormData) =>
+    async (dispatch, getState, { apolloClient }) => {
+        dispatch(startLoadingAll());
+
+        const mutation = formData.id ? UPDATE_ANIMAL_MUTATION : CREATE_ANIMAL_MUTATION;
+        const animalInput = makeAnimalInputFromAnimalForm(formData);
+
+        try {
+            const result = await apolloClient.mutate({
+                mutation,
+                variables: { input: animalInput },
+            });
+            if (result) {
+                const { animalsAll } = getState();
+                const { queryVars } = animalsAll;
+                dispatch(fetchAnimals(queryVars));
+            }
+        } catch (error: any) {
+            dispatch(hasErrorAll(error.message));
+        }
+    };
+
+const makeAnimalInputFromAnimalForm = (formData: AnimalFormData): CreateAnimalInput | UpdateAnimalInput => {
+    const result: CreateAnimalInput = {
+        name: formData.name,
+        comments: formData.comments,
+        registration: {
+            registrationNo: 'no registration',
+        },
+        details: {
+            // todo - should let to send speciesId without breedId being set.
+            // problem due to backend architecture solutions
+
+            //speciesId: formData.details?.species?.id,
+            breedId: formData.details?.breed?.id,
+            genderId: formData.details?.gender?.id,
+            colorId: formData.details?.color?.id,
+            birthDate: formData.details?.birthDate,
+        },
+    };
+    if (formData.id) {
+        return { ...result, id: formData.id } as UpdateAnimalInput;
+    }
+    return result;
+};

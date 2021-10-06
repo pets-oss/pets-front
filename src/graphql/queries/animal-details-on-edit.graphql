@@ -1,0 +1,26 @@
+query GetAnimalOnEdit($id: Int!) {
+    animal(id: $id) {
+        id
+        name
+        details {
+            gender {
+                id
+                value
+            }
+            color {
+                id
+                value
+            }
+            birthDate
+            breed {
+                id
+                value
+            }
+            species {
+                id
+                value
+            }
+        }
+        comments
+    }
+}
