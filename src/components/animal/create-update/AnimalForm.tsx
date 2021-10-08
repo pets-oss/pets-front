@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 
 import { Grid, GridProps } from '@material-ui/core';
 import makeStyles from '@material-ui/core/styles/makeStyles';
@@ -12,6 +13,7 @@ import DetailsStep from './DetailsStep';
 
 export default function AnimalForm({ animal }: AnimalFormProps) {
     const classes = useStyles();
+    const history = useHistory();
 
     const methods = useForm({ defaultValues: getDefaultFormValues(animal) });
     const { handleSubmit, reset } = methods;
@@ -33,7 +35,16 @@ export default function AnimalForm({ animal }: AnimalFormProps) {
         if (animal) {
             formData.id = animal.id;
         }
-        dispatch(createOrUpdateAnimal(normalizedFormData));
+        dispatch(createOrUpdateAnimal(normalizedFormData, submitCallback));
+    };
+
+    const submitCallback = (error: any) => {
+        if (error === null) {
+            history.push('/animal-list');
+        } else {
+            // todo - should show error on UI
+            console.error('AnimalForm', error);
+        }
     };
 
     return (

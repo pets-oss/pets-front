@@ -41,6 +41,7 @@ function DetailsStep() {
     useEffect(() => {
         if (!species) {
             setValue('details.breed', null);
+            setValue('details.color', null);
         }
     }, [species, setValue]);
 
