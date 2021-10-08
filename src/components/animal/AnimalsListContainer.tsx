@@ -10,7 +10,7 @@ import AnimalsTable from './AnimalsTable';
 import PaginationRounded from './PaginationRounded';
 import { AnimalsViewType } from './ViewSelector';
 
-const DEFAULT_PAGE_SIZE = 4;
+const DEFAULT_PAGE_SIZE = 12;
 interface AnimalsListContainerProps {
     viewType: AnimalsViewType;
     setAnimalsCount: (value: number) => void;
