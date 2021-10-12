@@ -1,5 +1,5 @@
-query GetColors($language: String!) {
-    colors(language: $language) {
+query GetColors($language: String!, $speciesId: Int) {
+    colors(language: $language, speciesId: $speciesId) {
         id
         value
     }
