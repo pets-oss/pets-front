@@ -10,6 +10,7 @@ import Divider from '@material-ui/core/Divider';
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import Typography from '@material-ui/core/Typography';
 import { Species } from '../../../graphql/types';
+import usePrevious from '../../../hooks/usePrevious';
 import { getDateYMDFlexible } from '../../../utils/dateFormatters';
 import DynamicSelector from '../../form/DynamicSelector';
 import RichTextEditor from '../../form/RichTextEditor';
@@ -38,11 +39,16 @@ function DetailsStep() {
         defaultValue: null,
     });
 
+    const prevSpecies = usePrevious({ species });
+
     useEffect(() => {
-        if (!species) {
+        const speciesHasChangedInUi =
+            prevSpecies !== undefined && prevSpecies.species !== null && prevSpecies.species !== species;
+        if (!species || speciesHasChangedInUi) {
             setValue('details.breed', null);
             setValue('details.color', null);
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [species, setValue]);
 
     const handleCancel = () => {
@@ -98,7 +104,11 @@ function DetailsStep() {
                     <DynamicSelector
                         name="details.color"
                         label="Color"
-                        gqlOptions={{ query: GET_COLORS, variables: { language: 'lt' }, type: 'colors' }}
+                        gqlOptions={{
+                            query: GET_COLORS,
+                            variables: { language: 'lt', species: (species as Species | undefined)?.id.toString() },
+                            type: 'colors',
+                        }}
                     />
                 </Grid>
                 <Grid item xs={12} sm={6}>
