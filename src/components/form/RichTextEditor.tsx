@@ -1,33 +1,52 @@
+import { ContentState, convertFromHTML, convertToRaw } from 'draft-js';
 import { stateToHTML } from 'draft-js-export-html';
 import MUIRichTextEditor from 'mui-rte';
-import React, { useState } from 'react';
-import { Controller } from 'react-hook-form';
+import React, { useEffect, useState } from 'react';
+import { useFormContext, useWatch } from 'react-hook-form';
 
 import { FormHelperText, makeStyles } from '@material-ui/core';
-import { createMuiTheme, MuiThemeProvider, Theme } from '@material-ui/core/styles';
+import { createTheme, MuiThemeProvider, Theme } from '@material-ui/core/styles';
 
 export default function RichTextEditor({ name, maxLength }: RichTextEditorProps) {
+    const classes = useStyles();
     const [focused, setFocused] = useState(false);
 
-    const classes = useStyles();
+    const { register, control, setValue } = useFormContext();
+    const [defaultValue, setDefaultValue] = useState('');
+
+    const fieldValue = useWatch({
+        control,
+        name: name,
+    });
+
+    useEffect(() => {
+        register(name);
+        setDefaultValue(() => {
+            const contentHTML = convertFromHTML(fieldValue);
+            const contentState = ContentState.createFromBlockArray(contentHTML.contentBlocks, contentHTML.entityMap);
+            return JSON.stringify(convertToRaw(contentState));
+        });
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [register, name]);
+
+    const onChange = content => {
+        setValue(name, content);
+    };
+
     return (
         <>
-            <Controller
-                name={name}
-                render={props => (
-                    <MuiThemeProvider theme={focused ? focusedTheme : defaultTheme}>
-                        <MUIRichTextEditor
-                            onChange={state => props.field.onChange(stateToHTML(state.getCurrentContent()))}
-                            label="Type here your description"
-                            inlineToolbar
-                            maxLength={maxLength}
-                            controls={['bold', 'italic', 'underline', 'strikethrough', 'highlight', 'clear']}
-                            onFocus={() => setFocused(true)}
-                            onBlur={() => setFocused(false)}
-                        />
-                    </MuiThemeProvider>
-                )}
-            />
+            <MuiThemeProvider theme={focused ? focusedTheme : defaultTheme}>
+                <MUIRichTextEditor
+                    defaultValue={defaultValue}
+                    onChange={state => onChange(stateToHTML(state.getCurrentContent()))}
+                    label="Type here your description"
+                    inlineToolbar
+                    maxLength={maxLength}
+                    controls={['bold', 'italic', 'underline', 'strikethrough', 'highlight', 'clear']}
+                    onFocus={() => setFocused(true)}
+                    onBlur={() => setFocused(false)}
+                />
+            </MuiThemeProvider>
             <FormHelperText className={classes.formHelperText} id="component-helper-text">
                 Optional
             </FormHelperText>
@@ -35,7 +54,7 @@ export default function RichTextEditor({ name, maxLength }: RichTextEditorProps)
     );
 }
 
-const defaultTheme = createMuiTheme();
+const defaultTheme = createTheme();
 Object.assign(defaultTheme, {
     overrides: {
         MUIRichTextEditor: {
@@ -57,7 +76,7 @@ Object.assign(defaultTheme, {
     },
 });
 
-const focusedTheme = createMuiTheme();
+const focusedTheme = createTheme();
 Object.assign(focusedTheme, {
     overrides: {
         MUIRichTextEditor: {
