@@ -12,8 +12,8 @@ import Typography from '@material-ui/core/Typography';
 import { Species } from '../../../graphql/types';
 import { getDateYMDFlexible } from '../../../utils/dateFormatters';
 import DynamicSelector from '../../form/DynamicSelector';
+import RichTextEditor from '../../form/RichTextEditor';
 import TextInput from '../../form/TextInput';
-import RichTextEditor from './RichTextEditor';
 
 const GET_SPECIES = loader('../../../graphql/queries/species.graphql');
 const GET_GENDERS = loader('../../../graphql/queries/genders.graphql');
