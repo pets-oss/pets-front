@@ -114,7 +114,7 @@ export const fetchAnimals =
     };
 
 export const createOrUpdateAnimal =
-    (formData: AnimalFormData) =>
+    (formData: AnimalFormData, actionCb: (error: any) => void) =>
     async (dispatch, getState, { apolloClient }) => {
         dispatch(startLoadingAll());
 
@@ -127,11 +127,13 @@ export const createOrUpdateAnimal =
                 variables: { input: animalInput },
             });
             if (result) {
+                actionCb(null);
                 const { animalsAll } = getState();
                 const { queryVars } = animalsAll;
                 dispatch(fetchAnimals(queryVars));
             }
         } catch (error: any) {
+            actionCb(error);
             dispatch(hasErrorAll(error.message));
         }
     };
@@ -140,9 +142,6 @@ const makeAnimalInputFromAnimalForm = (formData: AnimalFormData): CreateAnimalIn
     const result: CreateAnimalInput = {
         name: formData.name,
         comments: formData.comments,
-        registration: {
-            registrationNo: 'no registration',
-        },
         details: {
             // todo - should let to send speciesId without breedId being set.
             // problem due to backend architecture solutions
