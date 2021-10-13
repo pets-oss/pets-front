@@ -22,7 +22,8 @@ export default function RichTextEditor({ name, maxLength }: RichTextEditorProps)
     useEffect(() => {
         register(name);
         setDefaultValue(() => {
-            const contentHTML = convertFromHTML(fieldValue);
+            const markup = typeof fieldValue === 'string' ? fieldValue : '';
+            const contentHTML = convertFromHTML(markup);
             const contentState = ContentState.createFromBlockArray(contentHTML.contentBlocks, contentHTML.entityMap);
             return JSON.stringify(convertToRaw(contentState));
         });
