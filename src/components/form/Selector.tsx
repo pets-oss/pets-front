@@ -15,6 +15,7 @@ export default function Selector({
     optionsLimit = OPTIONS_LIMIT,
     label,
     required = false,
+    multiple = false,
 }: SelectorProps) {
     const {
         control,
@@ -29,7 +30,7 @@ export default function Selector({
             defaultValue={defaultValue ?? null}
             rules={{ required: required ? 'Required' : false }}
             render={props => (
-                <Autocomplete<DynamicSelectorOption | string>
+                <Autocomplete<DynamicSelectorOption | string, boolean>
                     {...props}
                     value={props.field.value ?? null}
                     options={options ?? []}
@@ -44,6 +45,7 @@ export default function Selector({
                         props.field.onChange(option);
                     }}
                     disabled={disabled}
+                    multiple={multiple}
                     renderInput={params => (
                         <TextField
                             {...params}
@@ -72,6 +74,7 @@ export interface SelectorProps {
     label?: string;
     helperText?: string;
     required?: boolean;
+    multiple?: boolean;
 }
 
 export interface DynamicSelectorOption {
