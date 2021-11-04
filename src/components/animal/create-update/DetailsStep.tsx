@@ -106,7 +106,7 @@ function DetailsStep() {
                         label="Color"
                         gqlOptions={{
                             query: GET_COLORS,
-                            variables: { language: 'lt', species: (species as Species | undefined)?.id.toString() },
+                            variables: { language: 'lt', speciesId: (species as Species | undefined)?.id },
                             type: 'colors',
                         }}
                     />
