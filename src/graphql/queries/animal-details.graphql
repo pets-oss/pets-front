@@ -24,6 +24,7 @@ query GetAnimal($id: Int!) {
             }
         }
         imageUrl
+        comments
     }
     events(animalId: $id) {
         id
