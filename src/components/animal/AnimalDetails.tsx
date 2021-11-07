@@ -125,6 +125,11 @@ function AnimalDetails({ onLoad }: AnimalDetailsProps) {
                             </Box>
                         </>
                     )}
+                    {animal.comments && (
+                        <Box mt={3} mb={2}>
+                            <Typography variant="body1" dangerouslySetInnerHTML={{ __html: animal.comments }} />
+                        </Box>
+                    )}
                     <Box mt={1}>
                         <Typography variant="body1">Referencing Animal ID:{id}</Typography>
                     </Box>
