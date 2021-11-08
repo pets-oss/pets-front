@@ -12,12 +12,8 @@ import AnimalEventList from '../animal/events/AnimalEventList';
 
 const GET_EVENTS_QUERY = loader('../../graphql/queries/events-list.graphql');
 
-interface EventsResponseItem {
-    all: Event[];
-}
-
 interface Response {
-    events: EventsResponseItem[];
+    events: Event[];
 }
 
 export default function RecentEventsContainer() {
@@ -30,12 +26,12 @@ export default function RecentEventsContainer() {
         // TODO: replace with proper UI elements
         return <p>Error!</p>;
     }
-    if (!data?.events.length || !data.events[0].all?.length) {
+    if (!data?.events.length) {
         // TODO: replace with proper UI elements
         return <p>No data</p>;
     }
 
-    const events = [...data.events[0].all].sort(sortEventsByDate);
+    const events = [...data.events].sort(sortEventsByDate);
 
     return (
         <Box className={classes.root} mt={5}>
