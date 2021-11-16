@@ -10,4 +10,6 @@ export type PagedAnimalsState = {
     error: boolean;
     queryVars: QueryAnimalsArgs;
     pageContext?: string;
+    pageSize?: number;
+    currentPage?: number;
 };

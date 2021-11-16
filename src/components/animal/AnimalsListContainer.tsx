@@ -1,54 +1,40 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { RootStateOrAny, useDispatch, useSelector } from 'react-redux';
-import { useLocation } from 'react-router-dom';
 
 import Skeleton from '@material-ui/lab/Skeleton';
-import { Animal, QueryAnimalsArgs } from '../../graphql/types';
-import { fetchAnimals, fetchAnimalsIfNewContext } from '../../store/animalsAll';
+import { Animal } from '../../graphql/types';
+import {
+    loadAnimalsFirstPage,
+    loadAnimalsNextPage,
+    loadAnimalsPreviousPage,
+    setAnimalsCurrentPage,
+    setAnimalsPageContext,
+    setAnimalsPageSize,
+} from '../../store/animalsAll';
 import AnimalCardList from './AnimalCardList';
 import AnimalsTable from './AnimalsTable';
 import PaginationRounded from './PaginationRounded';
 import { AnimalsViewType } from './ViewSelector';
 
-const DEFAULT_PAGE_SIZE = 12;
-interface AnimalsListContainerProps {
-    viewType: AnimalsViewType;
-    setAnimalsCount: (value: number) => void;
-}
-
-export default function AnimalsListContainer({ viewType, setAnimalsCount }: AnimalsListContainerProps) {
-    const { pathname } = useLocation();
-
-    const [pageSize, setPageSize] = useState(DEFAULT_PAGE_SIZE);
-    const [currentPage, setCurrentPage] = useState(0);
+export default function AnimalsListContainer({ viewType, pageType = AnimalPageType.ALL }: AnimalsListContainerProps) {
     const dispatch = useDispatch();
 
-    const { page, isLoading, error } = useSelector((state: RootStateOrAny) => state.animalsAll);
+    const { page, pageSize, currentPage, isLoading, error } = useSelector((state: RootStateOrAny) => state.animalsAll);
     const animalObjs: Animal[] = page.objs;
 
-    function filterArgs(args: QueryAnimalsArgs): QueryAnimalsArgs {
-        if (pathname === '/favorites') {
-            return { isFavoriteOnly: true, ...args };
+    useEffect(() => {
+        switch (pageType) {
+            case AnimalPageType.ALL:
+                dispatch(setAnimalsPageContext('/animal-list'));
+                break;
+            case AnimalPageType.FAVORITES:
+                dispatch(setAnimalsPageContext('/favorites'));
+                break;
         }
-        return args;
-    }
-
-    useEffect(() => {
-        dispatch(
-            fetchAnimalsIfNewContext(
-                filterArgs({
-                    first: pageSize,
-                    after: '',
-                }),
-                pathname
-            )
-        );
+        dispatch(setAnimalsCurrentPage(0));
+        loadFirstPage();
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [pageSize]);
-
-    useEffect(() => {
-        setAnimalsCount(page.info.totalCount ?? 0);
-    }, [setAnimalsCount, page.info.totalCount]);
+    }, []);
 
     if (isLoading) {
         return <Skeleton animation="wave" variant="rect" height={500} width="100%" />;
@@ -64,54 +50,29 @@ export default function AnimalsListContainer({ viewType, setAnimalsCount }: Anim
         return <p>No data</p>;
     }
 
-    function loadFirstPage(first: number) {
-        dispatch(
-            fetchAnimals(
-                filterArgs({
-                    first,
-                    after: '',
-                })
-            )
-        );
+    function loadFirstPage() {
+        dispatch(loadAnimalsFirstPage());
     }
 
     function loadNextPage() {
-        dispatch(
-            fetchAnimals(
-                filterArgs({
-                    first: pageSize,
-                    after: page.info.endCursor,
-                })
-            )
-        );
+        dispatch(loadAnimalsNextPage());
     }
 
     function loadPreviousPage() {
-        dispatch(
-            fetchAnimals(
-                filterArgs({
-                    first: undefined,
-                    after: undefined,
-                    last: pageSize,
-                    before: page.info.startCursor,
-                })
-            )
-        );
+        dispatch(loadAnimalsPreviousPage());
     }
 
     function handlePageSizeChange(size) {
-        setCurrentPage(0);
-        setPageSize(size);
-        loadFirstPage(size);
+        dispatch(setAnimalsPageSize(size));
     }
 
     function handlePageChange(newPage) {
+        dispatch(setAnimalsCurrentPage(newPage));
         if (newPage > currentPage) {
             loadNextPage();
         } else {
             loadPreviousPage();
         }
-        setCurrentPage(newPage);
     }
 
     return (
@@ -130,4 +91,14 @@ export default function AnimalsListContainer({ viewType, setAnimalsCount }: Anim
             />
         </>
     );
+}
+
+interface AnimalsListContainerProps {
+    viewType: AnimalsViewType;
+    pageType?: AnimalPageType;
+}
+
+export enum AnimalPageType {
+    ALL,
+    FAVORITES,
 }

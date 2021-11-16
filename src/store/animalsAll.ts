@@ -5,7 +5,9 @@ import { loader } from 'graphql.macro';
 import { createSlice } from '@reduxjs/toolkit';
 import { AnimalFormData } from '../components/animal/create-update/AnimalForm';
 import { CreateAnimalInput, PageInfo, QueryAnimalsArgs, UpdateAnimalInput } from '../graphql/types';
-import { PagedAnimalsState } from './types-definitions';
+import { AnimalsFiltersFormData, PagedAnimalsState } from './types-definitions';
+
+const DEFAULT_PAGE_SIZE = 12;
 
 const GET_ANIMALS_QUERY = loader('../graphql/queries/animal-list.graphql');
 
@@ -30,6 +32,8 @@ const initialState: PagedAnimalsState = {
     error: false,
     queryVars: {},
     pageContext: '',
+    pageSize: DEFAULT_PAGE_SIZE,
+    currentPage: 0,
 };
 
 const slice = createSlice({
@@ -52,47 +56,159 @@ const slice = createSlice({
             state.page.info = action.payload.info;
             state.isLoading = false;
         },
-        lastQueryVarsAll: (state, action) => {
-            state.queryVars = action.payload;
-        },
         animalsContextAll: (state, action) => {
             state.pageContext = action.payload;
+        },
+        animalsPageSizeAll: (state, action) => {
+            state.pageSize = action.payload;
+        },
+        animalsCurrentPageAll: (state, action) => {
+            state.currentPage = action.payload;
+        },
+        animalsQueryVarsFavoriteAll: (state, action) => {
+            state.queryVars.isFavoriteOnly = action.payload;
+        },
+        animalsQueryVarsFiltersAll: (state, action) => {
+            const { breed, gender, species } = action.payload;
+            const newValue = { ...state.queryVars, breed, gender, species };
+            for (const propName in newValue) {
+                if (newValue[propName] === null || newValue[propName] === undefined) {
+                    delete newValue[propName];
+                }
+            }
+            state.queryVars = newValue;
+        },
+        animalsQueryVarsPaginationAll: (state, action) => {
+            const { first, after, last, before } = action.payload;
+            const newValue = { ...state.queryVars, first, after, last, before };
+            for (const propName in newValue) {
+                if (newValue[propName] === null || newValue[propName] === undefined) {
+                    delete newValue[propName];
+                }
+            }
+            state.queryVars = newValue;
         },
     },
 });
 
 export default slice.reducer;
 
+/* IMPORTANT:
+ * All the reloading/refetching logic should be here. Not in the view.
+ * View is only calling named actions (without params).
+ */
+
 // Actions
 
-const { animalsSuccessAll, startLoadingAll, hasErrorAll, lastQueryVarsAll, animalsContextAll } = slice.actions;
-
-export const fetchAnimalsIfNewContext = (queryArgs: QueryAnimalsArgs, context: string) => (dispatch, getState) => {
-    const { animalsAll } = getState();
-    const { pageContext } = animalsAll;
-    if (context !== pageContext) {
-        dispatch(startLoadingAll());
-        dispatch(fetchAnimals(queryArgs));
-    }
-    dispatch(animalsContextAll(context));
-};
+const {
+    animalsSuccessAll,
+    startLoadingAll,
+    hasErrorAll,
+    animalsContextAll,
+    animalsPageSizeAll,
+    animalsCurrentPageAll,
+    animalsQueryVarsFavoriteAll,
+    animalsQueryVarsFiltersAll,
+    animalsQueryVarsPaginationAll,
+} = slice.actions;
 
 export const forceReFetchAnimalsForSameContext = (context: string) => (dispatch, getState) => {
     const { animalsAll } = getState();
-    const { queryVars, pageContext } = animalsAll;
+    const { pageContext } = animalsAll;
     if (context === pageContext) {
-        dispatch(fetchAnimals(queryVars));
+        dispatch(fetchAnimals());
     }
 };
 
+export const loadAnimalsFirstPage = () => (dispatch, getState) => {
+    const { animalsAll } = getState();
+    const { pageSize } = animalsAll;
+
+    dispatch(startLoadingAll());
+
+    const firstPageQueryVars: QueryAnimalsArgs = {
+        first: pageSize,
+        after: '',
+        last: undefined,
+        before: undefined,
+    };
+
+    dispatch(animalsQueryVarsPaginationAll(firstPageQueryVars));
+    dispatch(fetchAnimals());
+};
+
+export const loadAnimalsNextPage = () => (dispatch, getState) => {
+    const { animalsAll } = getState();
+    const { pageSize, page } = animalsAll;
+    dispatch(startLoadingAll());
+
+    const nextPageQueryVars: QueryAnimalsArgs = {
+        first: pageSize,
+        after: page.info.endCursor,
+        last: undefined,
+        before: undefined,
+    };
+
+    dispatch(animalsQueryVarsPaginationAll(nextPageQueryVars));
+    dispatch(fetchAnimals());
+};
+
+export const loadAnimalsPreviousPage = () => (dispatch, getState) => {
+    const { animalsAll } = getState();
+    const { pageSize, page } = animalsAll;
+    dispatch(startLoadingAll());
+
+    const previousPageQueryVars: QueryAnimalsArgs = {
+        first: undefined,
+        after: undefined,
+        last: pageSize,
+        before: page.info.startCursor,
+    };
+
+    dispatch(animalsQueryVarsPaginationAll(previousPageQueryVars));
+    dispatch(fetchAnimals());
+};
+
+export const setAnimalsPageContext = (context: string) => dispatch => {
+    dispatch(animalsContextAll(context));
+    if (context === '/favorites') {
+        dispatch(animalsQueryVarsFavoriteAll(true));
+    } else {
+        dispatch(animalsQueryVarsFavoriteAll(false));
+    }
+};
+
+export const setAnimalsPageSize = (size: number) => dispatch => {
+    dispatch(animalsPageSizeAll(size));
+    dispatch(animalsCurrentPageAll(0));
+    dispatch(loadAnimalsFirstPage());
+};
+
+export const setAnimalsCurrentPage = (number: number) => dispatch => {
+    dispatch(animalsCurrentPageAll(number));
+};
+
+export const setAnimalsPagination = (queryArgs: QueryAnimalsArgs) => dispatch => {
+    dispatch(animalsQueryVarsPaginationAll(queryArgs));
+    dispatch(fetchAnimals());
+};
+
+export const setAnimalsFilters = (formData: AnimalsFiltersFormData) => dispatch => {
+    dispatch(animalsQueryVarsFiltersAll(formData));
+    dispatch(fetchAnimals());
+};
+
 export const fetchAnimals =
-    (queryArgs: QueryAnimalsArgs) =>
+    () =>
     async (dispatch, getState, { apolloClient }) => {
+        const { animalsAll } = getState();
+        const { queryVars } = animalsAll;
+
         try {
             const { data } = await apolloClient.query({
                 query: GET_ANIMALS_QUERY,
                 fetchPolicy: 'no-cache',
-                variables: queryArgs,
+                variables: queryVars,
             });
             if (data.animals) {
                 let ids;
@@ -106,7 +222,6 @@ export const fetchAnimals =
                     info = data.animals.pageInfo;
                 }
                 dispatch(animalsSuccessAll({ ids, objs, info }));
-                dispatch(lastQueryVarsAll(queryArgs));
             }
         } catch (error: any) {
             dispatch(hasErrorAll(error.message));
@@ -128,9 +243,7 @@ export const createOrUpdateAnimal =
             });
             if (result) {
                 actionCb(null);
-                const { animalsAll } = getState();
-                const { queryVars } = animalsAll;
-                dispatch(fetchAnimals(queryVars));
+                dispatch(fetchAnimals());
             }
         } catch (error: any) {
             actionCb(error);
