@@ -5,7 +5,7 @@ import { loader } from 'graphql.macro';
 import { createSlice } from '@reduxjs/toolkit';
 import { AnimalFormData } from '../components/animal/create-update/AnimalForm';
 import { CreateAnimalInput, PageInfo, QueryAnimalsArgs, UpdateAnimalInput } from '../graphql/types';
-import { AnimalsFiltersFormData, PagedAnimalsState } from './types-definitions';
+import { AnimalsFiltersFormDataOutput, AnimalsFiltersQueryVars, PagedAnimalsState } from './types-definitions';
 
 const DEFAULT_PAGE_SIZE = 12;
 
@@ -34,6 +34,7 @@ const initialState: PagedAnimalsState = {
     pageContext: '',
     pageSize: DEFAULT_PAGE_SIZE,
     currentPage: 0,
+    queryVarsFilterObjs: {},
 };
 
 const slice = createSlice({
@@ -55,6 +56,8 @@ const slice = createSlice({
             state.page.objs = action.payload.objs;
             state.page.info = action.payload.info;
             state.isLoading = false;
+            // clear previous error state
+            state.error = false;
         },
         animalsContextAll: (state, action) => {
             state.pageContext = action.payload;
@@ -77,6 +80,9 @@ const slice = createSlice({
                 }
             }
             state.queryVars = newValue;
+        },
+        animalsQueryVarsFilterObjsAll: (state, action) => {
+            state.queryVarsFilterObjs = action.payload;
         },
         animalsQueryVarsPaginationAll: (state, action) => {
             const { first, after, last, before } = action.payload;
@@ -109,6 +115,7 @@ const {
     animalsCurrentPageAll,
     animalsQueryVarsFavoriteAll,
     animalsQueryVarsFiltersAll,
+    animalsQueryVarsFilterObjsAll,
     animalsQueryVarsPaginationAll,
 } = slice.actions;
 
@@ -193,9 +200,19 @@ export const setAnimalsPagination = (queryArgs: QueryAnimalsArgs) => dispatch =>
     dispatch(fetchAnimals());
 };
 
-export const setAnimalsFilters = (formData: AnimalsFiltersFormData) => dispatch => {
-    dispatch(animalsQueryVarsFiltersAll(formData));
+// Is internal. Not intended for calling directly from UI
+const setAnimalsFilters = (queryArgs: QueryAnimalsArgs) => dispatch => {
+    dispatch(animalsQueryVarsFiltersAll(queryArgs));
     dispatch(fetchAnimals());
+};
+
+export const setAnimalsFiltersWithFilterObjs = (queryArgsFilterObjs: AnimalsFiltersFormDataOutput) => dispatch => {
+    // this is mapping action (formData Objs -> queryVars)
+
+    dispatch(animalsQueryVarsFilterObjsAll(queryArgsFilterObjs));
+
+    const queryArgs = convertFilterObjsToQueryVars(queryArgsFilterObjs);
+    dispatch(setAnimalsFilters(queryArgs));
 };
 
 export const fetchAnimals =
@@ -270,4 +287,20 @@ const makeAnimalInputFromAnimalForm = (formData: AnimalFormData): CreateAnimalIn
         return { ...result, id: formData.id } as UpdateAnimalInput;
     }
     return result;
+};
+
+const convertFilterObjsToQueryVars = (filterObjsArr: AnimalsFiltersFormDataOutput) => {
+    console.log('convertFilterObjsToQueryVars:: receiving', filterObjsArr);
+    // IMPORTANT: this is meaningful as long as filters work in NON multiple selection mode.
+    // and we need to convert to queryVars array format
+    const filterQueryVars: AnimalsFiltersQueryVars = {};
+
+    filterQueryVars.species =
+        filterObjsArr.species && filterObjsArr.species.length > 0 ? filterObjsArr.species.map(item => item.id) : null;
+    filterQueryVars.breed =
+        filterObjsArr.breed && filterObjsArr.breed.length > 0 ? filterObjsArr.breed.map(item => item.id) : null;
+    filterQueryVars.gender =
+        filterObjsArr.gender && filterObjsArr.gender.length > 0 ? filterObjsArr.gender.map(item => item.id) : null;
+
+    return filterQueryVars;
 };
