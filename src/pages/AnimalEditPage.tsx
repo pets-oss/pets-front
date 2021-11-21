@@ -1,6 +1,6 @@
 import { loader } from 'graphql.macro';
 import React from 'react';
-import { useParams } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 
 import { useQuery } from '@apollo/client';
 import { Box, Fade } from '@material-ui/core';
@@ -14,6 +14,7 @@ import Page from './Page';
 const GET_ANIMAL_DETAILS_ON_EDIT = loader('../graphql/queries/animal-details-on-edit.graphql');
 
 function AnimalEditPage() {
+    const history = useHistory();
     const params: RouterParams = useParams();
     const { id } = params;
 
@@ -21,6 +22,15 @@ function AnimalEditPage() {
         variables: { id: Number(id) },
         skip: !id,
     });
+
+    const submitCallback = (err: any) => {
+        if (err === null) {
+            history.push('/animal-list');
+        } else {
+            // todo - should also show error on UI
+            console.error('AnimalForm', err);
+        }
+    };
 
     return (
         <Fade in timeout={600}>
@@ -30,7 +40,7 @@ function AnimalEditPage() {
                 ) : loading ? (
                     <Skeleton animation="wave" variant="rect" height="70vh" width="100%" />
                 ) : (
-                    <AnimalForm animal={data?.animal} />
+                    <AnimalForm animal={data?.animal} submitCallback={submitCallback} />
                 )}
             </Page>
         </Fade>
