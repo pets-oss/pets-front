@@ -7,7 +7,6 @@ import {
     loadAnimalsFirstPage,
     loadAnimalsNextPage,
     loadAnimalsPreviousPage,
-    setAnimalsCurrentPage,
     setAnimalsPageContext,
     setAnimalsPageSize,
 } from '../../store/animalsAll';
@@ -31,7 +30,6 @@ export default function AnimalsListContainer({ viewType, pageType = AnimalPageTy
                 dispatch(setAnimalsPageContext('/favorites'));
                 break;
         }
-        dispatch(setAnimalsCurrentPage(0));
         loadFirstPage();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
@@ -67,7 +65,6 @@ export default function AnimalsListContainer({ viewType, pageType = AnimalPageTy
     }
 
     function handlePageChange(newPage) {
-        dispatch(setAnimalsCurrentPage(newPage));
         if (newPage > currentPage) {
             loadNextPage();
         } else {
