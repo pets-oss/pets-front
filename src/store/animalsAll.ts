@@ -311,7 +311,6 @@ const makeAnimalInputFromAnimalForm = (formData: AnimalFormData): CreateAnimalIn
 };
 
 const convertFilterObjsToQueryVars = (filterObjsArr: AnimalsFiltersFormDataOutput) => {
-    console.log('convertFilterObjsToQueryVars:: receiving', filterObjsArr);
     // IMPORTANT: this is meaningful as long as filters work in NON multiple selection mode.
     // and we need to convert to queryVars array format
     const filterQueryVars: AnimalsFiltersQueryVars = {};

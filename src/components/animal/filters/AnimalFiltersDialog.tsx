@@ -52,9 +52,7 @@ export default function AnimalFiltersDialog() {
 
     const onSubmit = formData => {
         handleDialogClose();
-        console.log('onSubmit with raw formData', formData);
         const preparedFilterObjs = makeMultipleFromSingleFilterProps(formData);
-        console.log('onSubmit with', preparedFilterObjs);
         dispatch(setAnimalsFiltersWithFilterObjs(preparedFilterObjs));
     };
 

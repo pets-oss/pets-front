@@ -16,6 +16,9 @@ export default function AnimalFiltersChips() {
 
     useEffect(() => {
         setFilters(makeFilterValues(queryVars, queryVarsFilterObjs));
+        // Note: intentionally dependency is only queryVars
+        // (in store both params change in different time, and only queryVars is important here)
+
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [queryVars]);
 
@@ -24,21 +27,15 @@ export default function AnimalFiltersChips() {
     };
 
     const onDelete = (filter: Filter) => {
-        // todo - remove
-        console.log('onDelete', filter, JSON.stringify(queryVarsFilterObjs));
-
         const newFilterObjs = {};
+
         FILTER_PROPS.map(type => {
-            const filterPropList = queryVarsFilterObjs[type];
-            const filterPropValuesAfterDelete = !filterPropList
+            const filterPropListResult = !queryVarsFilterObjs[type]
                 ? null
-                : filterPropList.filter(prop => {
-                      // todo - remove
-                      console.log('in', type, 'filter with', prop, filter);
-                      return prop.value !== filter.id && type !== filter.type;
-                  });
-            if (filterPropValuesAfterDelete && filterPropValuesAfterDelete.length > 0) {
-                newFilterObjs[type] = filterPropValuesAfterDelete;
+                : queryVarsFilterObjs[type].filter(prop => prop.value !== filter.id && type !== filter.type);
+
+            if (filterPropListResult && filterPropListResult.length > 0) {
+                newFilterObjs[type] = filterPropListResult;
             } else {
                 newFilterObjs[type] = null;
             }
@@ -59,48 +56,23 @@ export default function AnimalFiltersChips() {
 }
 
 const makeFilterValues = (queryVars, queryVarsFilterObjs) => {
-    // todo - remove
-    console.log('makeFilterValues', JSON.stringify(queryVars), JSON.stringify(queryVarsFilterObjs));
     const filters: Filter[] = [];
-    const { species: speciesObjList, breed: breedObjList, gender: genderObjList } = queryVarsFilterObjs;
 
-    // todo - optimize
-    if (queryVars.species) {
-        queryVars.species.map(speciesItem => {
-            const labelDisplay = getFilterPropValue(speciesItem, speciesObjList);
-            if (typeof labelDisplay === 'string') {
-                filters.push({
-                    type: 'species',
-                    label: labelDisplay,
-                    id: speciesItem,
-                });
-            }
-        });
-    }
-    if (queryVars.breed) {
-        queryVars.breed.map(breedItem => {
-            const labelDisplay = getFilterPropValue(breedItem, breedObjList);
-            if (typeof labelDisplay === 'string') {
-                filters.push({
-                    type: 'breed',
-                    label: labelDisplay,
-                    id: breedItem,
-                });
-            }
-        });
-    }
-    if (queryVars.gender) {
-        queryVars.gender.map(genderItem => {
-            const labelDisplay = getFilterPropValue(genderItem, genderObjList);
-            if (typeof labelDisplay === 'string') {
-                filters.push({
-                    type: 'gender',
-                    label: labelDisplay,
-                    id: genderItem,
-                });
-            }
-        });
-    }
+    FILTER_PROPS.map(type => {
+        if (queryVars[type]) {
+            queryVars[type].map(id => {
+                const objsList = queryVarsFilterObjs[type];
+                const label = getFilterPropValue(id, objsList);
+                if (typeof label === 'string') {
+                    filters.push({
+                        type: type,
+                        label: label,
+                        id: id,
+                    });
+                }
+            });
+        }
+    });
     return filters;
 };
 
@@ -113,7 +85,7 @@ const getFilterPropValue = (id: number, dataset: Species[] | Breed[] | Gender[])
     if (!found) {
         return false;
     }
-    return found?.value ?? 'unknown';
+    return found.value;
 };
 
 interface Filter {
