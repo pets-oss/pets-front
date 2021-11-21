@@ -119,6 +119,42 @@ const {
     animalsQueryVarsPaginationAll,
 } = slice.actions;
 
+const setAnimalsQueryVarsFirstPage = () => (dispatch, getState) => {
+    const { animalsAll } = getState();
+    const { pageSize } = animalsAll;
+    const firstPageQueryVars: QueryAnimalsArgs = {
+        first: pageSize,
+        after: '',
+        last: undefined,
+        before: undefined,
+    };
+    dispatch(animalsQueryVarsPaginationAll(firstPageQueryVars));
+};
+
+const setAnimalsQueryVarsNextPage = () => (dispatch, getState) => {
+    const { animalsAll } = getState();
+    const { pageSize, page } = animalsAll;
+    const nextPageQueryVars: QueryAnimalsArgs = {
+        first: pageSize,
+        after: page.info.endCursor,
+        last: undefined,
+        before: undefined,
+    };
+    dispatch(animalsQueryVarsPaginationAll(nextPageQueryVars));
+};
+
+const setAnimalsQueryVarsPrevPage = () => (dispatch, getState) => {
+    const { animalsAll } = getState();
+    const { pageSize, page } = animalsAll;
+    const previousPageQueryVars: QueryAnimalsArgs = {
+        first: undefined,
+        after: undefined,
+        last: pageSize,
+        before: page.info.startCursor,
+    };
+    dispatch(animalsQueryVarsPaginationAll(previousPageQueryVars));
+};
+
 export const forceReFetchAnimalsForSameContext = (context: string) => (dispatch, getState) => {
     const { animalsAll } = getState();
     const { pageContext } = animalsAll;
@@ -127,52 +163,21 @@ export const forceReFetchAnimalsForSameContext = (context: string) => (dispatch,
     }
 };
 
-export const loadAnimalsFirstPage = () => (dispatch, getState) => {
-    const { animalsAll } = getState();
-    const { pageSize } = animalsAll;
-
+export const loadAnimalsFirstPage = () => dispatch => {
     dispatch(startLoadingAll());
-
-    const firstPageQueryVars: QueryAnimalsArgs = {
-        first: pageSize,
-        after: '',
-        last: undefined,
-        before: undefined,
-    };
-
-    dispatch(animalsQueryVarsPaginationAll(firstPageQueryVars));
+    dispatch(setAnimalsQueryVarsFirstPage());
     dispatch(fetchAnimals());
 };
 
-export const loadAnimalsNextPage = () => (dispatch, getState) => {
-    const { animalsAll } = getState();
-    const { pageSize, page } = animalsAll;
+export const loadAnimalsNextPage = () => dispatch => {
     dispatch(startLoadingAll());
-
-    const nextPageQueryVars: QueryAnimalsArgs = {
-        first: pageSize,
-        after: page.info.endCursor,
-        last: undefined,
-        before: undefined,
-    };
-
-    dispatch(animalsQueryVarsPaginationAll(nextPageQueryVars));
+    dispatch(setAnimalsQueryVarsNextPage());
     dispatch(fetchAnimals());
 };
 
-export const loadAnimalsPreviousPage = () => (dispatch, getState) => {
-    const { animalsAll } = getState();
-    const { pageSize, page } = animalsAll;
+export const loadAnimalsPreviousPage = () => dispatch => {
     dispatch(startLoadingAll());
-
-    const previousPageQueryVars: QueryAnimalsArgs = {
-        first: undefined,
-        after: undefined,
-        last: pageSize,
-        before: page.info.startCursor,
-    };
-
-    dispatch(animalsQueryVarsPaginationAll(previousPageQueryVars));
+    dispatch(setAnimalsQueryVarsPrevPage());
     dispatch(fetchAnimals());
 };
 
@@ -203,7 +208,12 @@ export const setAnimalsPagination = (queryArgs: QueryAnimalsArgs) => dispatch =>
 // Is internal. Not intended for calling directly from UI
 const setAnimalsFilters = (queryArgs: QueryAnimalsArgs) => dispatch => {
     dispatch(animalsQueryVarsFiltersAll(queryArgs));
-    dispatch(fetchAnimals());
+
+    // IMPORTANT. After filters are set, should load the first page again
+    dispatch(setAnimalsQueryVarsFirstPage());
+
+    // todo - should reset pagination navigations
+    dispatch(setAnimalsCurrentPage(0));
 };
 
 export const setAnimalsFiltersWithFilterObjs = (queryArgsFilterObjs: AnimalsFiltersFormDataOutput) => dispatch => {
