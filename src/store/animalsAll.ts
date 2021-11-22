@@ -294,10 +294,7 @@ const makeAnimalInputFromAnimalForm = (formData: AnimalFormData): CreateAnimalIn
         name: formData.name,
         comments: formData.comments,
         details: {
-            // todo - should let to send speciesId without breedId being set.
-            // problem due to backend architecture solutions
-
-            //speciesId: formData.details?.species?.id,
+            speciesId: formData.details?.species?.id,
             breedId: formData.details?.breed?.id,
             genderId: formData.details?.gender?.id,
             colorId: formData.details?.color?.id,
