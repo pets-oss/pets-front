@@ -4,8 +4,13 @@ import { loader } from 'graphql.macro';
 
 import { createSlice } from '@reduxjs/toolkit';
 import { AnimalFormData } from '../components/animal/create-update/AnimalForm';
-import { CreateAnimalInput, PageInfo, QueryAnimalsArgs, UpdateAnimalInput } from '../graphql/types';
-import { AnimalsFiltersFormDataOutput, AnimalsFiltersQueryVars, PagedAnimalsState } from './types-definitions';
+import { Breed, CreateAnimalInput, Gender, QueryAnimalsArgs, Species, UpdateAnimalInput } from '../graphql/types';
+import {
+    AnimalsFiltersFormDataOutput,
+    AnimalsFiltersQueryVars,
+    GenericFilter,
+    PagedAnimalsState,
+} from './types-definitions';
 
 const DEFAULT_PAGE_SIZE = 12;
 
@@ -20,7 +25,7 @@ const initialState: PagedAnimalsState = {
     page: {
         ids: [],
         objs: [],
-        info: <PageInfo>{
+        info: {
             hasNextPage: false,
             hasPreviousPage: false,
             totalCount: 0,
@@ -84,6 +89,23 @@ const slice = createSlice({
         animalsQueryVarsFilterObjsAll: (state, action) => {
             state.queryVarsFilterObjs = action.payload;
         },
+        deleteAnimalFilterWithFilterObjsAll: (state, action) => {
+            if (!state.queryVarsFilterObjs) {
+                return;
+            }
+            const queryObj = state.queryVarsFilterObjs;
+            const filter = action.payload as GenericFilter;
+            const filterType = filter.__typename.toLowerCase();
+
+            const filterList = queryObj[filterType]?.filter(prop => prop.id !== filter.id);
+
+            if (filterList && filterList.length > 0) {
+                queryObj[filterType] = filterList;
+            } else {
+                delete queryObj[filterType];
+            }
+            state.queryVarsFilterObjs = queryObj;
+        },
         animalsQueryVarsPaginationAll: (state, action) => {
             const { first, after, last, before } = action.payload;
             const newValue = { ...state.queryVars, first, after, last, before };
@@ -116,6 +138,7 @@ const {
     animalsQueryVarsFavoriteAll,
     animalsQueryVarsFiltersAll,
     animalsQueryVarsFilterObjsAll,
+    deleteAnimalFilterWithFilterObjsAll,
     animalsQueryVarsPaginationAll,
 } = slice.actions;
 
@@ -236,6 +259,16 @@ export const setAnimalsFiltersWithFilterObjs = (queryArgsFilterObjs: AnimalsFilt
     dispatch(setAnimalsFilters(queryArgs));
 };
 
+export const removeAnimalsFilterWithFilterObj =
+    (queryArgsFilterObj: Species | Breed | Gender) => (dispatch, getState) => {
+        dispatch(deleteAnimalFilterWithFilterObjsAll(queryArgsFilterObj));
+
+        const { animalsAll } = getState();
+        const { queryVarsFilterObjs } = animalsAll;
+        const queryArgs = convertFilterObjsToQueryVars(queryVarsFilterObjs);
+        dispatch(setAnimalsFilters(queryArgs));
+    };
+
 export const fetchAnimals =
     () =>
     async (dispatch, getState, { apolloClient }) => {
@@ -312,12 +345,14 @@ const convertFilterObjsToQueryVars = (filterObjsArr: AnimalsFiltersFormDataOutpu
     // and we need to convert to queryVars array format
     const filterQueryVars: AnimalsFiltersQueryVars = {};
 
-    filterQueryVars.species =
-        filterObjsArr.species && filterObjsArr.species.length > 0 ? filterObjsArr.species.map(item => item.id) : null;
-    filterQueryVars.breed =
-        filterObjsArr.breed && filterObjsArr.breed.length > 0 ? filterObjsArr.breed.map(item => item.id) : null;
-    filterQueryVars.gender =
-        filterObjsArr.gender && filterObjsArr.gender.length > 0 ? filterObjsArr.gender.map(item => item.id) : null;
-
+    if (filterObjsArr?.species && filterObjsArr.species?.length > 0) {
+        filterQueryVars.species = filterObjsArr.species.map(item => item.id);
+    }
+    if (filterObjsArr?.breed && filterObjsArr.breed.length > 0) {
+        filterQueryVars.breed = filterObjsArr.breed.map(item => item.id);
+    }
+    if (filterObjsArr?.gender && filterObjsArr.gender.length > 0) {
+        filterQueryVars.gender = filterObjsArr.gender.map(item => item.id);
+    }
     return filterQueryVars;
 };

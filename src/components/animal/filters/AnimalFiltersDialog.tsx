@@ -16,7 +16,7 @@ import {
 import Dialog from '@material-ui/core/Dialog';
 import FilterListIcon from '@material-ui/icons/FilterList';
 import { setAnimalsFiltersWithFilterObjs } from '../../../store/animalsAll';
-import { AnimalsFiltersFormDataInput, AnimalsFiltersObjs } from '../../../store/types-definitions';
+import { AnimalsFiltersFormDataInput, AnimalsFiltersObjs, GenericFilter } from '../../../store/types-definitions';
 import AnimalFiltersDialogContents from './AnimalFiltersDialogContents';
 
 export default function AnimalFiltersDialog() {
@@ -52,8 +52,13 @@ export default function AnimalFiltersDialog() {
 
     const onSubmit = formData => {
         handleDialogClose();
-        const preparedFilterObjs = makeMultipleFromSingleFilterProps(formData);
-        dispatch(setAnimalsFiltersWithFilterObjs(preparedFilterObjs));
+        dispatch(
+            setAnimalsFiltersWithFilterObjs({
+                species: propToPropArray(formData.species),
+                breed: propToPropArray(formData.breed),
+                gender: propToPropArray(formData.gender),
+            })
+        );
     };
 
     return (
@@ -104,23 +109,17 @@ const makeSingleDefaultFormValuesFromMultipleQueryVars = (queryVarsFilterObjs: A
     // is filter prop single val?
     // convert to Species | Breed | Gender value
     if (queryVarsFilterObjs.species && Array.isArray(queryVarsFilterObjs.species)) {
-        formData.species = queryVarsFilterObjs.species[0];
+        formData.species = queryVarsFilterObjs.species[0] as GenericFilter;
     }
     if (queryVarsFilterObjs.breed && Array.isArray(queryVarsFilterObjs.breed)) {
-        formData.breed = queryVarsFilterObjs.breed[0];
+        formData.breed = queryVarsFilterObjs.breed[0] as GenericFilter;
     }
     if (queryVarsFilterObjs.gender && Array.isArray(queryVarsFilterObjs.gender)) {
-        formData.gender = queryVarsFilterObjs.gender[0];
+        formData.gender = queryVarsFilterObjs.gender[0] as GenericFilter;
     }
     return formData;
 };
 
-const makeMultipleFromSingleFilterProps = filterProps => {
-    // NOTE: multiple value selection is not implemented, just emulating
-    const multipleFilterProps: AnimalsFiltersObjs = {
-        species: filterProps.species ? [filterProps.species] : null,
-        breed: filterProps.breed ? [filterProps.breed] : null,
-        gender: filterProps.gender ? [filterProps.gender] : null,
-    };
-    return multipleFilterProps;
+const propToPropArray = prop => {
+    return prop ? [prop] : null;
 };

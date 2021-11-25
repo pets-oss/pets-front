@@ -22,9 +22,9 @@ export type AnimalsFiltersQueryVars = {
 };
 
 export type AnimalsFiltersFormDataInput = {
-    breed?: Breed;
-    gender?: Gender;
-    species?: Species;
+    breed?: Maybe<GenericFilter>;
+    gender?: Maybe<GenericFilter>;
+    species?: Maybe<GenericFilter>;
 };
 
 export type AnimalsFiltersFormDataOutput = {
@@ -33,8 +33,15 @@ export type AnimalsFiltersFormDataOutput = {
     species?: Maybe<Species[]>;
 };
 
+export type GenericFilter = {
+    __typename: 'Breed' | 'Gender' | 'Species';
+    id: Scalars['Int'];
+    value: Scalars['String'];
+};
+
 export type AnimalsFiltersObjs = {
-    breed?: Maybe<Array<Breed>>;
-    gender?: Maybe<Array<Gender>>;
-    species?: Maybe<Array<Species>>;
+    breed?: Maybe<Array<GenericFilter>>;
+    gender?: Maybe<Array<GenericFilter>>;
+    species?: Maybe<Array<GenericFilter>>;
+    [index: string]: Maybe<Array<GenericFilter>> | undefined;
 };
