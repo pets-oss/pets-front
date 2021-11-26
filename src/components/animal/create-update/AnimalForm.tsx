@@ -1,11 +1,11 @@
 import React, { useEffect, useRef } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
-import { useDispatch } from 'react-redux';
 
 import { Grid, GridProps } from '@material-ui/core';
 import makeStyles from '@material-ui/core/styles/makeStyles';
-import { Animal, Breed, Color, Gender, Species } from '../../../graphql/types';
-import { createOrUpdateAnimal } from '../../../store/animalsAll';
+import { Animal, AnimalDetails } from '../../../graphql/types';
+import { useAppDispatch } from '../../../store';
+import { createOrUpdateAnimal } from '../../../store/animals';
 import { getDateYMDFlexible, getYMDDateFromTS } from '../../../utils/dateFormatters';
 import LayoutAlignCenterBox from '../../layout/LayoutAlignCenterBox';
 import DetailsStep from './DetailsStep';
@@ -16,7 +16,7 @@ export default function AnimalForm({ animal, submitCallback }: AnimalFormProps) 
     const methods = useForm({ defaultValues: getDefaultFormValues(animal) });
     const { handleSubmit, reset } = methods;
     const formRef = useRef<HTMLFormElement>(null);
-    const dispatch = useDispatch();
+    const dispatch = useAppDispatch();
 
     useEffect(() => {
         if (animal) {
@@ -25,15 +25,28 @@ export default function AnimalForm({ animal, submitCallback }: AnimalFormProps) 
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [animal]);
 
-    const onSubmit = (formData: AnimalFormData) => {
-        const normalizedFormData = normalizeFormData(formData);
-        // eslint-disable-next-line no-console
-        console.log('FORM DATA: ', formData, JSON.stringify(formData));
+    const onSubmit = async (formData: AnimalFormData) => {
+        // filter/cleanup RichTextEditorField
+        if (formData.comments === '<p><br></p>') {
+            formData.comments = '';
+        }
+
+        // convert birthDate string to TS
+        if (formData.details?.birthDate) {
+            formData.details.birthDate = getDateYMDFlexible(formData.details?.birthDate) as string;
+        }
 
         if (animal) {
             formData.id = animal.id;
         }
-        dispatch(createOrUpdateAnimal(normalizedFormData, submitCallback));
+        const resultAction = await dispatch(createOrUpdateAnimal(formData));
+
+        if (createOrUpdateAnimal.fulfilled.match(resultAction)) {
+            submitCallback(null);
+        } else {
+            // returns error message after bad insert
+            submitCallback(resultAction.payload);
+        }
     };
 
     return (
@@ -55,23 +68,11 @@ export default function AnimalForm({ animal, submitCallback }: AnimalFormProps) 
     );
 }
 
-const getDefaultFormValues = (animal?: Animal) => {
+const getDefaultFormValues = (animal?: Animal): AnimalFormData => {
     // adjust birthData format to form string input
     return animal
         ? { ...animal, details: { ...animal.details, birthDate: getYMDDateFromTS(animal.details?.birthDate) } }
         : { details: { birthDate: getYMDDateFromTS(Date.now().toString()) } };
-};
-
-const normalizeFormData = formData => {
-    // filter/cleanup RichTextEditorField
-    if (formData.comments === '<p><br></p>') {
-        formData.comments = '';
-    }
-    // convert birthDate string to TS
-    if (formData.details?.birthDate) {
-        formData.details.birthDate = getDateYMDFlexible(formData.details?.birthDate);
-    }
-    return formData;
 };
 
 export function FormRow({ children, ...props }: GridProps) {
@@ -93,22 +94,9 @@ interface AnimalFormProps {
     submitCallback: (error: any) => void;
 }
 
-export interface AnimalFormData {
+export interface AnimalFormData extends Partial<Omit<Animal, 'details'>> {
     id?: number;
-    name?: string;
-    organizationId?: number;
-    comments?: string;
-    details?: Details;
-    createEvent?: boolean;
+    details?: Partial<AnimalDetails>;
 }
 
 // todo createEvent prop.
-
-// Details type is declared as it differs from AnimalDetails
-interface Details {
-    species?: Species;
-    breed?: Breed;
-    gender?: Gender;
-    color?: Color;
-    birthDate?: string;
-}

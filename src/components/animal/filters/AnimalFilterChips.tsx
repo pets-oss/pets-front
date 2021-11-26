@@ -1,38 +1,37 @@
 import React from 'react';
-import { RootStateOrAny, useDispatch, useSelector } from 'react-redux';
 
 import { Button, Chip, Grid } from '@material-ui/core';
-import { Breed, Gender, Species } from '../../../graphql/types';
-import { removeAnimalsFilterWithFilterObj, setAnimalsFiltersWithFilterObjs } from '../../../store/animalsAll';
+import { useAppDispatch, useAppSelector } from '../../../store';
+import { deleteFilter, resetFilters } from '../../../store/filters';
 
 const FILTER_PROPS = ['species', 'gender', 'breed'];
 
 export default function AnimalFiltersChips() {
-    const dispatch = useDispatch();
-    const { queryVars, queryVarsFilterObjs } = useSelector((state: RootStateOrAny) => state.animalsAll);
+    const dispatch = useAppDispatch();
+    const filters = useAppSelector(state => state.filters);
 
-    const hasFilters = Object.keys(queryVars).filter(key => FILTER_PROPS.includes(key)).length > 0;
+    const hasFilters = Object.keys(filters).filter(key => FILTER_PROPS.includes(key)).length > 0;
 
     const handleClearFilters = () => {
-        dispatch(setAnimalsFiltersWithFilterObjs({}));
+        dispatch(resetFilters());
     };
 
-    const onDelete = (filter: Species | Breed | Gender) => {
-        dispatch(removeAnimalsFilterWithFilterObj(filter));
+    const onDelete = type => {
+        dispatch(deleteFilter(type));
     };
 
     const filterChip = (type, filter) => (
         <Grid item key={`${type}-${filter.id}`}>
-            <Chip label={filter.value} onDelete={() => onDelete(filter)} />
+            <Chip label={filter.value} onDelete={() => onDelete(type)} />
         </Grid>
     );
 
     if (hasFilters) {
         return (
             <Grid container spacing={1}>
-                {Object.keys(queryVarsFilterObjs).map(type => {
-                    if (queryVarsFilterObjs[type]) {
-                        return queryVarsFilterObjs[type].map(filter => filterChip(type, filter));
+                {Object.keys(filters).map(type => {
+                    if (filters[type]) {
+                        return filterChip(type, filters[type]);
                     }
                 })}
                 <Button onClick={handleClearFilters}>Clear</Button>

@@ -25,6 +25,7 @@ query GetAnimalsList(
                 imageUrl
                 status
                 modTime
+                isFavorite
                 details {
                     gender {
                         id

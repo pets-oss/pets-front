@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
-import { RootStateOrAny, useDispatch, useSelector } from 'react-redux';
 
 import {
     Box,
@@ -15,8 +14,8 @@ import {
 } from '@material-ui/core';
 import Dialog from '@material-ui/core/Dialog';
 import FilterListIcon from '@material-ui/icons/FilterList';
-import { setAnimalsFiltersWithFilterObjs } from '../../../store/animalsAll';
-import { AnimalsFiltersFormDataInput, AnimalsFiltersObjs, GenericFilter } from '../../../store/types-definitions';
+import { useAppDispatch, useAppSelector } from '../../../store';
+import { setFilters } from '../../../store/filters';
 import AnimalFiltersDialogContents from './AnimalFiltersDialogContents';
 
 export default function AnimalFiltersDialog() {
@@ -24,18 +23,18 @@ export default function AnimalFiltersDialog() {
     const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
 
     const [dialogOpen, setDialogOpen] = useState(false);
-    const dispatch = useDispatch();
-    const { queryVarsFilterObjs, page } = useSelector((state: RootStateOrAny) => state.animalsAll);
+    const dispatch = useAppDispatch();
 
-    const methods = useForm({ defaultValues: makeSingleDefaultFormValuesFromMultipleQueryVars(queryVarsFilterObjs) });
+    const filters = useAppSelector(state => state.filters);
+    const { totalCount } = useAppSelector(state => state.animals.pageInfo || {});
+
+    const methods = useForm({ defaultValues: filters });
     const { handleSubmit, reset } = methods;
     const formRef = useRef<HTMLFormElement>(null);
 
     useEffect(() => {
-        reset(makeSingleDefaultFormValuesFromMultipleQueryVars(queryVarsFilterObjs));
-    }, [queryVarsFilterObjs, reset]);
-
-    const count = page.info?.totalCount;
+        reset(filters);
+    }, [filters, reset]);
 
     const handleDialogOpen = () => {
         setDialogOpen(true);
@@ -47,23 +46,17 @@ export default function AnimalFiltersDialog() {
 
     const onResetFilters = () => {
         reset({});
-        dispatch(setAnimalsFiltersWithFilterObjs({}));
+        // dispatch(setAnimalsFiltersWithFilterObjs({}));
     };
 
     const onSubmit = formData => {
         handleDialogClose();
-        dispatch(
-            setAnimalsFiltersWithFilterObjs({
-                species: propToPropArray(formData.species),
-                breed: propToPropArray(formData.breed),
-                gender: propToPropArray(formData.gender),
-            })
-        );
+        dispatch(setFilters(formData));
     };
 
     return (
         <Grid container alignItems="center" spacing={1}>
-            <Grid item>{count}</Grid>
+            <Grid item>{totalCount}</Grid>
             <Grid item>
                 <IconButton aria-label="filter animal list" aria-haspopup="true" onClick={handleDialogOpen}>
                     <FilterListIcon />
@@ -102,24 +95,3 @@ export default function AnimalFiltersDialog() {
         </Grid>
     );
 }
-
-const makeSingleDefaultFormValuesFromMultipleQueryVars = (queryVarsFilterObjs: AnimalsFiltersObjs) => {
-    // NOTE: multiple value selection is not implemented, so converting
-    const formData: AnimalsFiltersFormDataInput = {};
-    // is filter prop single val?
-    // convert to Species | Breed | Gender value
-    if (queryVarsFilterObjs.species && Array.isArray(queryVarsFilterObjs.species)) {
-        formData.species = queryVarsFilterObjs.species[0] as GenericFilter;
-    }
-    if (queryVarsFilterObjs.breed && Array.isArray(queryVarsFilterObjs.breed)) {
-        formData.breed = queryVarsFilterObjs.breed[0] as GenericFilter;
-    }
-    if (queryVarsFilterObjs.gender && Array.isArray(queryVarsFilterObjs.gender)) {
-        formData.gender = queryVarsFilterObjs.gender[0] as GenericFilter;
-    }
-    return formData;
-};
-
-const propToPropArray = prop => {
-    return prop ? [prop] : null;
-};

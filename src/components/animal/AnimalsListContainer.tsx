@@ -1,86 +1,52 @@
-import React, { useEffect } from 'react';
-import { RootStateOrAny, useDispatch, useSelector } from 'react-redux';
+import React from 'react';
 
 import Skeleton from '@material-ui/lab/Skeleton';
-import { Animal } from '../../graphql/types';
-import {
-    loadAnimalsFirstPage,
-    loadAnimalsNextPage,
-    loadAnimalsPreviousPage,
-    setAnimalsPageContext,
-    setAnimalsPageSize,
-} from '../../store/animalsAll';
+import { useAppDispatch, useAppSelector } from '../../store';
+import { loadNextPage, loadPreviousPage, setPageSize } from '../../store/queryArgs';
 import AnimalCardList from './AnimalCardList';
 import AnimalsTable from './AnimalsTable';
 import PaginationRounded from './PaginationRounded';
 import { AnimalsViewType } from './ViewSelector';
 
-export default function AnimalsListContainer({ viewType, pageType = AnimalPageType.ALL }: AnimalsListContainerProps) {
-    const dispatch = useDispatch();
+export default function AnimalsListContainer({ viewType }: AnimalsListContainerProps) {
+    const dispatch = useAppDispatch();
 
-    const { page, pageSize, currentPage, isLoading, error } = useSelector((state: RootStateOrAny) => state.animalsAll);
-    const animalObjs: Animal[] = page.objs;
+    const { loading, entities, pageInfo } = useAppSelector(state => state.animals);
+    const { currentPage, pageSize } = useAppSelector(state => state.queryArgs);
 
-    useEffect(() => {
-        switch (pageType) {
-            case AnimalPageType.ALL:
-                dispatch(setAnimalsPageContext('/animal-list'));
-                break;
-            case AnimalPageType.FAVORITES:
-                dispatch(setAnimalsPageContext('/favorites'));
-                break;
-        }
-        loadFirstPage();
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    // const animalObjs: Animal[] = animalsConnection.edges;
+    const totalPageSize = pageInfo?.totalCount || 0;
 
-    if (isLoading) {
+    if (loading === 'pending') {
         return <Skeleton animation="wave" variant="rect" height={500} width="100%" />;
     }
 
-    if (error) {
-        // TODO: replace with proper UI elements
-        return <p>Error!</p>;
-    }
-
-    if (page.info.totalCount === 0) {
+    if (totalPageSize === 0) {
         // TODO: replace with proper UI elements
         return <p>No data</p>;
     }
 
-    function loadFirstPage() {
-        dispatch(loadAnimalsFirstPage());
-    }
-
-    function loadNextPage() {
-        dispatch(loadAnimalsNextPage());
-    }
-
-    function loadPreviousPage() {
-        dispatch(loadAnimalsPreviousPage());
-    }
-
     function handlePageSizeChange(size) {
-        dispatch(setAnimalsPageSize(size));
+        dispatch(setPageSize(size));
     }
 
     function handlePageChange(newPage) {
         if (newPage > currentPage) {
-            loadNextPage();
+            dispatch(loadNextPage(pageInfo));
         } else {
-            loadPreviousPage();
+            dispatch(loadPreviousPage(pageInfo));
         }
     }
 
     return (
         <>
             {viewType === AnimalsViewType.TABLE ? (
-                <AnimalsTable animals={animalObjs} />
+                <AnimalsTable animals={entities} />
             ) : (
-                <AnimalCardList animals={animalObjs} />
+                <AnimalCardList animals={entities} />
             )}
             <PaginationRounded
-                count={page.info.totalCount ?? 0}
+                count={totalPageSize}
                 page={currentPage}
                 onPageChange={handlePageChange}
                 pageSize={pageSize}
@@ -92,10 +58,4 @@ export default function AnimalsListContainer({ viewType, pageType = AnimalPageTy
 
 interface AnimalsListContainerProps {
     viewType: AnimalsViewType;
-    pageType?: AnimalPageType;
-}
-
-export enum AnimalPageType {
-    ALL,
-    FAVORITES,
 }
