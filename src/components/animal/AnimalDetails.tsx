@@ -90,7 +90,7 @@ const Root = styled('div')(({ theme }) => ({
     },
 }));
 
-function AnimalDetails({ onLoad }: AnimalDetailsProps) {
+export default function AnimalDetails({ onLoad }: AnimalDetailsProps) {
     const { id } = useParams();
     const navigate = useNavigate();
 
@@ -208,5 +208,3 @@ function AnimalDetails({ onLoad }: AnimalDetailsProps) {
         </Root>
     );
 }
-
-export default AnimalDetails;
