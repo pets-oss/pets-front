@@ -1,4 +1,5 @@
 import { loader } from 'graphql.macro';
+import Image from 'mui-image';
 import React, { useRef } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
@@ -156,13 +157,7 @@ export default function AnimalDetails({ onLoad }: AnimalDetailsProps) {
                         <AnimalDetailsMenu id={animal.id} />
                     </AnimalDetailsHeader>
                     <Box className={classes.imageContainer}>
-                        <img
-                            alt={''}
-                            src={animal.imageUrl!}
-                            style={{
-                                width: '100%',
-                            }}
-                        />
+                        <Image src={animal.imageUrl!} aspectRatio={3 / 2} cover />
                         <IconButton className={classes.addImageButton} onClick={showUploadImageDialog}>
                             <AddAPhotoIcon className={classes.imageIcon} />
                         </IconButton>

@@ -1,4 +1,5 @@
 import clsx from 'clsx';
+import Image from 'mui-image';
 import React, { forwardRef, Ref, useImperativeHandle, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
 
@@ -44,16 +45,34 @@ export interface DialogEventTypes {
 const PREVIEW_IMAGE_TYPES = ['image/gif', 'image/jpeg', 'image/png', 'image/jpg'];
 const INIT_DIALOG_STATE = { visible: false, loading: false, error: null };
 
-const RenderSelected = ({ multiple, files }: RenderSelectedProps) => {
+const RenderSelected = ({ multiple, files, theme }: RenderSelectedProps) => {
     const imageStyles = {
         container: {
             paddingTop: 0,
             height: 135,
         },
+        image: {
+            height: 135,
+            width: 'auto',
+            maxWidth: '100%',
+            position: 'relative',
+            objectFit: 'contain',
+            borderWidth: 2,
+            borderRadius: theme?.shape?.borderRadius,
+            borderColor: theme?.palette?.grey?.['400'],
+        },
     };
 
     if (!multiple && files[0] && PREVIEW_IMAGE_TYPES.includes(files[0].type)) {
-        return <img src={URL.createObjectURL(files[0])} style={imageStyles.container} />;
+        return (
+            <Image
+                src={URL.createObjectURL(files[0])}
+                aspectRatio={1}
+                cover={false}
+                style={imageStyles.container}
+                imageStyle={imageStyles.image}
+            />
+        );
     }
     return (
         <ul>
