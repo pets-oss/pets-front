@@ -1,4 +1,5 @@
 export type Maybe<T> = T | null;
+export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
 export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
 export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
@@ -55,7 +56,7 @@ export type Animal = {
 
 /** Represents an animal. */
 export type AnimalStatusArgs = {
-    language?: Maybe<Scalars['String']>;
+    language?: InputMaybe<Scalars['String']>;
 };
 
 /** Represents an animal details. */
@@ -95,41 +96,41 @@ export type AnimalDetails = {
 
 /** Represents an animal details. */
 export type AnimalDetailsBreedArgs = {
-    language?: Maybe<Scalars['String']>;
+    language?: InputMaybe<Scalars['String']>;
 };
 
 /** Represents an animal details. */
 export type AnimalDetailsColorArgs = {
-    language?: Maybe<Scalars['String']>;
+    language?: InputMaybe<Scalars['String']>;
 };
 
 /** Represents an animal details. */
 export type AnimalDetailsGenderArgs = {
-    language?: Maybe<Scalars['String']>;
+    language?: InputMaybe<Scalars['String']>;
 };
 
 /** Represents an animal details. */
 export type AnimalDetailsSpeciesArgs = {
-    language?: Maybe<Scalars['String']>;
+    language?: InputMaybe<Scalars['String']>;
 };
 
 export type AnimalDetailsInput = {
     /** Animal allergy */
-    allergy?: Maybe<Scalars['String']>;
+    allergy?: InputMaybe<Scalars['String']>;
     /** Animal date of birth (year) */
-    birthDate?: Maybe<Scalars['Date']>;
+    birthDate?: InputMaybe<Scalars['Date']>;
     /** Animal breed id (any value from 'breeds' query) */
-    breedId?: Maybe<Scalars['Int']>;
+    breedId?: InputMaybe<Scalars['Int']>;
     /** Animal color (any value from 'colors' query) */
-    colorId?: Maybe<Scalars['Int']>;
+    colorId?: InputMaybe<Scalars['Int']>;
     /** Animal food */
-    food?: Maybe<Scalars['String']>;
+    food?: InputMaybe<Scalars['String']>;
     /** Animal gender (any value from 'genders' query) */
-    genderId?: Maybe<Scalars['Int']>;
+    genderId?: InputMaybe<Scalars['Int']>;
     /** Species breed id (any value from 'species' query) */
-    speciesId?: Maybe<Scalars['Int']>;
+    speciesId?: InputMaybe<Scalars['Int']>;
     /** Animal weight (kg) */
-    weight?: Maybe<Scalars['Int']>;
+    weight?: InputMaybe<Scalars['Int']>;
 };
 
 /** An edge in a connection. */
@@ -163,7 +164,7 @@ export type AnimalMicrochip = {
 
 /** Represents an animal microchip. */
 export type AnimalMicrochipStatusArgs = {
-    language?: Maybe<Scalars['String']>;
+    language?: InputMaybe<Scalars['String']>;
 };
 
 /** Represents a animal owner. */
@@ -192,15 +193,15 @@ export type AnimalRegistration = {
 
 /** Represents animal registration */
 export type AnimalRegistrationStatusArgs = {
-    language?: Maybe<Scalars['String']>;
+    language?: InputMaybe<Scalars['String']>;
 };
 
 export type AnimalRegistrationInput = {
-    registrationDate?: Maybe<Scalars['Date']>;
+    registrationDate?: InputMaybe<Scalars['Date']>;
     /** Registration number (255 characters max) */
     registrationNo: Scalars['String'];
     /** Registration status ('Active' or 'Inactive') */
-    status?: Maybe<RegistrationStatus>;
+    status?: InputMaybe<RegistrationStatus>;
 };
 
 export enum AnimalStatus {
@@ -237,6 +238,21 @@ export type Breed = {
     abbreviation: Scalars['String'];
     /** Breed id */
     id: Scalars['Int'];
+    /** Breed name */
+    value: Scalars['String'];
+};
+
+/** Represents a breed with species. */
+export type BreedWithSpecies = {
+    __typename?: 'BreedWithSpecies';
+    /** Breed abbreviation */
+    abbreviation: Scalars['String'];
+    /** Breed id */
+    id: Scalars['Int'];
+    /** Species id */
+    speciesId: Scalars['Int'];
+    /** Species name */
+    speciesValue: Scalars['String'];
     /** Breed name */
     value: Scalars['String'];
 };
@@ -313,26 +329,26 @@ export type Color = {
 
 export type CreateAnimalInput = {
     /** Comments */
-    comments?: Maybe<Scalars['String']>;
+    comments?: InputMaybe<Scalars['String']>;
     /** AnimalDetails */
-    details?: Maybe<AnimalDetailsInput>;
+    details?: InputMaybe<AnimalDetailsInput>;
     /** Image File */
-    image?: Maybe<Scalars['Upload']>;
+    image?: InputMaybe<Scalars['Upload']>;
     /** AnimalMicrochip */
-    microchip?: Maybe<CreateAnimalMicrochipInput>;
+    microchip?: InputMaybe<CreateAnimalMicrochipInput>;
     /** Animal name (128 characters max) */
-    name?: Maybe<Scalars['String']>;
+    name?: InputMaybe<Scalars['String']>;
     /** AnimalRegistration */
-    registration?: Maybe<AnimalRegistrationInput>;
+    registration?: InputMaybe<AnimalRegistrationInput>;
     /** Status */
-    status?: Maybe<AnimalStatus>;
+    status?: InputMaybe<AnimalStatus>;
 };
 
 export type CreateAnimalMicrochipInput = {
     /** Chip company code */
     chipCompanyCode: Scalars['Int'];
     /** Install date (UTC timestamp) */
-    installDate?: Maybe<Scalars['String']>;
+    installDate?: InputMaybe<Scalars['String']>;
     /** Install place */
     installPlaceId: Scalars['Int'];
     /** Microchip id (255 characters max) */
@@ -343,36 +359,36 @@ export type CreateAnimalMicrochipInput = {
 
 export type CreateAnimalOwnerInput = {
     name: Scalars['Name'];
-    phone?: Maybe<Scalars['Phone']>;
-    surname?: Maybe<Scalars['Surname']>;
+    phone?: InputMaybe<Scalars['Phone']>;
+    surname?: InputMaybe<Scalars['Surname']>;
 };
 
 export type CreateGiveawayEventInput = {
     /** Animal id, e.g. 2 */
     animalId: Scalars['Int'];
     /** Event date in YYYY-MM-DD format */
-    date?: Maybe<Scalars['Date']>;
+    date?: InputMaybe<Scalars['Date']>;
     /** Former owner id */
     formerOwnerId: Scalars['Int'];
     /** Event reason */
-    reason?: Maybe<Scalars['String']>;
+    reason?: InputMaybe<Scalars['String']>;
     /** Registration date */
-    registrationDate?: Maybe<Scalars['Date']>;
+    registrationDate?: InputMaybe<Scalars['Date']>;
     /** Registration no */
-    registrationNo?: Maybe<Scalars['String']>;
+    registrationNo?: InputMaybe<Scalars['String']>;
 };
 
 export type CreateOrganisationInput = {
     /** City (128 characters max) */
-    city?: Maybe<Scalars['String']>;
+    city?: InputMaybe<Scalars['String']>;
     /** Country (128 characters max) */
-    country?: Maybe<Scalars['String']>;
+    country?: InputMaybe<Scalars['String']>;
     /** Organization name (255 characters max) */
     name: Scalars['Name'];
     /** Phone (64 characters max) */
-    phone?: Maybe<Scalars['Phone']>;
+    phone?: InputMaybe<Scalars['Phone']>;
     /** Street address (255 characters max) */
-    streetAddress?: Maybe<Scalars['String']>;
+    streetAddress?: InputMaybe<Scalars['String']>;
 };
 
 export type DeleteAnimalInput = {
@@ -736,7 +752,7 @@ export type Query = {
      *
      * breeds(species: "2", language: "lt")
      */
-    breeds?: Maybe<Array<Maybe<Breed>>>;
+    breeds?: Maybe<Array<Maybe<BreedWithSpecies>>>;
     /**
      * Get all chipCompanies.
      *
@@ -849,20 +865,20 @@ export type QueryAnimalOwnerArgs = {
 };
 
 export type QueryAnimalsArgs = {
-    after?: Maybe<Scalars['String']>;
-    before?: Maybe<Scalars['String']>;
-    breed?: Maybe<Array<Maybe<Scalars['Int']>>>;
-    first?: Maybe<Scalars['Int']>;
-    gender?: Maybe<Array<Maybe<Scalars['Int']>>>;
-    ids?: Maybe<Array<Maybe<Scalars['Int']>>>;
-    isFavoriteOnly?: Maybe<Scalars['Boolean']>;
-    last?: Maybe<Scalars['Int']>;
-    species?: Maybe<Array<Maybe<Scalars['Int']>>>;
+    after?: InputMaybe<Scalars['String']>;
+    before?: InputMaybe<Scalars['String']>;
+    breed?: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
+    first?: InputMaybe<Scalars['Int']>;
+    gender?: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
+    ids?: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
+    isFavoriteOnly?: InputMaybe<Scalars['Boolean']>;
+    last?: InputMaybe<Scalars['Int']>;
+    species?: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
 };
 
 export type QueryBreedsArgs = {
     language: Scalars['String'];
-    species: Scalars['String'];
+    species?: InputMaybe<Scalars['String']>;
 };
 
 export type QueryChipCompaniesArgs = {
@@ -875,12 +891,12 @@ export type QueryChipInstallPlacesArgs = {
 
 export type QueryColorsArgs = {
     language: Scalars['String'];
-    speciesId?: Maybe<Scalars['Int']>;
+    speciesId?: InputMaybe<Scalars['Int']>;
 };
 
 export type QueryEventsArgs = {
-    animalId?: Maybe<Scalars['Int']>;
-    groups?: Maybe<Array<Maybe<EventGroup>>>;
+    animalId?: InputMaybe<Scalars['Int']>;
+    groups?: InputMaybe<Array<InputMaybe<EventGroup>>>;
 };
 
 export type QueryGendersArgs = {
@@ -892,7 +908,7 @@ export type QueryOrganizationArgs = {
 };
 
 export type QueryOrganizationTaskArgs = {
-    id?: Maybe<Scalars['Int']>;
+    id?: InputMaybe<Scalars['Int']>;
 };
 
 export type QueryRegistrationArgs = {
@@ -977,10 +993,10 @@ export type StreetfindEvent = {
 
 export type StreetfindEventInput = {
     animalId: Scalars['Int'];
-    comments?: Maybe<Scalars['String']>;
-    date?: Maybe<Scalars['Date']>;
+    comments?: InputMaybe<Scalars['String']>;
+    date?: InputMaybe<Scalars['Date']>;
     /** Max 8 characters */
-    houseNo?: Maybe<Scalars['String']>;
+    houseNo?: InputMaybe<Scalars['String']>;
     /** Any id from municipalities query */
     municipalityId: Scalars['Int'];
     /** Max 255 characters */
@@ -994,69 +1010,69 @@ export type Subscription = {
 
 export type UpdateAnimalInput = {
     /** Comments */
-    comments?: Maybe<Scalars['String']>;
+    comments?: InputMaybe<Scalars['String']>;
     /** AnimalDetails */
-    details?: Maybe<AnimalDetailsInput>;
+    details?: InputMaybe<AnimalDetailsInput>;
     /** Animal id, for example 2 */
     id: Scalars['Int'];
     /** Image File */
-    image?: Maybe<Scalars['Upload']>;
+    image?: InputMaybe<Scalars['Upload']>;
     /** AnimalMicrochip */
-    microchip?: Maybe<UpdateAnimalMicrochipInput>;
+    microchip?: InputMaybe<UpdateAnimalMicrochipInput>;
     /** Animal name (128 characters max) */
-    name?: Maybe<Scalars['String']>;
+    name?: InputMaybe<Scalars['String']>;
     /** AnimalRegistration */
-    registration?: Maybe<AnimalRegistrationInput>;
+    registration?: InputMaybe<AnimalRegistrationInput>;
     /** Status */
-    status?: Maybe<AnimalStatus>;
+    status?: InputMaybe<AnimalStatus>;
 };
 
 export type UpdateAnimalMicrochipInput = {
     /** Chip company code (255 characters max, any id from query chipCompanies) */
-    chipCompanyCode?: Maybe<Scalars['Int']>;
+    chipCompanyCode?: InputMaybe<Scalars['Int']>;
     /** Install date */
-    installDate?: Maybe<Scalars['Date']>;
+    installDate?: InputMaybe<Scalars['Date']>;
     /** Install place (any id from query chipInstallPlaces) */
-    installPlaceId?: Maybe<Scalars['Int']>;
+    installPlaceId?: InputMaybe<Scalars['Int']>;
     /** Microchip status ('Implanted' or 'Removed') */
-    status?: Maybe<MicrochipStatus>;
+    status?: InputMaybe<MicrochipStatus>;
 };
 
 export type UpdateAnimalOwnerInput = {
     /** Animal owner ID, e.g., 1 */
     id: Scalars['Int'];
-    name?: Maybe<Scalars['Name']>;
-    phone?: Maybe<Scalars['Phone']>;
-    surname?: Maybe<Scalars['Surname']>;
+    name?: InputMaybe<Scalars['Name']>;
+    phone?: InputMaybe<Scalars['Phone']>;
+    surname?: InputMaybe<Scalars['Surname']>;
 };
 
 export type UpdateGiveawayEventInput = {
     /** Animal id, e.g. 2 */
-    animalId?: Maybe<Scalars['Int']>;
+    animalId?: InputMaybe<Scalars['Int']>;
     /** Event date in YYYY-MM-DD format */
-    date?: Maybe<Scalars['Date']>;
+    date?: InputMaybe<Scalars['Date']>;
     /** Former owner id */
-    formerOwnerId?: Maybe<Scalars['Int']>;
+    formerOwnerId?: InputMaybe<Scalars['Int']>;
     /** Event id */
     id: Scalars['Int'];
     /** Event reason */
-    reason?: Maybe<Scalars['String']>;
+    reason?: InputMaybe<Scalars['String']>;
     /** Registration date */
-    registrationDate?: Maybe<Scalars['Date']>;
+    registrationDate?: InputMaybe<Scalars['Date']>;
     /** Registration no */
-    registrationNo?: Maybe<Scalars['String']>;
+    registrationNo?: InputMaybe<Scalars['String']>;
 };
 
 export type UpdateOrganizationInput = {
     /** City (128 characters max) */
-    city?: Maybe<Scalars['String']>;
+    city?: InputMaybe<Scalars['String']>;
     /** Country (128 characters max) */
-    country?: Maybe<Scalars['String']>;
+    country?: InputMaybe<Scalars['String']>;
     id: Scalars['Int'];
-    name?: Maybe<Scalars['Name']>;
-    phone?: Maybe<Scalars['Phone']>;
+    name?: InputMaybe<Scalars['Name']>;
+    phone?: InputMaybe<Scalars['Phone']>;
     /** Street address (255 characters max) */
-    streetAddress?: Maybe<Scalars['String']>;
+    streetAddress?: InputMaybe<Scalars['String']>;
 };
 
 /** Represents an user. */
@@ -1073,13 +1089,13 @@ export type User = {
 
 export type UserInput = {
     /** User valid email (255 characters max) */
-    email?: Maybe<Scalars['Email']>;
+    email?: InputMaybe<Scalars['Email']>;
     /** User id  (255 characters max) */
     id: Scalars['String'];
-    name?: Maybe<Scalars['Name']>;
-    surname?: Maybe<Scalars['Surname']>;
+    name?: InputMaybe<Scalars['Name']>;
+    surname?: InputMaybe<Scalars['Surname']>;
     /** User username (128 characters max) */
-    username?: Maybe<Scalars['String']>;
+    username?: InputMaybe<Scalars['String']>;
 };
 
 export type Municipality = {
