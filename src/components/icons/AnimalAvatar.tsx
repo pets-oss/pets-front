@@ -18,7 +18,7 @@ const classes = {
     dynamicAvatar: `${PREFIX}-dynamicAvatar`,
 };
 
-export default function AnimalAvatar({ species, gender }: AnimalAvatarProps) {
+export default function AnimalAvatar({ species }: AnimalAvatarProps) {
     // const styleProps = createGenderStyle(gender);
     // const classes = useStyles(styleProps);
 
@@ -28,11 +28,11 @@ export default function AnimalAvatar({ species, gender }: AnimalAvatarProps) {
         </Avatar>
     );
 }
-
-interface AvatarStyleProps {
-    color: string;
-    backgroundColor: string;
-}
+//
+// interface AvatarStyleProps {
+//     color: string;
+//     backgroundColor: string;
+// }
 
 // const useStyles = makeStyles({
 //     dynamicAvatar: (props: AvatarStyleProps) => ({
