@@ -1,23 +1,12 @@
 import React, { ReactNode } from 'react';
 
-import { Grid } from '@material-ui/core';
-import { createStyles, makeStyles } from '@material-ui/core/styles';
-
-const useStyles = makeStyles(() =>
-    createStyles({
-        root: {
-            flexGrow: 1,
-        },
-    })
-);
+import { Grid } from '@mui/material';
 
 interface Props {
     children: ReactNode;
 }
 
 function LayoutMultiColRow({ children }: Props) {
-    const classes = useStyles();
-
     const colNum = React.Children.count(children);
     const maxColNum = 4;
     const sizeSm = !!Math.floor(12 / colNum); // method overload signature matching
@@ -37,7 +26,7 @@ function LayoutMultiColRow({ children }: Props) {
     });
 
     return (
-        <div className={classes.root}>
+        <div style={{ flexGrow: 1 }}>
             <Grid container spacing={3}>
                 {items}
             </Grid>

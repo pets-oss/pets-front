@@ -1,14 +1,14 @@
 import React, { ReactChild } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 import { Auth0Provider } from '@auth0/auth0-react';
 import config from '../../config';
 
 const Auth0ProviderWithHistory = ({ children }: { children: ReactChild }) => {
-    const history = useHistory();
+    const navigate = useNavigate();
 
     const onRedirectCallback = (appState: any) => {
-        history.push(appState?.returnTo || window.location.pathname);
+        navigate(appState?.returnTo || window.location.pathname);
     };
 
     return (

@@ -1,78 +1,67 @@
-import React, { useState } from 'react';
+import React from 'react';
 
-import { Grid } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
-import TablePagination from '@material-ui/core/TablePagination';
+import { Grid, styled, TablePagination } from '@mui/material';
 
 interface PaginationRoundedProps {
     count: number;
-    nextPage: () => void;
-    prevPage: () => void;
-    firstPage: (size: number) => void;
+    page: number;
+    onPageChange: (page: number) => void;
     pageSize: number;
     onPageSizeChange: (pageSize: number) => void;
 }
 
+const PREFIX = 'PaginationRounded';
+const classes = {
+    toolbar: `${PREFIX}-toolbar`,
+    actions: `${PREFIX}-actions`,
+};
+
+const Root = styled('div')(({ theme }) => ({
+    marginTop: theme.spacing(2),
+    [classes.toolbar]: {
+        flexWrap: 'wrap',
+    },
+    [classes.actions]: {
+        [theme.breakpoints.down('sm')]: {
+            margin: '0 auto',
+        },
+    },
+}));
+
 export default function PaginationRounded({
     count,
-    nextPage,
-    prevPage,
-    firstPage,
+    page,
+    onPageChange,
     pageSize,
     onPageSizeChange,
 }: PaginationRoundedProps) {
-    const classes = useStyles();
-
-    const [page, setPage] = useState(0);
-
-    function handleChangePage(event, newPage) {
-        if (newPage > page) {
-            nextPage();
-        } else {
-            prevPage();
-        }
-
-        setPage(newPage);
+    function handlePageChange(event, newPage) {
+        onPageChange(newPage);
     }
 
     function handleChangeRowsPerPage(event) {
         const size = parseInt(event.target.value, 10);
         onPageSizeChange(size);
-        setPage(0);
-        firstPage(size);
     }
 
     return (
-        <Grid container justify="flex-end">
-            <div className={classes.root}>
+        <Grid container justifyContent="flex-end">
+            <Root>
                 <TablePagination
+                    component="div"
                     count={count}
                     page={page}
-                    onChangePage={handleChangePage}
+                    onPageChange={handlePageChange}
                     rowsPerPage={pageSize}
                     rowsPerPageOptions={[4, 12, 48, 192]}
-                    onChangeRowsPerPage={handleChangeRowsPerPage}
+                    onRowsPerPageChange={handleChangeRowsPerPage}
                     classes={{
                         toolbar: classes.toolbar,
                         actions: classes.actions,
                     }}
                     labelRowsPerPage="Items per page"
                 />
-            </div>
+            </Root>
         </Grid>
     );
 }
-
-const useStyles = makeStyles(theme => ({
-    root: {
-        marginTop: theme.spacing(2),
-    },
-    toolbar: {
-        flexWrap: 'wrap',
-    },
-    actions: {
-        [theme.breakpoints.down('sm')]: {
-            margin: '0 auto',
-        },
-    },
-}));

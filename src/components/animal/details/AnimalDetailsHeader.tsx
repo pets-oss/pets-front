@@ -1,8 +1,74 @@
 import React, { ReactNode } from 'react';
 
-import { Box, IconButton, Typography } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
-import ArrowBackIcon from '@material-ui/icons/ArrowBack';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import { Box, IconButton, styled, Typography } from '@mui/material';
+
+const PREFIX = 'AnimalDetailsHeader';
+
+const classes = {
+    backButton: `${PREFIX}-backButton`,
+    backIcon: `${PREFIX}-backIcon`,
+    innerName: `${PREFIX}-innerName`,
+    mainParams: `${PREFIX}-mainParams`,
+    property: `${PREFIX}-property`,
+};
+
+const StyledBox = styled(Box)(({ theme }) => ({
+    [classes.backButton]: {
+        backgroundColor: theme.palette.primary.main,
+        '&:hover,&:focus': {
+            backgroundColor: theme.palette.primary.dark,
+        },
+        marginRight: theme.spacing(2),
+        height: '36px',
+        width: '36px',
+        [theme.breakpoints.up('md')]: {
+            height: '48px',
+            width: '48px',
+        },
+    },
+    [classes.backIcon]: {
+        color: theme.palette.tertiary.light,
+    },
+    [classes.innerName]: {
+        fontWeight: 500,
+        maxWidth: 180,
+        [theme.breakpoints.up('md')]: {
+            maxWidth: 340,
+        },
+        [theme.breakpoints.up('lg')]: {
+            maxWidth: 480,
+        },
+    },
+    [classes.mainParams]: {
+        padding: '8px 0',
+        fontSize: '12px',
+        [theme.breakpoints.up('md')]: {
+            padding: '12px 0',
+            fontSize: '14px',
+        },
+    },
+    [classes.property]: {
+        color: '#666666',
+        fontSize: '12px',
+        [theme.breakpoints.up('md')]: {
+            fontSize: '14px',
+        },
+        '&:not(:last-child)': {
+            paddingRight: theme.spacing(2),
+            marginRight: theme.spacing(2),
+            position: 'relative',
+            '&::after': {
+                color: '#999999',
+                content: '"/"',
+                display: 'block',
+                position: 'absolute',
+                top: 0,
+                right: 0,
+            },
+        },
+    },
+}));
 
 function AnimalDetailsHeader({
     animalName,
@@ -13,10 +79,8 @@ function AnimalDetailsHeader({
     onBack,
     children,
 }: AnimalDetailsHeaderProps) {
-    const classes = useStyles();
-
     return (
-        <Box>
+        <StyledBox>
             <Box display="flex" alignItems="center">
                 <IconButton className={classes.backButton} onClick={onBack}>
                     <ArrowBackIcon className={classes.backIcon} />
@@ -52,68 +116,11 @@ function AnimalDetailsHeader({
                     </Typography>
                 )}
             </Box>
-        </Box>
+        </StyledBox>
     );
 }
 
 export default AnimalDetailsHeader;
-
-const useStyles = makeStyles(theme => ({
-    backButton: {
-        backgroundColor: theme.palette.primary.main,
-        '&:hover,&:focus': {
-            backgroundColor: theme.palette.primary.dark,
-        },
-        marginRight: theme.spacing(2),
-        height: '36px',
-        width: '36px',
-        [theme.breakpoints.up('md')]: {
-            height: '48px',
-            width: '48px',
-        },
-    },
-    backIcon: {
-        color: theme.palette.tertiary.light,
-    },
-    innerName: {
-        fontWeight: 500,
-        maxWidth: 180,
-        [theme.breakpoints.up('md')]: {
-            maxWidth: 340,
-        },
-        [theme.breakpoints.up('lg')]: {
-            maxWidth: 480,
-        },
-    },
-    mainParams: {
-        padding: '8px 0',
-        fontSize: '12px',
-        [theme.breakpoints.up('md')]: {
-            padding: '12px 0',
-            fontSize: '14px',
-        },
-    },
-    property: {
-        color: '#666666',
-        fontSize: '12px',
-        [theme.breakpoints.up('md')]: {
-            fontSize: '14px',
-        },
-        '&:not(:last-child)': {
-            paddingRight: theme.spacing(2),
-            marginRight: theme.spacing(2),
-            position: 'relative',
-            '&::after': {
-                color: '#999999',
-                content: '"/"',
-                display: 'block',
-                position: 'absolute',
-                top: 0,
-                right: 0,
-            },
-        },
-    },
-}));
 
 interface AnimalDetailsHeaderProps {
     animalName?: string | null;

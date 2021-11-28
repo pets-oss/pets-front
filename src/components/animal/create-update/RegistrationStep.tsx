@@ -1,14 +1,7 @@
 import React, { memo } from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
 
-import { Grid } from '@material-ui/core';
-import Button from '@material-ui/core/Button';
-import Checkbox from '@material-ui/core/Checkbox';
-import Divider from '@material-ui/core/Divider';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Radio from '@material-ui/core/Radio';
-import RadioGroup from '@material-ui/core/RadioGroup';
-import makeStyles from '@material-ui/core/styles/makeStyles';
+import { Button, Checkbox, Divider, FormControlLabel, Grid, Radio, RadioGroup } from '@mui/material';
 import { RegistrationStatus } from '../../../graphql/types';
 import TextInput from '../../form/TextInput';
 
@@ -18,7 +11,6 @@ export enum AnimalIncomingType {
 }
 
 function RegistrationStep({ onPrev }: RegistrationStepProps) {
-    const classes = useStyles();
     const { control, register } = useFormContext();
 
     return (
@@ -45,7 +37,7 @@ function RegistrationStep({ onPrev }: RegistrationStepProps) {
                         )}
                     />
                 </Grid>
-                <Grid item xs={12} sm={6} className={classes.relative}>
+                <Grid item xs={12} sm={6}>
                     <TextInput
                         name="registration.nr"
                         label="Registration No."
@@ -121,9 +113,3 @@ export default memo(RegistrationStep);
 interface RegistrationStepProps {
     onPrev: () => void;
 }
-
-const useStyles = makeStyles(() => ({
-    relative: {
-        position: 'relative',
-    },
-}));

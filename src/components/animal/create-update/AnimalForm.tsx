@@ -1,8 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 
-import { Grid, GridProps } from '@material-ui/core';
-import makeStyles from '@material-ui/core/styles/makeStyles';
+import { Grid, GridProps } from '@mui/material';
 import { Animal, AnimalDetails } from '../../../graphql/types';
 import { useAppDispatch } from '../../../store';
 import { createOrUpdateAnimal } from '../../../store/animals';
@@ -11,8 +10,6 @@ import LayoutAlignCenterBox from '../../layout/LayoutAlignCenterBox';
 import DetailsStep from './DetailsStep';
 
 export default function AnimalForm({ animal, submitCallback }: AnimalFormProps) {
-    const classes = useStyles();
-
     const methods = useForm({ defaultValues: getDefaultFormValues(animal) });
     const { handleSubmit, reset } = methods;
     const formRef = useRef<HTMLFormElement>(null);
@@ -57,7 +54,7 @@ export default function AnimalForm({ animal, submitCallback }: AnimalFormProps) 
                     spacing={2}
                     alignItems="center"
                     component="form"
-                    className={classes.form}
+                    style={{ maxWidth: 800 }}
                     onSubmit={handleSubmit(onSubmit)}
                     ref={formRef}
                 >
@@ -82,12 +79,6 @@ export function FormRow({ children, ...props }: GridProps) {
         </Grid>
     );
 }
-
-const useStyles = makeStyles(() => ({
-    form: {
-        maxWidth: 800,
-    },
-}));
 
 interface AnimalFormProps {
     animal?: Animal;

@@ -2,7 +2,7 @@ import { loader } from 'graphql.macro';
 import React from 'react';
 
 import { useQuery } from '@apollo/client';
-import Skeleton from '@material-ui/lab/Skeleton';
+import { Skeleton } from '@mui/material';
 import { Animal, AnimalsConnection } from '../../graphql/types';
 import { sortAnimalsByDate } from '../../utils/animal';
 import AnimalCard from '../animal/AnimalCard';

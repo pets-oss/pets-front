@@ -1,27 +1,32 @@
 import React from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
-import { Button } from '@material-ui/core';
-import Fab from '@material-ui/core/Fab';
-import { makeStyles, Theme } from '@material-ui/core/styles';
-import AddIcon from '@material-ui/icons/Add';
+import AddIcon from '@mui/icons-material/Add';
+import { Button, Fab, styled } from '@mui/material';
 import useMobile from '../../../hooks/useMobile';
 import { BOTTOM_NAVIGATION_HEIGHT } from '../../layout/AppBottomNavigation';
 
+const StyledFab = styled(Fab)(({ theme }) => ({
+    position: 'fixed',
+    zIndex: theme.zIndex.appBar + 1,
+    right: theme.spacing(4),
+    bottom: BOTTOM_NAVIGATION_HEIGHT,
+    transform: 'translateY(50%)',
+}));
+
 export default function CreateButton() {
-    const history = useHistory();
-    const classes = useStyles();
+    const navigate = useNavigate();
     const mobile = useMobile();
 
     const handleClick = () => {
-        history.push('/animal/new');
+        navigate('/animal/new');
     };
 
     if (mobile) {
         return (
-            <Fab color="secondary" aria-label="add" className={classes.fab} onClick={handleClick}>
+            <StyledFab color="secondary" aria-label="add" onClick={handleClick}>
                 <AddIcon />
-            </Fab>
+            </StyledFab>
         );
     }
 
@@ -31,13 +36,3 @@ export default function CreateButton() {
         </Button>
     );
 }
-
-const useStyles = makeStyles((theme: Theme) => ({
-    fab: {
-        position: 'fixed',
-        zIndex: theme.zIndex.appBar + 1,
-        right: theme.spacing(4),
-        bottom: BOTTOM_NAVIGATION_HEIGHT,
-        transform: 'translateY(50%)',
-    },
-}));

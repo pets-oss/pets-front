@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { useHistory, useRouteMatch } from 'react-router-dom';
+import { useLocation, useMatch } from 'react-router-dom';
 
-import { Fade, Grid } from '@material-ui/core';
-import useTheme from '@material-ui/core/styles/useTheme';
-import useMediaQuery from '@material-ui/core/useMediaQuery';
+import { Grid, useMediaQuery, useTheme } from '@mui/material';
 import AnimalsListContainer from '../components/animal/AnimalsListContainer';
 import AnimalFiltersChips from '../components/animal/filters/AnimalFilterChips';
 import AnimalFiltersDialog from '../components/animal/filters/AnimalFiltersDialog';
@@ -21,8 +19,8 @@ function FavoritesPage() {
     const [viewType, setViewType] = useState<AnimalsViewType>(AnimalsViewType.LIST);
     const mobile = useMediaQuery(theme.breakpoints.down('sm'));
 
-    const match = useRouteMatch('/favorites');
-    const history = useHistory();
+    const match = useMatch('/favorites');
+    const location = useLocation();
 
     const { query: queryArgs } = useAppSelector(state => state.queryArgs);
     const { favoriteChangeRequestId } = useAppSelector(state => state.animals);
@@ -39,7 +37,7 @@ function FavoritesPage() {
 
     useEffect(() => {
         dispatch(resetQuery());
-    }, [dispatch, history.location.pathname]);
+    }, [dispatch, location.pathname]);
 
     useEffect(() => {
         if (match) {
@@ -49,14 +47,12 @@ function FavoritesPage() {
     }, [dispatch, queryArgs, favoriteChangeRequestId]);
 
     return (
-        <Fade in timeout={600}>
-            <Page
-                title="Favorites"
-                topSection={<TopSection viewType={viewType} onChange={handleViewChange} mobile={mobile} />}
-            >
-                <AnimalsListContainer viewType={viewType} />
-            </Page>
-        </Fade>
+        <Page
+            title="Favorites"
+            topSection={<TopSection viewType={viewType} onChange={handleViewChange} mobile={mobile} />}
+        >
+            <AnimalsListContainer viewType={viewType} />
+        </Page>
     );
 }
 

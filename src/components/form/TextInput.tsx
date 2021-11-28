@@ -2,10 +2,16 @@ import clsx from 'clsx';
 import React, { useEffect, useState } from 'react';
 import { Controller, FieldError, useFormContext, useWatch } from 'react-hook-form';
 
-import { BaseTextFieldProps } from '@material-ui/core';
-import { makeStyles, Theme } from '@material-ui/core/styles';
-import TextField from '@material-ui/core/TextField';
-import Typography from '@material-ui/core/Typography';
+import { BaseTextFieldProps, styled, TextField, Typography } from '@mui/material';
+
+const StyledTypography = styled(Typography)(({ theme }) => ({
+    position: 'absolute',
+    right: 12,
+    bottom: 12,
+    '&.Mui-error': {
+        color: theme.palette.error.main,
+    },
+}));
 
 export default function TextInput({
     label,
@@ -23,7 +29,6 @@ export default function TextInput({
     type = 'text',
     InputLabelProps,
 }: TextInputProps) {
-    const classes = useStyles();
     const { control, formState } = useFormContext();
 
     const [localValue, setLocalValue] = useState<string | undefined>(undefined);
@@ -86,28 +91,13 @@ export default function TextInput({
                 )}
             />
             {(showLettersCount || rightHelperText) && (
-                <Typography
-                    variant="caption"
-                    color="textSecondary"
-                    className={clsx({ ['Mui-error']: error }, classes.rightHelper)}
-                >
+                <StyledTypography variant="caption" color="textSecondary" className={clsx({ ['Mui-error']: error })}>
                     {rightHelperText ?? `${localValue?.length || 0}/${maxLength}`}
-                </Typography>
+                </StyledTypography>
             )}
         </>
     );
 }
-
-const useStyles = makeStyles((theme: Theme) => ({
-    rightHelper: {
-        position: 'absolute',
-        right: 12,
-        bottom: 12,
-        '&.Mui-error': {
-            color: theme.palette.error.main,
-        },
-    },
-}));
 
 interface TextInputProps extends BaseTextFieldProps {
     name: string;

@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Button, Chip, Grid } from '@material-ui/core';
+import { Button, Chip, Grid } from '@mui/material';
 import { useAppDispatch, useAppSelector } from '../../../store';
 import { deleteFilter, resetFilters } from '../../../store/filters';
 

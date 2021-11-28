@@ -1,10 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { useHistory, useRouteMatch } from 'react-router-dom';
+import { useLocation, useMatch } from 'react-router-dom';
 
-import { Fade, Grid } from '@material-ui/core';
-import Divider from '@material-ui/core/Divider';
-import useTheme from '@material-ui/core/styles/useTheme';
-import useMediaQuery from '@material-ui/core/useMediaQuery';
+import { Divider, Grid, useMediaQuery, useTheme } from '@mui/material';
 import AnimalsListContainer from '../components/animal/AnimalsListContainer';
 import CreateButton from '../components/animal/create-update/CreateButton';
 import AnimalFiltersChips from '../components/animal/filters/AnimalFilterChips';
@@ -23,8 +20,8 @@ function AnimalsPage() {
 
     const { query: queryArgs } = useAppSelector(state => state.queryArgs);
     const mobile = useMediaQuery(theme.breakpoints.down('sm'));
-    const match = useRouteMatch('/animal-list');
-    const history = useHistory();
+    const match = useMatch('/animal-list');
+    const location = useLocation();
 
     useEffect(() => {
         if (mobile && viewType === AnimalsViewType.TABLE) {
@@ -38,7 +35,7 @@ function AnimalsPage() {
 
     useEffect(() => {
         dispatch(resetQuery());
-    }, [dispatch, history.location.pathname]);
+    }, [dispatch, location.pathname]);
 
     useEffect(() => {
         if (match) {
@@ -48,14 +45,12 @@ function AnimalsPage() {
     }, [dispatch, queryArgs]);
 
     return (
-        <Fade in timeout={600}>
-            <Page
-                title="Animals List"
-                topSection={<TopSection viewType={viewType} onChange={handleViewChange} mobile={mobile} />}
-            >
-                <AnimalsListContainer viewType={viewType} />
-            </Page>
-        </Fade>
+        <Page
+            title="Animals List"
+            topSection={<TopSection viewType={viewType} onChange={handleViewChange} mobile={mobile} />}
+        >
+            <AnimalsListContainer viewType={viewType} />
+        </Page>
     );
 }
 

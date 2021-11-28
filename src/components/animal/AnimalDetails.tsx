@@ -1,13 +1,10 @@
 import { loader } from 'graphql.macro';
-import Image from 'material-ui-image';
 import React, { useRef } from 'react';
-import { useHistory, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 import { useMutation, useQuery } from '@apollo/client';
-import { Box, IconButton, Typography } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
-import AddAPhotoOutlinedIcon from '@material-ui/icons/AddAPhotoOutlined';
-import { Skeleton } from '@material-ui/lab';
+import AddAPhotoIcon from '@mui/icons-material/AddAPhoto';
+import { Box, IconButton, Skeleton, styled, Typography } from '@mui/material';
 import { Animal, Event } from '../../graphql/types';
 import { getAnimalDetails } from '../../utils/animal';
 import SelectFilesDialog, { DialogEventTypes } from '../form/SelectFilesDialog';
@@ -20,10 +17,6 @@ import ParamTable from './ParamTable';
 const GET_ANIMAL_DETAILS = loader('../../graphql/queries/animal-details.graphql');
 const UPDATE_ANIMAL_IMAGE = loader('../../graphql/queries/update-animal-image.graphql');
 
-interface RouterParams {
-    id: string;
-}
-
 interface Response {
     animal: Animal;
     events: Event[];
@@ -33,11 +26,73 @@ interface AnimalDetailsProps {
     onLoad?: (animal: Animal) => void;
 }
 
+const PREFIX = 'AnimalDetails';
+
+const classes = {
+    animalName: `${PREFIX}-animalName`,
+    animalMeta: `${PREFIX}-animalMeta`,
+    secondaryProperty: `${PREFIX}-secondaryProperty`,
+    eventsHeader: `${PREFIX}-eventsHeader`,
+    eventsContainer: `${PREFIX}-eventsContainer`,
+    imageContainer: `${PREFIX}-imageContainer`,
+    imageIcon: `${PREFIX}-imageIcon`,
+    addImageButton: `${PREFIX}-addImageButton`,
+};
+
+const Root = styled('div')(({ theme }) => ({
+    flexGrow: 1,
+    width: '100%',
+
+    [`& .${classes.animalName}`]: {
+        color: theme.palette.primary.dark,
+    },
+    [`& .${classes.animalMeta}`]: {
+        color: theme.palette.grey[600],
+    },
+    [`& .${classes.secondaryProperty}`]: {
+        marginBottom: theme.spacing(2),
+        fontWeight: 500,
+    },
+    [`& .${classes.eventsHeader}`]: {
+        fontWeight: 400,
+    },
+    [`& .${classes.eventsContainer}`]: {
+        backgroundColor: theme.palette.tertiary.main,
+    },
+    [`& .${classes.imageContainer}`]: {
+        position: 'relative',
+    },
+    [`& .${classes.imageIcon}`]: {
+        color: theme.palette.tertiary.light,
+        height: '18px',
+        width: '18px',
+        [theme.breakpoints.up('md')]: {
+            height: 'unset',
+            width: 'unset',
+        },
+    },
+    [`& .${classes.addImageButton}`]: {
+        position: 'absolute',
+        right: theme.spacing(1),
+        top: theme.spacing(1),
+        backgroundColor: theme.palette.primary.main,
+        '&:hover,&:focus': {
+            backgroundColor: theme.palette.primary.dark,
+        },
+        height: '36px',
+        width: '36px',
+        [theme.breakpoints.up('md')]: {
+            height: '48px',
+            width: '48px',
+            right: theme.spacing(2),
+            top: theme.spacing(2),
+        },
+    },
+}));
+
 function AnimalDetails({ onLoad }: AnimalDetailsProps) {
-    const params: RouterParams = useParams();
-    const { id } = params;
-    const classes = useStyles();
-    const history = useHistory();
+    const { id } = useParams();
+    const navigate = useNavigate();
 
     const [updateAnimalImageMutation] = useMutation(UPDATE_ANIMAL_IMAGE);
     const uploadImageDialogRef = useRef<DialogEventTypes>(null);
@@ -48,7 +103,7 @@ function AnimalDetails({ onLoad }: AnimalDetailsProps) {
     });
 
     if (loading) {
-        return <Skeleton animation="wave" variant="rect" height="70vh" width="100%" />;
+        return <Skeleton animation="wave" variant="rectangular" height="70vh" width="100%" />;
     }
 
     if (error) {
@@ -87,7 +142,7 @@ function AnimalDetails({ onLoad }: AnimalDetailsProps) {
     };
 
     return (
-        <div className={classes.root}>
+        <Root>
             <LayoutMultiColRow>
                 <>
                     <AnimalDetailsHeader
@@ -95,15 +150,21 @@ function AnimalDetails({ onLoad }: AnimalDetailsProps) {
                         gender={animal.details?.gender?.value}
                         species={animal.details?.species?.value}
                         color={animal.details?.color?.value}
-                        onBack={() => history.goBack()}
+                        onBack={() => navigate(-1)}
                         breed={animal.details?.breed?.value}
                     >
                         <AnimalDetailsMenu id={animal.id} />
                     </AnimalDetailsHeader>
                     <Box className={classes.imageContainer}>
-                        <Image src={animal.imageUrl!} aspectRatio={3 / 2} cover />
+                        <img
+                            alt={''}
+                            src={animal.imageUrl!}
+                            style={{
+                                width: '100%',
+                            }}
+                        />
                         <IconButton className={classes.addImageButton} onClick={showUploadImageDialog}>
-                            <AddAPhotoOutlinedIcon className={classes.imageIcon} />
+                            <AddAPhotoIcon className={classes.imageIcon} />
                         </IconButton>
                     </Box>
                     {animal.details && (
@@ -144,60 +205,8 @@ function AnimalDetails({ onLoad }: AnimalDetailsProps) {
                 accept="image/jpeg, image/jpg"
                 onSubmit={onSelectedFilesSubmit}
             />
-        </div>
+        </Root>
     );
 }
 
 export default AnimalDetails;
-
-const useStyles = makeStyles(theme => ({
-    root: {
-        flexGrow: 1,
-        width: '100%',
-    },
-    animalName: {
-        color: theme.palette.primary.dark,
-    },
-    animalMeta: {
-        color: theme.palette.grey[600],
-    },
-    secondaryProperty: {
-        marginBottom: theme.spacing(2),
-        fontWeight: 500,
-    },
-    eventsHeader: {
-        fontWeight: 400,
-    },
-    eventsContainer: {
-        backgroundColor: theme.palette.tertiary.main,
-    },
-    imageContainer: {
-        position: 'relative',
-    },
-    imageIcon: {
-        color: theme.palette.tertiary.light,
-        height: '18px',
-        width: '18px',
-        [theme.breakpoints.up('md')]: {
-            height: 'unset',
-            width: 'unset',
-        },
-    },
-    addImageButton: {
-        position: 'absolute',
-        right: theme.spacing(1),
-        top: theme.spacing(1),
-        backgroundColor: theme.palette.primary.main,
-        '&:hover,&:focus': {
-            backgroundColor: theme.palette.primary.dark,
-        },
-        height: '36px',
-        width: '36px',
-        [theme.breakpoints.up('md')]: {
-            height: '48px',
-            width: '48px',
-            right: theme.spacing(2),
-            top: theme.spacing(2),
-        },
-    },
-}));

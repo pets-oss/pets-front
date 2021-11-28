@@ -2,7 +2,7 @@ import { loader } from 'graphql.macro';
 import React, { useEffect } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 
-import { Box } from '@material-ui/core';
+import { Box } from '@mui/material';
 import { Species } from '../../../graphql/types';
 import usePrevious from '../../../hooks/usePrevious';
 import DynamicSelector from '../../form/DynamicSelector';

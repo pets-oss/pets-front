@@ -1,8 +1,7 @@
 import React from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
 
-import TextField from '@material-ui/core/TextField';
-import Autocomplete, { createFilterOptions } from '@material-ui/lab/Autocomplete';
+import { Autocomplete, createFilterOptions, TextField } from '@mui/material';
 import { capitalizeFirstLetter } from '../../utils/string';
 
 const OPTIONS_LIMIT = 100;
@@ -36,11 +35,11 @@ export default function Selector({
                     options={options ?? []}
                     filterOptions={limitOptions}
                     getOptionLabel={option => (typeof option === 'string' ? option : option.value)}
-                    getOptionSelected={(option, value) =>
-                        typeof option === 'string'
-                            ? option === value
-                            : (option as DynamicSelectorOption)?.id === (value as DynamicSelectorOption)?.id
-                    }
+                    // getOptionSelected={(option, value) =>
+                    //     typeof option === 'string'
+                    //         ? option === value
+                    //         : (option as DynamicSelectorOption)?.id === (value as DynamicSelectorOption)?.id
+                    // }
                     onChange={(_, option) => {
                         props.field.onChange(option);
                     }}

@@ -1,5 +1,4 @@
-import { useMediaQuery } from '@material-ui/core';
-import useTheme from '@material-ui/core/styles/useTheme';
+import { useMediaQuery, useTheme } from '@mui/material';
 
 export default function useMobile() {
     const theme = useTheme();

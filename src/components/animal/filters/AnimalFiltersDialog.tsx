@@ -1,9 +1,11 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 
+import FilterListIcon from '@mui/icons-material/FilterList';
 import {
     Box,
     Button,
+    Dialog,
     DialogActions,
     DialogContent,
     DialogTitle,
@@ -11,9 +13,7 @@ import {
     IconButton,
     useMediaQuery,
     useTheme,
-} from '@material-ui/core';
-import Dialog from '@material-ui/core/Dialog';
-import FilterListIcon from '@material-ui/icons/FilterList';
+} from '@mui/material';
 import { useAppDispatch, useAppSelector } from '../../../store';
 import { setFilters } from '../../../store/filters';
 import AnimalFiltersDialogContents from './AnimalFiltersDialogContents';

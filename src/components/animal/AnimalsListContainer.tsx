@@ -1,9 +1,9 @@
 import React from 'react';
 
-import Skeleton from '@material-ui/lab/Skeleton';
+import { Grid, Skeleton } from '@mui/material';
 import { useAppDispatch, useAppSelector } from '../../store';
 import { loadNextPage, loadPreviousPage, setPageSize } from '../../store/queryArgs';
-import AnimalCardList from './AnimalCardList';
+import AnimalCard from './AnimalCard';
 import AnimalsTable from './AnimalsTable';
 import PaginationRounded from './PaginationRounded';
 import { AnimalsViewType } from './ViewSelector';
@@ -18,7 +18,7 @@ export default function AnimalsListContainer({ viewType }: AnimalsListContainerP
     const totalPageSize = pageInfo?.totalCount || 0;
 
     if (loading === 'pending') {
-        return <Skeleton animation="wave" variant="rect" height={500} width="100%" />;
+        return <Skeleton animation="wave" variant="rectangular" height={500} width="100%" />;
     }
 
     if (totalPageSize === 0) {
@@ -43,7 +43,11 @@ export default function AnimalsListContainer({ viewType }: AnimalsListContainerP
             {viewType === AnimalsViewType.TABLE ? (
                 <AnimalsTable animals={entities} />
             ) : (
-                <AnimalCardList animals={entities} />
+                <Grid container component="ul" spacing={2} justifyContent="center">
+                    {entities.map(animal => (
+                        <AnimalCard key={animal.id} animal={animal} />
+                    ))}
+                </Grid>
             )}
             <PaginationRounded
                 count={totalPageSize}
