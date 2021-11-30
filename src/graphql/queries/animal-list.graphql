@@ -1,5 +1,23 @@
-query GetAnimalsList($first: Int, $after: String, $last: Int, $before: String, $isFavoriteOnly: Boolean) {
-    animals(first: $first, after: $after, last: $last, before: $before, isFavoriteOnly: $isFavoriteOnly) {
+query GetAnimalsList(
+    $first: Int
+    $after: String
+    $last: Int
+    $before: String
+    $isFavoriteOnly: Boolean
+    $species: [Int]
+    $breed: [Int]
+    $gender: [Int]
+) {
+    animals(
+        first: $first
+        after: $after
+        last: $last
+        before: $before
+        isFavoriteOnly: $isFavoriteOnly
+        species: $species
+        breed: $breed
+        gender: $gender
+    ) {
         edges {
             node {
                 id
@@ -7,6 +25,7 @@ query GetAnimalsList($first: Int, $after: String, $last: Int, $before: String, $
                 imageUrl
                 status
                 modTime
+                isFavorite
                 details {
                     gender {
                         id

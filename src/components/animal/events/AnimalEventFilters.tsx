@@ -1,18 +1,11 @@
 import React from 'react';
 
-import { Chip, Grid, makeStyles } from '@material-ui/core';
+import { Chip, Grid } from '@mui/material';
 import { EventGroup } from '../../../graphql/types';
 
 export const EVENT_FILTER_ALL = 'All';
 
 export type EventCategory = EventGroup | 'All';
-
-const useStyles = makeStyles(() => ({
-    button: {
-        border: 'none',
-        backgroundColor: 'transparent',
-    },
-}));
 
 export default function AnimalEventFilters({ activeFilter, onChange }: AnimalEventFiltersProps) {
     return (
@@ -35,11 +28,16 @@ export default function AnimalEventFilters({ activeFilter, onChange }: AnimalEve
 }
 
 function Filter({ label, active, onClick }: FilterProps) {
-    const classes = useStyles();
-
     return (
         <Grid item>
-            <button className={classes.button} type="button" onClick={() => onClick(label as any)}>
+            <button
+                style={{
+                    border: 'none',
+                    backgroundColor: 'transparent',
+                }}
+                type="button"
+                onClick={() => onClick(label as any)}
+            >
                 <Chip label={label} clickable color={active ? 'primary' : 'default'} />
             </button>
         </Grid>

@@ -1,8 +1,7 @@
 import React from 'react';
 
-import { Box, Typography } from '@material-ui/core';
-import IconButton from '@material-ui/core/IconButton';
-import SortIcon from '@material-ui/icons/Sort';
+import SortIcon from '@mui/icons-material/Sort';
+import { Box, IconButton, Typography } from '@mui/material';
 
 export default function AnimalEventSorting({ sortingMode, onChange }: AnimalEventSortingProps) {
     const handleClick = () => {

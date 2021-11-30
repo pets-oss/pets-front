@@ -1,22 +1,31 @@
 import React, { ReactElement } from 'react';
-import Carousel from 'react-material-ui-carousel';
 
-import { Grid } from '@material-ui/core';
-import Box from '@material-ui/core/Box';
-import makeStyles from '@material-ui/core/styles/makeStyles';
-import useTheme from '@material-ui/core/styles/useTheme';
-import Typography from '@material-ui/core/Typography';
-import useMediaQuery from '@material-ui/core/useMediaQuery';
+import { Box, Grid, Typography, useMediaQuery, useTheme } from '@mui/material';
 
 interface HomePageCarouselContainerProps {
     itemsToRender: ReactElement[];
     title: string;
 }
 
+const PREFIX = 'HomePageCarouselContainer';
+
+const classes = {
+    root: `${PREFIX}-root`,
+    title: `${PREFIX}-title`,
+};
+
+// const useStyles = makeStyles(() => ({
+//     root: {
+//         width: '100%',
+//     },
+//     title: {
+//         fontWeight: 500,
+//     },
+// }));
+
 export default function HomePageCarouselContainer({ itemsToRender, title }: HomePageCarouselContainerProps) {
     const theme = useTheme();
     const isDesktop = useMediaQuery(theme.breakpoints.up('md'));
-    const classes = useStyles();
 
     const renderItems = () => {
         if (isDesktop) {
@@ -33,17 +42,9 @@ export default function HomePageCarouselContainer({ itemsToRender, title }: Home
             <Typography noWrap variant="h4" color="textPrimary" gutterBottom className={classes.title}>
                 {title}
             </Typography>
-            <Carousel autoPlay={false} indicators={false} animation="slide" swipe>
-                {renderItems()}
-            </Carousel>
+            {/*<Carouselousel autoPlay={false} indicators={false} animation="slide" swipe>*/}
+            {renderItems()}
+            {/*</Carouselousel>*/}
         </Box>
     );
 }
-const useStyles = makeStyles(() => ({
-    root: {
-        width: '100%',
-    },
-    title: {
-        fontWeight: 500,
-    },
-}));

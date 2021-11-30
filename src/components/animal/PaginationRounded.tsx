@@ -1,8 +1,6 @@
 import React from 'react';
 
-import { Grid } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
-import TablePagination from '@material-ui/core/TablePagination';
+import { Grid, styled, TablePagination } from '@mui/material';
 
 interface PaginationRoundedProps {
     count: number;
@@ -12,6 +10,24 @@ interface PaginationRoundedProps {
     onPageSizeChange: (pageSize: number) => void;
 }
 
+const PREFIX = 'PaginationRounded';
+const classes = {
+    toolbar: `${PREFIX}-toolbar`,
+    actions: `${PREFIX}-actions`,
+};
+
+const Root = styled('div')(({ theme }) => ({
+    marginTop: theme.spacing(2),
+    [classes.toolbar]: {
+        flexWrap: 'wrap',
+    },
+    [classes.actions]: {
+        [theme.breakpoints.down('sm')]: {
+            margin: '0 auto',
+        },
+    },
+}));
+
 export default function PaginationRounded({
     count,
     page,
@@ -19,8 +35,6 @@ export default function PaginationRounded({
     pageSize,
     onPageSizeChange,
 }: PaginationRoundedProps) {
-    const classes = useStyles();
-
     function handlePageChange(event, newPage) {
         onPageChange(newPage);
     }
@@ -32,7 +46,7 @@ export default function PaginationRounded({
 
     return (
         <Grid container justifyContent="flex-end">
-            <div className={classes.root}>
+            <Root>
                 <TablePagination
                     component="div"
                     count={count}
@@ -47,21 +61,7 @@ export default function PaginationRounded({
                     }}
                     labelRowsPerPage="Items per page"
                 />
-            </div>
+            </Root>
         </Grid>
     );
 }
-
-const useStyles = makeStyles(theme => ({
-    root: {
-        marginTop: theme.spacing(2),
-    },
-    toolbar: {
-        flexWrap: 'wrap',
-    },
-    actions: {
-        [theme.breakpoints.down('sm')]: {
-            margin: '0 auto',
-        },
-    },
-}));

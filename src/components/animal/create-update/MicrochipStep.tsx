@@ -1,12 +1,7 @@
 import React, { memo } from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
 
-import { Grid } from '@material-ui/core';
-import Button from '@material-ui/core/Button';
-import Divider from '@material-ui/core/Divider';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Radio from '@material-ui/core/Radio';
-import RadioGroup from '@material-ui/core/RadioGroup';
+import { Button, Divider, FormControlLabel, Grid, Radio, RadioGroup } from '@mui/material';
 import TextInput from '../../form/TextInput';
 
 export enum MicrochipStatus {

@@ -1,40 +1,43 @@
 import React from 'react';
 
-import { Button, Chip, Grid } from '@material-ui/core';
-import Filter from './Filter';
+import { Button, Chip, Grid } from '@mui/material';
+import { useAppDispatch, useAppSelector } from '../../../store';
+import { deleteFilter, resetFilters } from '../../../store/filters';
 
-export default function AnimalFiltersChips({ filters, onDelete, onClearFilters }: AnimalFiltersChipsProps) {
-    const hasFilters = filters.some(filter => filter.value);
+const FILTER_PROPS = ['species', 'gender', 'breed'];
 
-    if (!hasFilters) {
-        return null;
-    }
+export default function AnimalFiltersChips() {
+    const dispatch = useAppDispatch();
+    const filters = useAppSelector(state => state.filters);
+
+    const hasFilters = Object.keys(filters).filter(key => FILTER_PROPS.includes(key)).length > 0;
 
     const handleClearFilters = () => {
-        const newFilters = [...filters];
-        newFilters.forEach(filter => {
-            filter.value = undefined;
-            filter.displayValue = undefined;
-        });
-        onClearFilters(newFilters);
+        dispatch(resetFilters());
     };
 
-    return (
-        <Grid container spacing={1}>
-            {filters
-                .filter(filter => filter.value)
-                .map(filter => (
-                    <Grid item key={filter.name}>
-                        <Chip label={filter.displayValue} onDelete={() => onDelete(filter)} />
-                    </Grid>
-                ))}
-            <Button onClick={handleClearFilters}>Clear</Button>
+    const onDelete = type => {
+        dispatch(deleteFilter(type));
+    };
+
+    const filterChip = (type, filter) => (
+        <Grid item key={`${type}-${filter.id}`}>
+            <Chip label={filter.value} onDelete={() => onDelete(type)} />
         </Grid>
     );
-}
 
-interface AnimalFiltersChipsProps {
-    filters: Filter[];
-    onDelete: (filter: Filter) => void;
-    onClearFilters: (filters: Filter[]) => void;
+    if (hasFilters) {
+        return (
+            <Grid container spacing={1}>
+                {Object.keys(filters).map(type => {
+                    if (filters[type]) {
+                        return filterChip(type, filters[type]);
+                    }
+                })}
+                <Button onClick={handleClearFilters}>Clear</Button>
+            </Grid>
+        );
+    } else {
+        return null;
+    }
 }

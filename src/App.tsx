@@ -1,14 +1,13 @@
 import './App.css';
 import React from 'react';
-import { Route, Switch, useLocation } from 'react-router-dom';
+import { Route, Routes, useLocation } from 'react-router';
 
-import CssBaseline from '@material-ui/core/CssBaseline';
-import { makeStyles, ThemeProvider } from '@material-ui/core/styles';
-import { Skeleton } from '@material-ui/lab';
+import { Skeleton, styled, StyledEngineProvider, ThemeProvider } from '@mui/material';
+import CssBaseline from '@mui/material/CssBaseline';
 import ResponsiveAppBottom from './components/layout/ResponsiveAppBottom';
 import ResponsiveAppTop from './components/layout/ResponsiveAppTop';
 import PageNotFound from './pages/PageNotFound';
-import MuiTheme from './theme';
+import Theme from './theme';
 import PrivateRoute from './utils/auth/PrivateRoute';
 
 const LocationDisplay = () => {
@@ -16,73 +15,93 @@ const LocationDisplay = () => {
     return <div data-testid="location-display">{location.pathname}</div>;
 };
 
-const useStyles = makeStyles({
-    root: {
-        display: 'flex',
-        flexDirection: 'column',
-        minHeight: '100vh',
-    },
-});
+const PageNotImplemented = React.lazy(() => import('./pages/PageNotImplemented'));
+
+const About = React.lazy(() => import('./pages/About'));
+const UserProfile = React.lazy(() => import('./pages/UserProfile'));
+const AnimalsPage = React.lazy(() => import('./pages/AnimalsPage'));
+const AnimalEditPage = React.lazy(() => import('./pages/AnimalEditPage'));
+const AnimalDetailsPage = React.lazy(() => import('./pages/AnimalDetailsPage'));
+
+const FavoritesPage = React.lazy(() => import('./pages/FavoritesPage'));
+const Home = React.lazy(() => import('./pages/Home'));
+
+const Root = styled('div')(() => ({
+    display: 'flex',
+    flexDirection: 'column',
+    minHeight: '100vh',
+}));
 
 export default function App() {
-    const classes = useStyles();
-
     return (
-        <ThemeProvider theme={MuiTheme}>
-            <CssBaseline />
-            <div className={classes.root}>
-                <ResponsiveAppTop />
-                <React.Suspense fallback={<Skeleton variant="rect" height="100vh" width="100%" />}>
-                    <Switch>
-                        <Route exact path="/about" component={React.lazy(() => import('./pages/About'))} />
-                        <PrivateRoute
-                            exact
-                            path="/user-profile"
-                            component={React.lazy(() => import('./pages/UserProfile'))}
-                        />
-                        <PrivateRoute
-                            exact
-                            path="/animal-list"
-                            component={React.lazy(() => import('./pages/AnimalsPage'))}
-                        />
-                        <PrivateRoute
-                            exact
-                            path="/animal/new"
-                            component={React.lazy(() => import('./pages/AnimalEditPage'))}
-                        />
-                        <PrivateRoute
-                            exact
-                            path="/animal/:id"
-                            component={React.lazy(() => import('./pages/AnimalDetailsPage'))}
-                        />
-                        <PrivateRoute
-                            exact
-                            path="/animal/:id/edit"
-                            component={React.lazy(() => import('./pages/AnimalEditPage'))}
-                        />
-                        <PrivateRoute
-                            exact
-                            path="/favorites/"
-                            component={React.lazy(() => import('./pages/FavoritesPage'))}
-                        />
-                        <Route
-                            exact
-                            path="/search"
-                            component={React.lazy(() => import('./pages/PageNotImplemented'))}
-                        />
-                        <Route exact path="/login" component={React.lazy(() => import('./pages/PageNotImplemented'))} />
-                        <Route
-                            exact
-                            path="/logout"
-                            component={React.lazy(() => import('./pages/PageNotImplemented'))}
-                        />
-                        <Route exact path="/" component={React.lazy(() => import('./pages/Home'))} />
-                        <Route component={PageNotFound} />
-                    </Switch>
-                </React.Suspense>
-                <ResponsiveAppBottom />
-            </div>
-            <LocationDisplay />
-        </ThemeProvider>
+        <StyledEngineProvider>
+            <ThemeProvider theme={Theme}>
+                <CssBaseline />
+                <Root>
+                    <ResponsiveAppTop />
+                    <React.Suspense fallback={<Skeleton variant="rectangular" height="100vh" width="100%" />}>
+                        <Routes>
+                            <Route path="/about" element={<About />} />
+                            <Route
+                                path="/user-profile"
+                                element={
+                                    <PrivateRoute>
+                                        <UserProfile />
+                                    </PrivateRoute>
+                                }
+                            />
+                            <Route
+                                path="/animal-list"
+                                element={
+                                    <PrivateRoute>
+                                        <AnimalsPage />
+                                    </PrivateRoute>
+                                }
+                            />
+                            <Route
+                                path="/animal/new"
+                                element={
+                                    <PrivateRoute>
+                                        <AnimalEditPage />
+                                    </PrivateRoute>
+                                }
+                            />
+                            <Route
+                                path="/animal/:id"
+                                element={
+                                    <PrivateRoute>
+                                        <AnimalDetailsPage />
+                                    </PrivateRoute>
+                                }
+                            />
+                            <Route
+                                path="/animal/:id/edit"
+                                element={
+                                    <PrivateRoute>
+                                        <AnimalEditPage />
+                                    </PrivateRoute>
+                                }
+                            />
+                            <Route
+                                path="/favorites"
+                                element={
+                                    <PrivateRoute>
+                                        <FavoritesPage />
+                                    </PrivateRoute>
+                                }
+                            />
+                            <Route path="/search" element={<PageNotImplemented />} />
+                            <Route path="/login" element={<PageNotImplemented />} />
+                            <Route path="/logout" element={<PageNotImplemented />} />
+                            <Route path="/" element={<Home />} />
+
+                            <Route path="*" element={<PageNotFound />} />
+                        </Routes>
+                    </React.Suspense>
+                    <ResponsiveAppBottom />
+                </Root>
+                <LocationDisplay />
+            </ThemeProvider>
+        </StyledEngineProvider>
     );
 }

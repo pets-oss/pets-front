@@ -1,29 +1,30 @@
 import React from 'react';
 import { useLocation } from 'react-router-dom';
 
-import AppBar from '@material-ui/core/AppBar';
-import { createStyles, makeStyles } from '@material-ui/core/styles';
-import Toolbar from '@material-ui/core/Toolbar';
-import Typography from '@material-ui/core/Typography';
+import { AppBar, styled, Toolbar, Typography } from '@mui/material';
 import { navigation, NavigationItem } from '../../navigation';
 import TopAuthNav from './TopAuthNav';
 
-const useStyles = makeStyles(() =>
-    createStyles({
-        appbar: {
-            backgroundColor: 'transparent',
-        },
-        toolbar: {
-            justifyContent: 'space-between',
-        },
-        title: {
-            flexGrow: 1,
-        },
-    })
-);
+const PREFIX = 'AppTopBar';
+const classes = {
+    appbar: `${PREFIX}-appbar`,
+    toolbar: `${PREFIX}-toolbar`,
+    title: `${PREFIX}-title`,
+};
+
+const Root = styled('div')(() => ({
+    [`& .${classes.appbar}`]: {
+        backgroundColor: 'transparent',
+    },
+    [`& .${classes.toolbar}`]: {
+        justifyContent: 'space-between',
+    },
+    [`& .${classes.title}`]: {
+        flexGrow: 1,
+    },
+}));
 
 export default function AppTopBar() {
-    const classes = useStyles();
     const location = useLocation();
 
     const pageTitle = () => {
@@ -35,13 +36,15 @@ export default function AppTopBar() {
     };
 
     return (
-        <AppBar className={classes.appbar} position="static" color="default" elevation={0}>
-            <Toolbar className={classes.toolbar}>
-                <Typography variant="h6" className={classes.title} noWrap>
-                    {pageTitle()}
-                </Typography>
-                <TopAuthNav />
-            </Toolbar>
-        </AppBar>
+        <Root>
+            <AppBar className={classes.appbar} position="static" color="default" elevation={0}>
+                <Toolbar className={classes.toolbar}>
+                    <Typography variant="h6" className={classes.title} noWrap>
+                        {pageTitle()}
+                    </Typography>
+                    <TopAuthNav />
+                </Toolbar>
+            </AppBar>
+        </Root>
     );
 }

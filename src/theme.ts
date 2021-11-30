@@ -1,5 +1,4 @@
-import { createTheme } from '@material-ui/core/styles';
-import { ThemeOptions } from '@material-ui/core/styles/createTheme';
+import { createTheme, ThemeOptions } from '@mui/material';
 
 const defaultTheme = createTheme({
     palette: {
@@ -33,82 +32,85 @@ const defaultTheme = createTheme({
             xl: 1920,
         },
     },
+    typography: {
+        h1: {
+            fontSize: '3rem',
+            lineHeight: 1.2,
+            // [breakpoints.down('sm')]: {
+            //     fontSize: '2.6rem',
+            // },
+        },
+        h2: {
+            fontSize: '2.6rem',
+            lineHeight: 1.2,
+            // [breakpoints.down('sm')]: {
+            //     fontSize: '2.2rem',
+            // },
+        },
+        h3: {
+            fontSize: '2.2rem',
+            lineHeight: 1.2,
+            // [breakpoints.down('sm')]: {
+            //     fontSize: '1.8rem',
+            // },
+        },
+        h4: {
+            fontSize: '1.8rem',
+            lineHeight: 1.2,
+            // [breakpoints.down('sm')]: {
+            //     fontSize: '1.6rem',
+            // },
+        },
+        h5: {
+            fontSize: '1.8rem',
+            lineHeight: 1.2,
+            // [breakpoints.down('sm')]: {
+            //     fontSize: '1.4rem',
+            // },
+        },
+        h6: {
+            fontSize: '1.6rem',
+            lineHeight: 1.2,
+            // [breakpoints.down('sm')]: {
+            //     fontSize: '1.4rem',
+            // },
+        },
+    },
 });
-const { breakpoints } = defaultTheme;
 
 const theme: ThemeOptions = {
     ...defaultTheme,
-    overrides: {
-        MuiTypography: {
-            h1: {
-                fontSize: '3rem',
-                lineHeight: 1.2,
-                [breakpoints.down('sm')]: {
-                    fontSize: '2.6rem',
-                },
-            },
-            h2: {
-                fontSize: '2.6rem',
-                lineHeight: 1.2,
-                [breakpoints.down('sm')]: {
-                    fontSize: '2.2rem',
-                },
-            },
-            h3: {
-                fontSize: '2.2rem',
-                lineHeight: 1.2,
-                [breakpoints.down('sm')]: {
-                    fontSize: '1.8rem',
-                },
-            },
-            h4: {
-                fontSize: '1.8rem',
-                lineHeight: 1.2,
-                [breakpoints.down('sm')]: {
-                    fontSize: '1.6rem',
-                },
-            },
-            h5: {
-                fontSize: '1.8rem',
-                lineHeight: 1.2,
-                [breakpoints.down('sm')]: {
-                    fontSize: '1.4rem',
-                },
-            },
-            h6: {
-                fontSize: '1.6rem',
-                lineHeight: 1.2,
-                [breakpoints.down('sm')]: {
-                    fontSize: '1.4rem',
-                },
-            },
-        },
+
+    components: {
         MuiListItemIcon: {
-            root: {
-                minWidth: 'auto',
-                marginTop: 4,
-                marginBottom: 4,
+            styleOverrides: {
+                root: {
+                    minWidth: 'auto',
+                    marginTop: 4,
+                    marginBottom: 4,
+                },
             },
         },
         MuiStepIcon: {
-            root: {
-                '&$completed': {
-                    fill: defaultTheme.palette.success.main,
-                },
-                '&$active': {
-                    fill: defaultTheme.palette.secondary.main,
-                },
+            defaultProps: {
+                // '&$completed': {
+                //     fill: defaultTheme.palette.success.main,
+                // },
+                // '&$active': {
+                //     fill: defaultTheme.palette.secondary.main,
+                // },
             },
         },
     },
-    props: {
-        MuiUseMediaQuery: {
-            noSsr: true,
-        },
-    },
+    // },
+    // props: {
+    //     MuiUseMediaQuery: {
+    //         noSsr: true,
+    //     },
+    // },
 };
 
-declare module '@material-ui/core/styles/createPalette' {
+declare module '@mui/material/styles' {
     interface Palette {
         tertiary: Palette['primary'];
     }
