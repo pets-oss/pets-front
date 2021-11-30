@@ -1,10 +1,6 @@
 import React, { ReactNode } from 'react';
 
-import { Fade } from '@material-ui/core';
-import Container from '@material-ui/core/Container';
-import Grid from '@material-ui/core/Grid';
-import { makeStyles } from '@material-ui/core/styles';
-import Typography from '@material-ui/core/Typography';
+import { Container, Grid, styled, Typography } from '@mui/material';
 import useMobile from '../hooks/useMobile';
 
 interface PageProps {
@@ -15,13 +11,44 @@ interface PageProps {
     displayTitleOnMobile?: boolean;
 }
 
+const PREFIX = 'Page';
+
+const classes = {
+    heading: `${PREFIX}-heading`,
+    endAlign: `${PREFIX}-endAlign`,
+    title: `${PREFIX}-title`,
+    content: `${PREFIX}-content`,
+};
+
+const Root = styled('main')(({ theme }) => ({
+    paddingTop: 0,
+    [theme.breakpoints.up('sm')]: {
+        paddingTop: 64 + 32,
+    },
+
+    [`& .${classes.heading}`]: {
+        marginBottom: theme.spacing(2),
+    },
+    [`& .${classes.endAlign}`]: {
+        textAlign: 'end',
+    },
+    [`& .${classes.title}`]: {
+        fontWeight: 500,
+    },
+    [`& .${classes.content}`]: {
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'flex-start',
+        flexDirection: 'column',
+    },
+}));
+
 export default function Page({ title, topSection, children, displayTitleOnMobile }: PageProps) {
-    const classes = useStyles();
     const matchesMobile = useMobile();
 
     return (
-        <Fade in timeout={600}>
-            <Container component="main" className={classes.root} maxWidth="lg">
+        <Root>
+            <Container maxWidth="lg">
                 <Grid container spacing={4}>
                     {(!matchesMobile || displayTitleOnMobile) && title && (
                         <Grid item xs={12}>
@@ -39,13 +66,11 @@ export default function Page({ title, topSection, children, displayTitleOnMobile
                     </Grid>
                 </Grid>
             </Container>
-        </Fade>
+        </Root>
     );
 }
 
 function PageTitle({ title }: { title: string | ReactNode }) {
-    const classes = useStyles();
-
     if (typeof title !== 'string') {
         // Custom title
         return <>title</>;
@@ -59,30 +84,3 @@ function PageTitle({ title }: { title: string | ReactNode }) {
         </>
     );
 }
-
-const useStyles = makeStyles(theme => ({
-    root: {
-        [theme.breakpoints.down('md')]: {
-            marginTop: theme.spacing(1),
-        },
-        [theme.breakpoints.up('md')]: {
-            marginTop: 64 + theme.spacing(3), // follow fixed AppBar minHeight: 64
-        },
-        marginBottom: theme.spacing(10),
-    },
-    heading: {
-        marginBottom: theme.spacing(2),
-    },
-    endAlign: {
-        textAlign: 'end',
-    },
-    title: {
-        fontWeight: 500,
-    },
-    content: {
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'flex-start',
-        flexDirection: 'column',
-    },
-}));

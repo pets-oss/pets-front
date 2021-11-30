@@ -1,9 +1,8 @@
 import React from 'react';
 
-import ReorderIcon from '@material-ui/icons/Reorder';
-import ViewModuleIcon from '@material-ui/icons/ViewModule';
-import { ToggleButtonGroup } from '@material-ui/lab';
-import ToggleButton from '@material-ui/lab/ToggleButton';
+import ReorderIcon from '@mui/icons-material/Reorder';
+import ViewModuleIcon from '@mui/icons-material/ViewModule';
+import { ToggleButton, ToggleButtonGroup } from '@mui/material';
 
 interface ViewSelectorProps {
     value: AnimalsViewType;

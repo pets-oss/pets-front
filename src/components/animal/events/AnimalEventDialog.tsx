@@ -16,7 +16,7 @@ import {
     Typography,
     useMediaQuery,
     useTheme,
-} from '@material-ui/core';
+} from '@mui/material';
 import { Event } from '../../../graphql/types';
 
 interface AnimalEventDialogProps {
@@ -36,7 +36,7 @@ export default function AnimalEventDialog({
 }: AnimalEventDialogProps) {
     const theme = useTheme();
     const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
-    const { id: animalID } = useParams<{ id: string }>();
+    const { id: animalID } = useParams();
 
     const [type, setType] = useState('');
     const [category, setCategory] = useState('');
@@ -132,7 +132,7 @@ export default function AnimalEventDialog({
             },
             createTime: '',
             id: 123456,
-            animalId: +animalID,
+            animalId: +(animalID || 0),
             group: _group,
             type: _type,
             details: {
@@ -214,7 +214,6 @@ export default function AnimalEventDialog({
                         color="secondary"
                         multiline
                         rows={4}
-                        rowsMax={8}
                         error={commentsError}
                     />
                 </Box>

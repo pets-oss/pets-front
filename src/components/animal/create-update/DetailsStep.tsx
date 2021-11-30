@@ -2,13 +2,9 @@ import clsx from 'clsx';
 import { loader } from 'graphql.macro';
 import React, { memo, useEffect } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
-import { Grid } from '@material-ui/core';
-import Button from '@material-ui/core/Button';
-import Divider from '@material-ui/core/Divider';
-import makeStyles from '@material-ui/core/styles/makeStyles';
-import Typography from '@material-ui/core/Typography';
+import { Button, Divider, Grid, styled, Typography } from '@mui/material';
 import { Species } from '../../../graphql/types';
 import usePrevious from '../../../hooks/usePrevious';
 import { getDateYMDFlexible } from '../../../utils/dateFormatters';
@@ -23,10 +19,33 @@ const GET_COLORS = loader('../../../graphql/queries/colors.graphql');
 
 const EMPTY_NAME = 'New Animal';
 
+const PREFIX = 'DetailsStep';
+
+const classes = {
+    form: `${PREFIX}-form`,
+    name: `${PREFIX}-name`,
+    relative: `${PREFIX}-relative`,
+    fullWidth: `${PREFIX}-fullWidth`,
+};
+
+const StyledGrid = styled(Grid)(() => ({
+    form: {
+        maxWidth: 800,
+    },
+    name: {
+        minWidth: 300,
+    },
+    relative: {
+        position: 'relative',
+    },
+    fullWidth: {
+        width: '100%',
+    },
+}));
+
 function DetailsStep() {
-    const classes = useStyles();
     const { control, setValue } = useFormContext();
-    const history = useHistory();
+    const navigate = useNavigate();
 
     const name = useWatch({
         control,
@@ -52,7 +71,7 @@ function DetailsStep() {
     }, [species, setValue]);
 
     const handleCancel = () => {
-        history.push('/animal-list');
+        navigate('/animal-list');
     };
 
     const dateInputValidation = (input: string) => {
@@ -60,7 +79,7 @@ function DetailsStep() {
     };
 
     return (
-        <Grid container spacing={2}>
+        <StyledGrid container spacing={2}>
             <Grid item xs={12} container spacing={2} justifyContent="center">
                 {!!name ? (
                     <Typography variant="h5">{name}</Typography>
@@ -141,23 +160,8 @@ function DetailsStep() {
                     </Button>
                 </Grid>
             </Grid>
-        </Grid>
+        </StyledGrid>
     );
 }
-
-const useStyles = makeStyles(() => ({
-    form: {
-        maxWidth: 800,
-    },
-    name: {
-        minWidth: 300,
-    },
-    relative: {
-        position: 'relative',
-    },
-    fullWidth: {
-        width: '100%',
-    },
-}));
 
 export default memo(DetailsStep);

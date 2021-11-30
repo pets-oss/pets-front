@@ -1,6 +1,6 @@
 import React from 'react';
 
-import Grid from '@material-ui/core/Grid';
+import { Grid } from '@mui/material';
 import { Animal } from '../../graphql/types';
 import AnimalCard from './AnimalCard';
 

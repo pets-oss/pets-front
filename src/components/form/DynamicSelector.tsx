@@ -8,6 +8,7 @@ export default function DynamicSelector({
     gqlOptions,
     name,
     defaultValue,
+    multiple,
     disabled,
     helperText,
     required,
@@ -24,6 +25,7 @@ export default function DynamicSelector({
             name={name}
             helperText={helperText}
             defaultValue={defaultValue}
+            multiple={multiple}
             disabled={disabled}
             required={required}
             label={label}

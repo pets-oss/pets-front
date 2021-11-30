@@ -1,20 +1,23 @@
 import React from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 import { useAuth0 } from '@auth0/auth0-react';
-import Button from '@material-ui/core/Button';
-import IconButton from '@material-ui/core/IconButton';
-import Menu from '@material-ui/core/Menu';
-import MenuItem from '@material-ui/core/MenuItem';
-import { makeStyles } from '@material-ui/core/styles';
-import Typography from '@material-ui/core/Typography';
-import AccountCircleTwoToneIcon from '@material-ui/icons/AccountCircleTwoTone';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import { Button, IconButton, Menu, MenuItem, styled } from '@mui/material';
 import useMobileXS from '../../hooks/useMobileXS';
 
+const StyledSpan = styled('span')(({ theme }) => ({
+    fontSize: 'inherit',
+    fontWeight: 'inherit',
+    whiteSpace: 'nowrap',
+    [theme.breakpoints.down('sm')]: {
+        maxWidth: 150,
+    },
+}));
+
 export default function TopAuthNav() {
-    const classes = useStyles();
     const { isAuthenticated, user, loginWithRedirect, logout } = useAuth0();
-    const history = useHistory();
+    const navigate = useNavigate();
 
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
     const open = Boolean(anchorEl);
@@ -43,7 +46,7 @@ export default function TopAuthNav() {
     };
 
     const handleLinkProfile = () => {
-        history.push('/user-profile');
+        navigate('/user-profile');
         handleClose();
     };
 
@@ -57,11 +60,9 @@ export default function TopAuthNav() {
                         aria-haspopup="true"
                         onClick={handleMenu}
                         color="inherit"
-                        startIcon={<AccountCircleTwoToneIcon />}
+                        startIcon={<AccountCircleIcon />}
                     >
-                        <Typography component="span" className={classes.label} noWrap>
-                            {matchesMobileXS ? getShortUserName(user?.name) : user?.name}
-                        </Typography>
+                        <StyledSpan>{matchesMobileXS ? getShortUserName(user?.name) : user?.name}</StyledSpan>
                     </Button>
                     <Menu
                         id="menu-appbar"
@@ -92,19 +93,9 @@ export default function TopAuthNav() {
                 </>
             ) : (
                 <IconButton aria-label="login" edge="end" onClick={() => loginWithRedirect()} color="inherit">
-                    <AccountCircleTwoToneIcon />
+                    <AccountCircleIcon />
                 </IconButton>
             )}
         </div>
     );
 }
-
-const useStyles = makeStyles(theme => ({
-    label: {
-        fontSize: 'inherit',
-        fontWeight: 'inherit',
-        [theme.breakpoints.down('sm')]: {
-            maxWidth: 150,
-        },
-    },
-}));

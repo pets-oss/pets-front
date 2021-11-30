@@ -1,11 +1,9 @@
 import { loader } from 'graphql.macro';
 import React from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 import { useQuery } from '@apollo/client';
-import { Box, Fade } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
-import { Skeleton } from '@material-ui/lab';
+import { Box, Skeleton, styled } from '@mui/material';
 import AnimalForm from '../components/animal/create-update/AnimalForm';
 import { Animal } from '../graphql/types';
 import logo from '../logo.svg';
@@ -14,46 +12,49 @@ import Page from './Page';
 const GET_ANIMAL_DETAILS_ON_EDIT = loader('../graphql/queries/animal-details-on-edit.graphql');
 
 function AnimalEditPage() {
-    const params: RouterParams = useParams();
-    const { id } = params;
+    const navigate = useNavigate();
+    const { id } = useParams();
 
     const { loading, error, data } = useQuery<Response>(GET_ANIMAL_DETAILS_ON_EDIT, {
         variables: { id: Number(id) },
         skip: !id,
     });
 
+    const submitCallback = (err: any) => {
+        if (err === null) {
+            navigate('/animal-list');
+        } else {
+            // todo - should also show error on UI
+            console.error('AnimalForm', err);
+        }
+    };
+
     return (
-        <Fade in timeout={600}>
-            <Page topSection={<TopSection />}>
-                {error ? (
-                    <p>Error!</p>
-                ) : loading ? (
-                    <Skeleton animation="wave" variant="rect" height="70vh" width="100%" />
-                ) : (
-                    <AnimalForm animal={data?.animal} />
-                )}
-            </Page>
-        </Fade>
+        <Page topSection={<TopSection />}>
+            {error ? (
+                <p>Error!</p>
+            ) : loading ? (
+                <Skeleton animation="wave" variant="rectangular" height="70vh" width="100%" />
+            ) : (
+                <AnimalForm animal={data?.animal} submitCallback={submitCallback} />
+            )}
+        </Page>
     );
 }
 
-function TopSection() {
-    const classes = useStyles();
-    return (
-        <Box display="flex" flexDirection="column" alignItems="center">
-            <Box className={classes.imageWrapper}>
-                <img src={logo} alt="paw" className={classes.image} />
-            </Box>
-        </Box>
-    );
-}
+const PREFIX = 'TopSection';
 
-const useStyles = makeStyles(theme => ({
-    image: {
+const classes = {
+    image: `${PREFIX}-image`,
+    imageWrapper: `${PREFIX}-imageWrapper`,
+};
+
+const Root = styled('div')(({ theme }) => ({
+    [classes.image]: {
         fill: theme.palette.primary.dark,
         width: '100%',
     },
-    imageWrapper: {
+    [classes.imageWrapper]: {
         padding: theme.spacing(1),
         marginBottom: theme.spacing(1),
         width: 64,
@@ -69,11 +70,19 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-export default AnimalEditPage;
-
-interface RouterParams {
-    id: string;
+function TopSection() {
+    return (
+        <Root>
+            <Box display="flex" flexDirection="column" alignItems="center">
+                <Box className={classes.imageWrapper}>
+                    <img src={logo} alt="paw" className={classes.image} />
+                </Box>
+            </Box>
+        </Root>
+    );
 }
+
+export default AnimalEditPage;
 
 interface Response {
     animal: Animal;

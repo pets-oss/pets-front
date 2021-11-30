@@ -1,12 +1,11 @@
 import React from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
-import { IconButton, Menu, MenuItem } from '@material-ui/core';
-import { Fade } from '@material-ui/core';
-import MoreVertIcon from '@material-ui/icons/MoreVert';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
+import { Fade, IconButton, Menu, MenuItem } from '@mui/material';
 
 function AnimalDetailsMenu({ id }) {
-    const history = useHistory();
+    const navigate = useNavigate();
     const [anchorEl, setAnchorEl] = React.useState(null);
     const open = Boolean(anchorEl);
     const handleClick = event => {
@@ -16,7 +15,7 @@ function AnimalDetailsMenu({ id }) {
         setAnchorEl(null);
     };
     const handleEdit = () => {
-        history.push(`/animal/${id}/edit`);
+        navigate(`/animal/${id}/edit`);
         handleClose();
     };
 
