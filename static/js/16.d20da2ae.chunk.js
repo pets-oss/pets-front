@@ -1,0 +1,2 @@
+(this["webpackJsonppets-front"]=this["webpackJsonppets-front"]||[]).push([[16],{575:function(t,e,n){"use strict";n.r(e);n(0);var s=n(52),a=n(87),i=n(149),c=n(1);e.default=function(){return Object(c.jsxs)(i.a,{children:[Object(c.jsx)(a.a,{variant:"h3",component:"h1",children:"Page is not implemented yet"}),Object(c.jsxs)(a.a,{variant:"body1",children:["Try navigating to ",Object(c.jsx)(s.b,{to:"/",children:"homepage"})]})]})}}}]);
+//# sourceMappingURL=16.d20da2ae.chunk.js.map
