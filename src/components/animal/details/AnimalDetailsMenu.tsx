@@ -27,6 +27,7 @@ function AnimalDetailsMenu({ id }) {
                 aria-haspopup="true"
                 aria-expanded={open ? 'true' : undefined}
                 onClick={handleClick}
+                color="primary"
             >
                 <MoreVertIcon />
             </IconButton>

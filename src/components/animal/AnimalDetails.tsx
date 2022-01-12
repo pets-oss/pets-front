@@ -63,30 +63,17 @@ const Root = styled('div')(({ theme }) => ({
     [`& .${classes.imageContainer}`]: {
         position: 'relative',
     },
-    [`& .${classes.imageIcon}`]: {
-        color: theme.palette.tertiary.light,
-        height: '18px',
-        width: '18px',
-        [theme.breakpoints.up('md')]: {
-            height: 'unset',
-            width: 'unset',
-        },
-    },
     [`& .${classes.addImageButton}`]: {
         position: 'absolute',
-        right: theme.spacing(1),
-        top: theme.spacing(1),
-        backgroundColor: theme.palette.primary.main,
-        '&:hover,&:focus': {
-            backgroundColor: theme.palette.primary.dark,
+        top: theme.spacing(2),
+        right: theme.spacing(2),
+        zIndex: 1,
+        backgroundColor: 'rgba(255, 255, 255, 1)',
+        '&:hover': {
+            backgroundColor: 'rgba(255, 255, 255, .85)',
         },
-        height: '36px',
-        width: '36px',
-        [theme.breakpoints.up('md')]: {
-            height: '48px',
-            width: '48px',
-            right: theme.spacing(2),
-            top: theme.spacing(2),
+        '&:focus': {
+            backgroundColor: 'rgba(255, 255, 255, .85)',
         },
     },
 }));
@@ -157,9 +144,14 @@ export default function AnimalDetails({ onLoad }: AnimalDetailsProps) {
                         <AnimalDetailsMenu id={animal.id} />
                     </AnimalDetailsHeader>
                     <Box className={classes.imageContainer}>
-                        <Image src={animal.imageUrl!} aspectRatio={3 / 2} cover />
-                        <IconButton className={classes.addImageButton} onClick={showUploadImageDialog}>
-                            <AddAPhotoIcon className={classes.imageIcon} />
+                        <Image src={animal.imageUrl!} aspectratio={3 / 2} cover="true" />
+                        <IconButton
+                            className={classes.addImageButton}
+                            color="primary"
+                            onClick={showUploadImageDialog}
+                            aria-label="add image"
+                        >
+                            <AddAPhotoIcon />
                         </IconButton>
                     </Box>
                     {animal.details && (
