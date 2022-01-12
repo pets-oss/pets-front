@@ -14,7 +14,7 @@ const classes = {
 
 const Root = styled('div')(({ theme }) => ({
     [`& .${classes.appBar}`]: {
-        backgroundColor: theme.palette.primary.light,
+        backgroundColor: theme.palette.secondary.light,
     },
     [`& .${classes.title}`]: {
         flexGrow: 1,

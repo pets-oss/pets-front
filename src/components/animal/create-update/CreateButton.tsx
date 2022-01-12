@@ -24,14 +24,14 @@ export default function CreateButton() {
 
     if (mobile) {
         return (
-            <StyledFab color="secondary" aria-label="add" onClick={handleClick}>
+            <StyledFab color="primary" aria-label="add" onClick={handleClick}>
                 <AddIcon />
             </StyledFab>
         );
     }
 
     return (
-        <Button variant="contained" color="secondary" onClick={handleClick} startIcon={<AddIcon />}>
+        <Button variant="contained" color="primary" onClick={handleClick} startIcon={<AddIcon />}>
             Create
         </Button>
     );

@@ -36,7 +36,7 @@ const Root = styled('div')(({ theme }) => ({
         top: 'auto',
         bottom: 0,
         height: BOTTOM_NAVIGATION_HEIGHT,
-        backgroundColor: theme.palette.primary.light,
+        backgroundColor: theme.palette.secondary.light,
     },
 
     [`& .${classes.drawerHeader}`]: {

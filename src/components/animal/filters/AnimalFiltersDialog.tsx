@@ -59,7 +59,7 @@ export default function AnimalFiltersDialog() {
             <Grid item>{totalCount}</Grid>
             <Grid item>
                 <IconButton aria-label="filter animal list" aria-haspopup="true" onClick={handleDialogOpen}>
-                    <FilterListIcon />
+                    <FilterListIcon color="primary" />
                 </IconButton>
             </Grid>
             <Dialog
@@ -73,7 +73,9 @@ export default function AnimalFiltersDialog() {
                 <FormProvider {...methods}>
                     <Box display="flex" justifyContent="space-between" alignItems="center" marginRight={2.6}>
                         <DialogTitle id="filter-dialog-title">Search Filters</DialogTitle>
-                        <Button onClick={onResetFilters}>RESET ALL</Button>
+                        <Button onClick={onResetFilters} color="primary">
+                            RESET ALL
+                        </Button>
                     </Box>
                     <DialogContent>
                         <Grid component="form" ref={formRef}>
@@ -82,10 +84,10 @@ export default function AnimalFiltersDialog() {
                     </DialogContent>
                     <Box marginBottom={2} marginRight={2}>
                         <DialogActions>
-                            <Button variant="outlined" onClick={handleDialogClose}>
+                            <Button variant="outlined" onClick={handleDialogClose} color="primary">
                                 Cancel
                             </Button>
-                            <Button variant="contained" onClick={handleSubmit(onSubmit)} color="secondary" autoFocus>
+                            <Button variant="contained" onClick={handleSubmit(onSubmit)} color="primary" autoFocus>
                                 Apply
                             </Button>
                         </DialogActions>
