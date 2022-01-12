@@ -68,7 +68,7 @@ const RenderSelected = ({ multiple, files, theme }: RenderSelectedProps) => {
             <Image
                 src={URL.createObjectURL(files[0])}
                 aspectRatio={1}
-                cover={false}
+                cover="false"
                 style={imageStyles.container}
                 imageStyle={imageStyles.image}
             />
@@ -220,11 +220,11 @@ function SelectFilesDialog(props: SelectFilesDialogProps, ref: Ref<unknown> | un
                             </Typography>
                         )}
                     </Box>
-                    <Button disabled={loading} variant="outlined" onClick={onCancel} color="secondary">
+                    <Button disabled={loading} variant="outlined" onClick={onCancel} color="primary">
                         Cancel
                     </Button>
                     <div className={classes.submitButtonWrap}>
-                        <Button disabled={loading} onClick={handleSubmit} color="secondary" variant="contained">
+                        <Button disabled={loading} onClick={handleSubmit} color="primary" variant="contained">
                             Upload
                         </Button>
                         {loading && <CircularProgress size={20} className={classes.submitButtonSpinner} />}
