@@ -95,7 +95,7 @@ const classes = {
 };
 
 const StyledDialog = styled(Dialog)(({ theme }) => ({
-    [classes.dropZone]: {
+    [`& .${classes.dropZone}`]: {
         cursor: 'pointer',
         position: 'relative',
         width: '100%',
@@ -114,22 +114,22 @@ const StyledDialog = styled(Dialog)(({ theme }) => ({
             backgroundColor: theme.palette.grey['100'],
         },
     },
-    [classes.dropZoneDisabled]: {
+    [`& .${classes.dropZoneDisabled}`]: {
         pointerEvents: 'none',
     },
-    [classes.dropZoneSelected]: {
+    [`& .${classes.dropZoneSelected}`]: {
         pointerEvents: 'none',
         border: 'none',
     },
-    [classes.placeHolder]: {
+    [`& .${classes.placeHolder}`]: {
         padding: theme.spacing(1),
         textAlign: 'center',
         color: theme.palette.grey['400'],
     },
-    [classes.submitButtonWrap]: {
+    [`& .${classes.submitButtonWrap}`]: {
         position: 'relative',
     },
-    [classes.submitButtonSpinner]: {
+    [`& .${classes.submitButtonSpinner}`]: {
         color: theme.palette.secondary.main,
         position: 'absolute',
         top: '50%',
