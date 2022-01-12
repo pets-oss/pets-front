@@ -82,6 +82,11 @@ const theme: ThemeOptions = {
     ...defaultTheme,
 
     components: {
+        MuiLink: {
+            defaultProps: {
+                underline: 'hover',
+            },
+        },
         MuiListItemIcon: {
             styleOverrides: {
                 root: {
