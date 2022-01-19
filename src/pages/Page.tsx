@@ -22,6 +22,7 @@ const classes = {
 
 const Root = styled('main')(({ theme }) => ({
     paddingTop: 0,
+    paddingBottom: 32,
     [theme.breakpoints.up('sm')]: {
         paddingTop: 64 + 32,
     },
@@ -49,6 +50,7 @@ export default function Page({ title, topSection, children, displayTitleOnMobile
     return (
         <Root>
             <Container maxWidth="lg">
+                <Grid container columnSpacing={0} rowSpacing={2}>
                     {(!matchesNavMobile || displayTitleOnMobile) && title && (
                         <Grid item xs={12}>
                             <PageTitle title={title} />

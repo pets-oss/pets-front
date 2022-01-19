@@ -34,9 +34,11 @@ export default function AnimalFiltersChips() {
                         return filterChip(type, filters[type]);
                     }
                 })}
-                <Button onClick={handleClearFilters} color="primary" size="small">
-                    Clear
-                </Button>
+                <Grid item>
+                    <Button onClick={handleClearFilters} color="primary" size="small" sx={{ ml: 2 }}>
+                        Clear
+                    </Button>
+                </Grid>
             </Grid>
         );
     } else {

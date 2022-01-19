@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation, useMatch } from 'react-router-dom';
 
-import { Divider, Grid, useMediaQuery, useTheme } from '@mui/material';
+import { Box, Divider, Grid } from '@mui/material';
 import AnimalsListContainer from '../components/animal/AnimalsListContainer';
 import CreateButton from '../components/animal/create-update/CreateButton';
 import AnimalFiltersChips from '../components/animal/filters/AnimalFilterChips';
@@ -56,21 +56,16 @@ function AnimalsPage() {
 
 function TopSection({ viewType, onChange, mobile }: TopSectionProps) {
     return (
-        <Grid container spacing={2} alignItems="center">
-            <Grid container item xs={10} alignItems="center" spacing={2}>
+        <Grid container spacing={0} alignItems="center">
+            <Grid container item xs={10} alignItems="center" spacing={0}>
                 <CreateButton />
-                {!mobile && (
-                    <>
-                        <Grid item />
-                        <Divider flexItem orientation="vertical" />
-                    </>
-                )}
-                <Grid item>
+                {!mobile && <Divider flexItem orientation="vertical" sx={{ mx: 2 }} />}
+                <Box alignItems="center">
                     <AnimalFiltersDialog />
-                </Grid>
-                <Grid item>
+                </Box>
+                <Box alignItems="center" ml={2}>
                     <AnimalFiltersChips />
-                </Grid>
+                </Box>
             </Grid>
             {!mobile && (
                 <Grid item xs={2} style={{ textAlign: 'right' }}>

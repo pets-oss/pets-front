@@ -3,7 +3,7 @@ import React from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
 import { useQuery } from '@apollo/client';
-import { Box, Skeleton, styled } from '@mui/material';
+import { Box, Grid, Skeleton, styled } from '@mui/material';
 import AnimalForm from '../components/animal/create-update/AnimalForm';
 import { Animal } from '../graphql/types';
 import logo from '../logo.svg';
@@ -49,18 +49,18 @@ const classes = {
     imageWrapper: `${PREFIX}-imageWrapper`,
 };
 
-const Root = styled('div')(({ theme }) => ({
-    [classes.image]: {
+const StyledGrid = styled(Grid)(({ theme }) => ({
+    [`& .${classes.image}`]: {
         fill: theme.palette.primary.dark,
         width: '100%',
     },
-    [classes.imageWrapper]: {
+    [`& .${classes.imageWrapper}`]: {
         padding: theme.spacing(1),
         marginBottom: theme.spacing(1),
         width: 64,
         height: 64,
         borderRadius: '50%',
-        backgroundColor: theme.palette.primary.light,
+        backgroundColor: theme.palette.secondary.light,
         [theme.breakpoints.up('md')]: {
             padding: theme.spacing(2),
             marginBottom: theme.spacing(2),
@@ -72,13 +72,11 @@ const Root = styled('div')(({ theme }) => ({
 
 function TopSection() {
     return (
-        <Root>
-            <Box display="flex" flexDirection="column" alignItems="center">
-                <Box className={classes.imageWrapper}>
-                    <img src={logo} alt="paw" className={classes.image} />
-                </Box>
+        <StyledGrid container spacing={0} justifyContent="center" alignItems="center">
+            <Box className={classes.imageWrapper}>
+                <img src={logo} alt="paw" className={classes.image} />
             </Box>
-        </Root>
+        </StyledGrid>
     );
 }
 
