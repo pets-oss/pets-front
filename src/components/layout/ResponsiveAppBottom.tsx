@@ -1,9 +1,9 @@
 import React from 'react';
 
-import useMobile from '../../hooks/useMobile';
+import useNavMobile from '../../hooks/useNavMobile';
 import AppBottomNavigation from './AppBottomNavigation';
 
 export default function ResponsiveAppBottom() {
-    const matchesMobile = useMobile();
-    return matchesMobile ? <AppBottomNavigation /> : <div />;
+    const matchesNavMobile = useNavMobile();
+    return matchesNavMobile ? <AppBottomNavigation /> : <div />;
 }

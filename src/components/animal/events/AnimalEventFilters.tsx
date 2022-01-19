@@ -1,5 +1,6 @@
 import React from 'react';
 
+import DoneIcon from '@mui/icons-material/Done';
 import { Chip, Grid } from '@mui/material';
 import { EventGroup } from '../../../graphql/types';
 
@@ -38,7 +39,14 @@ function Filter({ label, active, onClick }: FilterProps) {
                 type="button"
                 onClick={() => onClick(label as any)}
             >
-                <Chip label={label} clickable color={active ? 'primary' : 'default'} />
+                <Chip
+                    label={label}
+                    variant="outlined"
+                    clickable
+                    color="secondary"
+                    icon={active ? <DoneIcon /> : undefined}
+                    sx={{ fontWeight: active ? 'bold' : 'regular' }}
+                />
             </button>
         </Grid>
     );

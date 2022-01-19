@@ -13,8 +13,8 @@ const classes = {
     property: `${PREFIX}-property`,
 };
 
-const StyledBox = styled(Box)(({ theme }) => ({
-    [classes.backButton]: {
+const StyledBox = styled('div')(({ theme }) => ({
+    [`& .${classes.backButton}`]: {
         backgroundColor: theme.palette.primary.main,
         '&:hover,&:focus': {
             backgroundColor: theme.palette.primary.dark,
@@ -27,10 +27,10 @@ const StyledBox = styled(Box)(({ theme }) => ({
             width: '48px',
         },
     },
-    [classes.backIcon]: {
+    [`& .${classes.backIcon}`]: {
         color: theme.palette.tertiary.light,
     },
-    [classes.innerName]: {
+    [`& .${classes.innerName}`]: {
         fontWeight: 500,
         maxWidth: 180,
         [theme.breakpoints.up('md')]: {
@@ -40,7 +40,7 @@ const StyledBox = styled(Box)(({ theme }) => ({
             maxWidth: 480,
         },
     },
-    [classes.mainParams]: {
+    [`& .${classes.mainParams}`]: {
         padding: '8px 0',
         fontSize: '12px',
         [theme.breakpoints.up('md')]: {
@@ -48,7 +48,7 @@ const StyledBox = styled(Box)(({ theme }) => ({
             fontSize: '14px',
         },
     },
-    [classes.property]: {
+    [`& .${classes.property}`]: {
         color: '#666666',
         fontSize: '12px',
         [theme.breakpoints.up('md')]: {
@@ -87,7 +87,7 @@ function AnimalDetailsHeader({
                 </IconButton>
                 <Box display="flex" flexGrow="1" flexShrink="1" flexBasis="auto">
                     {animalName && (
-                        <Typography variant="h3" className={classes.innerName} noWrap>
+                        <Typography variant="h1" className={classes.innerName} noWrap>
                             {animalName}
                         </Typography>
                     )}

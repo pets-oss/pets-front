@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 
 import AddIcon from '@mui/icons-material/Add';
 import { Button, Fab, styled } from '@mui/material';
-import useMobile from '../../../hooks/useMobile';
+import useNavMobile from '../../../hooks/useNavMobile';
 import { BOTTOM_NAVIGATION_HEIGHT } from '../../layout/AppBottomNavigation';
 
 const StyledFab = styled(Fab)(({ theme }) => ({
@@ -16,22 +16,22 @@ const StyledFab = styled(Fab)(({ theme }) => ({
 
 export default function CreateButton() {
     const navigate = useNavigate();
-    const mobile = useMobile();
+    const matchesNavMobile = useNavMobile();
 
     const handleClick = () => {
         navigate('/animal/new');
     };
 
-    if (mobile) {
+    if (matchesNavMobile) {
         return (
-            <StyledFab color="secondary" aria-label="add" onClick={handleClick}>
+            <StyledFab color="primary" aria-label="add" onClick={handleClick}>
                 <AddIcon />
             </StyledFab>
         );
     }
 
     return (
-        <Button variant="contained" color="secondary" onClick={handleClick} startIcon={<AddIcon />}>
+        <Button variant="contained" color="primary" onClick={handleClick} startIcon={<AddIcon />}>
             Create
         </Button>
     );

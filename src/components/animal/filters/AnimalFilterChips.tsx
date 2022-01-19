@@ -22,7 +22,7 @@ export default function AnimalFiltersChips() {
 
     const filterChip = (type, filter) => (
         <Grid item key={`${type}-${filter.id}`}>
-            <Chip label={filter.value} onDelete={() => onDelete(type)} />
+            <Chip label={filter.value} variant="outlined" color="primary" onDelete={() => onDelete(type)} />
         </Grid>
     );
 
@@ -34,7 +34,11 @@ export default function AnimalFiltersChips() {
                         return filterChip(type, filters[type]);
                     }
                 })}
-                <Button onClick={handleClearFilters}>Clear</Button>
+                <Grid item>
+                    <Button onClick={handleClearFilters} color="primary" size="small" sx={{ ml: 2 }}>
+                        Clear
+                    </Button>
+                </Grid>
             </Grid>
         );
     } else {

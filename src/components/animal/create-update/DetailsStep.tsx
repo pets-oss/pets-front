@@ -1,4 +1,3 @@
-import clsx from 'clsx';
 import { loader } from 'graphql.macro';
 import React, { memo, useEffect } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
@@ -22,19 +21,11 @@ const EMPTY_NAME = 'New Animal';
 const PREFIX = 'DetailsStep';
 
 const classes = {
-    form: `${PREFIX}-form`,
-    name: `${PREFIX}-name`,
     relative: `${PREFIX}-relative`,
     fullWidth: `${PREFIX}-fullWidth`,
 };
 
 const StyledGrid = styled(Grid)(() => ({
-    form: {
-        maxWidth: 800,
-    },
-    name: {
-        minWidth: 300,
-    },
     relative: {
         position: 'relative',
     },
@@ -80,15 +71,17 @@ function DetailsStep() {
 
     return (
         <StyledGrid container spacing={2}>
-            <Grid item xs={12} container spacing={2} justifyContent="center">
-                {!!name ? (
-                    <Typography variant="h5">{name}</Typography>
-                ) : (
-                    <Typography variant="h5">{EMPTY_NAME}</Typography>
-                )}
+            <Grid item xs={12} container justifyContent="center">
+                <Grid item spacing={2}>
+                    {!!name ? (
+                        <Typography variant="h5">{name}</Typography>
+                    ) : (
+                        <Typography variant="h5">{EMPTY_NAME}</Typography>
+                    )}
+                </Grid>
             </Grid>
-            <Grid item xs={12} container spacing={2} justifyContent="center">
-                <Grid item xs={12} sm={4} className={clsx(classes.name, classes.relative)}>
+            <Grid item xs={12} container justifyContent="center">
+                <Grid item xs={12} sm={6} className={classes.relative} spacing={2}>
                     <TextInput name="name" label="Name" required helperText=" " fullWidth showLettersCount />
                 </Grid>
             </Grid>
@@ -146,16 +139,16 @@ function DetailsStep() {
                 </Grid>
             </Grid>
             <Grid item container>
-                <Divider style={{ width: '100%' }} />
+                <Divider sx={{ width: '100%', my: 3 }} />
             </Grid>
             <Grid item xs={12} container spacing={2} justifyContent="center">
                 <Grid item>
-                    <Button color="secondary" variant="outlined" onClick={handleCancel}>
+                    <Button color="primary" variant="outlined" onClick={handleCancel}>
                         Cancel
                     </Button>
                 </Grid>
                 <Grid item>
-                    <Button type="submit" color="secondary" variant="contained">
+                    <Button type="submit" color="primary" variant="contained">
                         Submit
                     </Button>
                 </Grid>

@@ -83,10 +83,8 @@ export default function AnimalEvents({ events }: AnimalEventsProps) {
     return (
         <StyledBox>
             <Box mb={2} display="flex" justifyContent="space-between" alignItems="center">
-                <Typography variant="h5" component="h3">
-                    Events
-                </Typography>
-                <Button color="primary" variant="contained" startIcon={<AddIcon />} onClick={handleDialogOpen}>
+                <Typography variant="h2">Events</Typography>
+                <Button color="secondary" variant="contained" startIcon={<AddIcon />} onClick={handleDialogOpen}>
                     Create
                 </Button>
                 <AnimalEventDialog

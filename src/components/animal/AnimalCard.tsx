@@ -24,6 +24,7 @@ import AnimalAvatar from '../icons/AnimalAvatar';
 interface AnimalCardProps {
     animal: Animal;
     xs?: GridSize;
+    sm?: GridSize;
     md?: GridSize;
     lg?: GridSize;
 }
@@ -76,7 +77,7 @@ const StyledCard = styled(Card)(({ theme }) => ({
     },
 }));
 
-function AnimalCard({ animal, xs = 10, md = 6, lg = 3 }: AnimalCardProps) {
+function AnimalCard({ animal, xs = 12, sm = 6, md = 4, lg = 4 }: AnimalCardProps) {
     const dispatch = useAppDispatch();
     const [isFavorite, setFavorite] = useState<boolean>(!!animal.isFavorite);
 
@@ -98,7 +99,7 @@ function AnimalCard({ animal, xs = 10, md = 6, lg = 3 }: AnimalCardProps) {
     // todo - should handle error state via UI "toast" elements
 
     return (
-        <Grid item xs={xs} md={md} lg={lg}>
+        <Grid item xs={xs} sm={sm} md={md} lg={lg}>
             <StyledCard>
                 <Box className={classes.cardMediaWrapper}>
                     <CardActionArea component={NavLink} to={`/animal/${animal.id}`}>

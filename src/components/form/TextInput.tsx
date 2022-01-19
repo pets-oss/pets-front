@@ -73,7 +73,7 @@ export default function TextInput({
                         label={label}
                         id={id}
                         type={type}
-                        color="secondary"
+                        color="primary"
                         placeholder={placeholder}
                         variant="outlined"
                         fullWidth={fullWidth}

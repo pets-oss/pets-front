@@ -49,7 +49,7 @@ export default function Selector({
                         <TextField
                             {...params}
                             variant="outlined"
-                            color="secondary"
+                            color="primary"
                             margin="dense"
                             error={!!errors[name]}
                             label={label ?? capitalizeFirstLetter(name)}

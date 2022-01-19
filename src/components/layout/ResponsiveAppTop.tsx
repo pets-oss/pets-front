@@ -1,10 +1,10 @@
 import React from 'react';
 
-import useMobile from '../../hooks/useMobile';
+import useNavMobile from '../../hooks/useNavMobile';
 import AppTopBar from './AppTopBar';
 import AppTopNavigation from './AppTopNavigation';
 
 export default function ResponsiveAppTop() {
-    const matchesMobile = useMobile();
-    return matchesMobile ? <AppTopBar /> : <AppTopNavigation />;
+    const matchesNavMobile = useNavMobile();
+    return matchesNavMobile ? <AppTopBar /> : <AppTopNavigation />;
 }

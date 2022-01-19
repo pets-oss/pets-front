@@ -1,7 +1,7 @@
 import React, { ReactNode } from 'react';
 
 import { Container, Grid, styled, Typography } from '@mui/material';
-import useMobile from '../hooks/useMobile';
+import useNavMobile from '../hooks/useNavMobile';
 
 interface PageProps {
     title?: string | ReactNode;
@@ -22,6 +22,7 @@ const classes = {
 
 const Root = styled('main')(({ theme }) => ({
     paddingTop: 0,
+    paddingBottom: 32,
     [theme.breakpoints.up('sm')]: {
         paddingTop: 64 + 32,
     },
@@ -44,13 +45,13 @@ const Root = styled('main')(({ theme }) => ({
 }));
 
 export default function Page({ title, topSection, children, displayTitleOnMobile }: PageProps) {
-    const matchesMobile = useMobile();
+    const matchesNavMobile = useNavMobile();
 
     return (
         <Root>
             <Container maxWidth="lg">
-                <Grid container spacing={4}>
-                    {(!matchesMobile || displayTitleOnMobile) && title && (
+                <Grid container columnSpacing={0} rowSpacing={2}>
+                    {(!matchesNavMobile || displayTitleOnMobile) && title && (
                         <Grid item xs={12}>
                             <PageTitle title={title} />
                         </Grid>
@@ -78,7 +79,7 @@ function PageTitle({ title }: { title: string | ReactNode }) {
 
     return (
         <>
-            <Typography className={classes.title} variant="h3" component="h1">
+            <Typography className={classes.title} variant="h1">
                 {title}
             </Typography>
         </>

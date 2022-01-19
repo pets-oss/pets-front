@@ -1,12 +1,11 @@
 import React, { useEffect, useRef } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 
-import { Grid, GridProps } from '@mui/material';
+import { Box, Grid, GridProps } from '@mui/material';
 import { Animal, AnimalDetails } from '../../../graphql/types';
 import { useAppDispatch } from '../../../store';
 import { createOrUpdateAnimal } from '../../../store/animals';
 import { getDateYMDFlexible, getYMDDateFromTS } from '../../../utils/dateFormatters';
-import LayoutAlignCenterBox from '../../layout/LayoutAlignCenterBox';
 import DetailsStep from './DetailsStep';
 
 export default function AnimalForm({ animal, submitCallback }: AnimalFormProps) {
@@ -47,21 +46,13 @@ export default function AnimalForm({ animal, submitCallback }: AnimalFormProps) 
     };
 
     return (
-        <LayoutAlignCenterBox>
+        <Box display="flex" justifyContent="center" sx={{ maxWidth: 800, margin: '0 auto' }}>
             <FormProvider {...methods}>
-                <Grid
-                    container
-                    spacing={2}
-                    alignItems="center"
-                    component="form"
-                    style={{ maxWidth: 800 }}
-                    onSubmit={handleSubmit(onSubmit)}
-                    ref={formRef}
-                >
+                <Box onSubmit={handleSubmit(onSubmit)} ref={formRef}>
                     <DetailsStep />
-                </Grid>
+                </Box>
             </FormProvider>
-        </LayoutAlignCenterBox>
+        </Box>
     );
 }
 

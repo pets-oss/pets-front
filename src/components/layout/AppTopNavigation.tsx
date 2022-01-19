@@ -14,11 +14,12 @@ const classes = {
 
 const Root = styled('div')(({ theme }) => ({
     [`& .${classes.appBar}`]: {
-        backgroundColor: theme.palette.primary.light,
+        backgroundColor: theme.palette.secondary.light,
     },
     [`& .${classes.title}`]: {
         flexGrow: 1,
         textAlign: 'left',
+        fontSize: '1.5rem',
     },
     [`& .${classes.link}`]: {
         margin: theme.spacing(1, 1.5),

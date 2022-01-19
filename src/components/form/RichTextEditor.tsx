@@ -18,10 +18,6 @@ import FormatItalicIcon from '@mui/icons-material/FormatItalic';
 import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted';
 import FormatListNumberedIcon from '@mui/icons-material/FormatListNumbered';
 import FormatUnderlinedIcon from '@mui/icons-material/FormatUnderlined';
-import Looks3Icon from '@mui/icons-material/Looks3';
-import LooksOneIcon from '@mui/icons-material/LooksOne';
-import LooksTwoIcon from '@mui/icons-material/LooksTwo';
-import StrikethroughSIcon from '@mui/icons-material/StrikethroughS';
 import { Box, Divider, FormHelperText, ToggleButton, ToggleButtonGroup, Toolbar } from '@mui/material';
 
 const { hasCommandModifier } = KeyBindingUtil;
@@ -142,7 +138,7 @@ export default function RichTextEditor({ name }: RichTextEditorProps) {
         <Box border={1} borderColor="grey.500" borderRadius={2}>
             <Toolbar>
                 <BlockStyleControls editorState={editorState} onToggle={toggleBlockType} />
-                <Divider variant="inset" />
+                <Divider variant="middle" />
                 <InlineStyleControls editorState={editorState} onToggle={toggleInlineStyle} />
                 {/*<ToggleButton value={'clear'} onMouseDown={e => handleClearClick(e)}>*/}
                 {/*    clear*/}
@@ -167,9 +163,9 @@ export default function RichTextEditor({ name }: RichTextEditorProps) {
 }
 
 const BLOCK_TYPES = [
-    { label: 'H1', style: 'header-one', icon: <LooksOneIcon /> },
-    { label: 'H2', style: 'header-two', icon: <LooksTwoIcon /> },
-    { label: 'H3', style: 'header-three', icon: <Looks3Icon /> },
+    // { label: 'H1', style: 'header-one', icon: <LooksOneIcon /> },
+    // { label: 'H2', style: 'header-two', icon: <LooksTwoIcon /> },
+    // { label: 'H3', style: 'header-three', icon: <Looks3Icon /> },
     // { label: 'H4', style: 'header-four', icon: <Looks4Icon /> },
     // { label: 'H5', style: 'header-five', icon: <Looks5Icon /> },
     // { label: 'H6', style: 'header-six', icon: <Looks6Icon /> },
@@ -223,7 +219,7 @@ const INLINE_STYLES = [
     { label: 'Bold', style: 'BOLD', icon: <FormatBoldIcon /> },
     { label: 'Italic', style: 'ITALIC', icon: <FormatItalicIcon /> },
     { label: 'Underline', style: 'UNDERLINE', icon: <FormatUnderlinedIcon /> },
-    { label: 'Strikethrough', style: 'STRIKETHROUGH', icon: <StrikethroughSIcon /> },
+    // { label: 'Strikethrough', style: 'STRIKETHROUGH', icon: <StrikethroughSIcon /> },
     // { label: 'Monospace', style: 'CODE', icon: <CodeIcon /> },
 ];
 

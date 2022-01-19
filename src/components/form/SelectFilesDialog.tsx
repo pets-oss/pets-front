@@ -68,7 +68,7 @@ const RenderSelected = ({ multiple, files, theme }: RenderSelectedProps) => {
             <Image
                 src={URL.createObjectURL(files[0])}
                 aspectRatio={1}
-                cover={false}
+                cover="false"
                 style={imageStyles.container}
                 imageStyle={imageStyles.image}
             />
@@ -95,7 +95,7 @@ const classes = {
 };
 
 const StyledDialog = styled(Dialog)(({ theme }) => ({
-    [classes.dropZone]: {
+    [`& .${classes.dropZone}`]: {
         cursor: 'pointer',
         position: 'relative',
         width: '100%',
@@ -114,22 +114,22 @@ const StyledDialog = styled(Dialog)(({ theme }) => ({
             backgroundColor: theme.palette.grey['100'],
         },
     },
-    [classes.dropZoneDisabled]: {
+    [`& .${classes.dropZoneDisabled}`]: {
         pointerEvents: 'none',
     },
-    [classes.dropZoneSelected]: {
+    [`& .${classes.dropZoneSelected}`]: {
         pointerEvents: 'none',
         border: 'none',
     },
-    [classes.placeHolder]: {
+    [`& .${classes.placeHolder}`]: {
         padding: theme.spacing(1),
         textAlign: 'center',
         color: theme.palette.grey['400'],
     },
-    [classes.submitButtonWrap]: {
+    [`& .${classes.submitButtonWrap}`]: {
         position: 'relative',
     },
-    [classes.submitButtonSpinner]: {
+    [`& .${classes.submitButtonSpinner}`]: {
         color: theme.palette.secondary.main,
         position: 'absolute',
         top: '50%',
@@ -220,11 +220,11 @@ function SelectFilesDialog(props: SelectFilesDialogProps, ref: Ref<unknown> | un
                             </Typography>
                         )}
                     </Box>
-                    <Button disabled={loading} variant="outlined" onClick={onCancel} color="secondary">
+                    <Button disabled={loading} variant="outlined" onClick={onCancel} color="primary">
                         Cancel
                     </Button>
                     <div className={classes.submitButtonWrap}>
-                        <Button disabled={loading} onClick={handleSubmit} color="secondary" variant="contained">
+                        <Button disabled={loading} onClick={handleSubmit} color="primary" variant="contained">
                             Upload
                         </Button>
                         {loading && <CircularProgress size={20} className={classes.submitButtonSpinner} />}
