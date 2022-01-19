@@ -77,7 +77,7 @@ function PageTitle({ title }: { title: string | ReactNode }) {
 
     return (
         <>
-            <Typography className={classes.title} variant="h3" component="h1">
+            <Typography className={classes.title} variant="h1">
                 {title}
             </Typography>
         </>

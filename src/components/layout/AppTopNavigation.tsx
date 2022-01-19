@@ -19,6 +19,7 @@ const Root = styled('div')(({ theme }) => ({
     [`& .${classes.title}`]: {
         flexGrow: 1,
         textAlign: 'left',
+        fontSize: '1.5rem',
     },
     [`& .${classes.link}`]: {
         margin: theme.spacing(1, 1.5),

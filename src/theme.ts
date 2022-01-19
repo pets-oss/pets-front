@@ -22,61 +22,56 @@ const defaultTheme = createTheme({
         },
     },
     breakpoints: {
-        // due to Material UI breakpoints implementation
-        // theme.breakpoints.down('sm') resolves to "+1 and lower" or "md and lower"
         values: {
             xs: 0,
-            sm: 500,
-            md: 768,
-            lg: 1280,
-            xl: 1920,
+            sm: 600,
+            md: 900,
+            lg: 1200,
+            xl: 1536,
         },
     },
     typography: {
-        h1: {
-            fontSize: '3rem',
+        body1: {
             lineHeight: 1.2,
-            // [breakpoints.down('sm')]: {
-            //     fontSize: '2.6rem',
-            // },
-        },
-        h2: {
-            fontSize: '2.6rem',
-            lineHeight: 1.2,
-            // [breakpoints.down('sm')]: {
-            //     fontSize: '2.2rem',
-            // },
-        },
-        h3: {
-            fontSize: '2.2rem',
-            lineHeight: 1.2,
-            // [breakpoints.down('sm')]: {
-            //     fontSize: '1.8rem',
-            // },
-        },
-        h4: {
-            fontSize: '1.8rem',
-            lineHeight: 1.2,
-            // [breakpoints.down('sm')]: {
-            //     fontSize: '1.6rem',
-            // },
-        },
-        h5: {
-            fontSize: '1.8rem',
-            lineHeight: 1.2,
-            // [breakpoints.down('sm')]: {
-            //     fontSize: '1.4rem',
-            // },
-        },
-        h6: {
-            fontSize: '1.6rem',
-            lineHeight: 1.2,
-            // [breakpoints.down('sm')]: {
-            //     fontSize: '1.4rem',
-            // },
         },
     },
 });
+
+// Responsive Typography
+defaultTheme.typography.h1 = {
+    fontSize: '2.25rem',
+    [defaultTheme.breakpoints.down('sm')]: {
+        fontSize: '1.75rem',
+    },
+};
+
+defaultTheme.typography.h2 = {
+    fontSize: '1.75rem',
+    [defaultTheme.breakpoints.down('sm')]: {
+        fontSize: '1.5rem',
+    },
+};
+defaultTheme.typography.h3 = {
+    fontSize: '1.5rem',
+    [defaultTheme.breakpoints.down('sm')]: {
+        fontSize: '1.25rem',
+    },
+};
+defaultTheme.typography.h4 = {
+    fontSize: '1.25rem',
+    [defaultTheme.breakpoints.down('sm')]: {
+        fontSize: '1.15rem',
+    },
+};
+defaultTheme.typography.h5 = {
+    fontSize: '1.25rem',
+    [defaultTheme.breakpoints.down('sm')]: {
+        fontSize: '1.15rem',
+    },
+};
+defaultTheme.typography.h6 = {
+    fontSize: '1.2rem',
+};
 
 const theme: ThemeOptions = {
     ...defaultTheme,
@@ -96,23 +91,7 @@ const theme: ThemeOptions = {
                 },
             },
         },
-        MuiStepIcon: {
-            defaultProps: {
-                // '&$completed': {
-                //     fill: defaultTheme.palette.success.main,
-                // },
-                // '&$active': {
-                //     fill: defaultTheme.palette.secondary.main,
-                // },
-            },
-        },
     },
-    // },
-    // props: {
-    //     MuiUseMediaQuery: {
-    //         noSsr: true,
-    //     },
-    // },
 };
 
 declare module '@mui/material/styles' {

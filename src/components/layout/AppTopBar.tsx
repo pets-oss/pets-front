@@ -21,6 +21,7 @@ const Root = styled('div')(() => ({
     },
     [`& .${classes.title}`]: {
         flexGrow: 1,
+        fontSize: '1.5rem',
     },
 }));
 
@@ -39,7 +40,7 @@ export default function AppTopBar() {
         <Root>
             <AppBar className={classes.appbar} position="static" color="default" elevation={0}>
                 <Toolbar className={classes.toolbar}>
-                    <Typography variant="h6" className={classes.title} noWrap>
+                    <Typography variant="h1" className={classes.title} noWrap>
                         {pageTitle()}
                     </Typography>
                     <TopAuthNav />

@@ -87,7 +87,7 @@ function AnimalDetailsHeader({
                 </IconButton>
                 <Box display="flex" flexGrow="1" flexShrink="1" flexBasis="auto">
                     {animalName && (
-                        <Typography variant="h3" className={classes.innerName} noWrap>
+                        <Typography variant="h1" className={classes.innerName} noWrap>
                             {animalName}
                         </Typography>
                     )}
