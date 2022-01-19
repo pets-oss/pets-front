@@ -10,7 +10,6 @@ const navigation: Array<NavigationItem> = [
     { authRequired: false, title: 'About', to: '/about', pageTitle: 'About this project' },
     { authRequired: true, title: 'Animals', to: '/animal-list', pageTitle: 'Animal list' },
     { authRequired: true, title: 'Favorites', to: '/favorites', pageTitle: 'Favorites' },
-    { authRequired: true, title: 'Reports', to: '/reports', pageTitle: 'Reports' },
 ];
 
 export { navigation };
