@@ -15,7 +15,8 @@ const Root = styled('div')(() => ({
     alignItems: 'center',
     justifyContent: 'center',
     width: '100%',
-    [classes.logo]: {
+    [`& .${classes.logo}`]: {
+        marginTop: 64,
         height: '40vmin',
         pointerEvents: 'none',
     },
